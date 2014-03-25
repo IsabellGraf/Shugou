@@ -58,11 +58,27 @@ num_players = 0
 class Card:
 
 	def __init__(self,number, colour, filling, shape):
-		self.number = number
-		self.colour = colour
-		self.filling = filling
-		self.shape = shape
+		self.__number = number
+		self.__colour = colour
+		self.__filling = filling
+		self.__shape = shape
 
+	@property
+	def number(self):
+		return self.__number
+		
+	@property
+	def colour(self):
+		return self.__colour
+		
+	@property
+	def filling(self):
+		return self.__filling
+		
+	@property
+	def shape(self):
+		return self.__shape
+		
 
 #For example, the person coding the title layout might
 #want to use a class like is done in the game layout
