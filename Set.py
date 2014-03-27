@@ -1,8 +1,9 @@
 #Begin Preamble.
 
 import kivy
-#Unsure if the require statement is necessary...
-kivy.require('1.0.7')
+
+# To make sure we are all at the same starting point
+kivy.require('1.8.0') 
 
 from kivy.uix.button import Button
 from time import time
