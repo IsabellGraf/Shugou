@@ -56,13 +56,11 @@ num_players = 0
 # End preamble.
 
 
-class Card:
+from collections import namedtuple
+Card = namedtuple('Card', ['number', 'colour','filling','shape'])
 
-	def __init__(self,number, colour, filling, shape):
-		self.number = number
-		self.colour = colour
-		self.filling = filling
-		self.shape = shape
+def indexFromCard(card):
+    return str(card.number) + str(card.colour) + str(card.filling) + str(card.shape)
 
 
 #For example, the person coding the title layout might
