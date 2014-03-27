@@ -124,17 +124,16 @@ class GameLayout(GridLayout):
 	def on_press_callback(self,obj):
 		print('press on button', obj)
 	
-	#Code needed.
-	#It is possible you won't want to pass three cards
-	#and instead bass the three depressed buttons and do the
-	#code in here - that's fine too.
-	def checkSet(self,card1,card2,card3):
-		'''
-		Pre: card1,card2,card3 are valid card instances
-		Post: Return true if these cards form a valid set, false otherwise
-		'''
-		pass
-	
+	@staticmethod
+	def allSameOrAllDifferent(*args):
+		'''Returns True if all the args are different or all the same'''
+		return len(set(args)) == 1 or len(set(args)) == len(args)
+
+	@staticmethod
+	def checkSet(card1,card2,card3):
+		'''Return true if these cards form a valid set, false otherwise'''
+		return all(allSameOrAllDifferent(card1[i], card2[i], card3[i]) for i in range(0,4))
+		
 	#Code needed.
 	def checkIfSetExists(self):
 		'''
