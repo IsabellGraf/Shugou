@@ -20,25 +20,6 @@ from kivy.animation import Animation
 from kivy.uix.screenmanager import Screen,ScreenManager
 
 
-#Constants:
-#All constants must be capitalized.
-#Its a bit silly to make constants out of 1,2,3 but
-#I hope we all understand stylistically why I did this.
-ONE = 1
-TWO = 2
-THREE = 3
-RED = 4
-GREEN = 5
-BLUE = 6
-BLANK = 7
-STRIPED = 8
-FILLED = 9
-TRIANGLE = 10
-SQUARE = 11
-CIRCLE=12
-NUMVISIBLECARDS = 12
-NUMCARDS = 81
-
 #Global variables
 num_players = 0
 
@@ -54,13 +35,6 @@ num_players = 0
 # This naming scheme also saves us from storing an extra variable.
 
 # End preamble.
-
-
-from collections import namedtuple
-Card = namedtuple('Card', ['number', 'colour','filling','shape'])
-
-def indexFromCard(card):
-    return str(card.number) + str(card.colour) + str(card.filling) + str(card.shape)
 
 
 #For example, the person coding the title layout might
@@ -95,6 +69,9 @@ as chosen randomly - after this amount of time the AI shows the solution
 and then he gets a point.
 
 '''
+
+from Deck import NUMCARDS, NUMVISIBLECARDS
+
 class GameLayout(GridLayout):
 	
 	def __init__(self,**kwargs):
@@ -124,44 +101,6 @@ class GameLayout(GridLayout):
 	def on_press_callback(self,obj):
 		print('press on button', obj)
 	
-	@staticmethod
-	def allSameOrAllDifferent(*args):
-		'''Returns True if all the args are different or all the same'''
-		return len(set(args)) == 1 or len(set(args)) == len(args)
-
-	@staticmethod
-	def checkSet(card1,card2,card3):
-		'''Return true if these cards form a valid set, false otherwise'''
-		return all(allSameOrAllDifferent(card1[i], card2[i], card3[i]) for i in range(0,4))
-		
-	#Code needed.
-	def checkIfSetExists(self):
-		'''
-		Post: Return true if a valid set exists ont he game board.
-		False otherwise
-		'''
-		pass
-	
-	
-	#Code needed.
-	def initializeDeck(self):
-		'''
-		Post: Set up the self.deck variable to contain the 
-		total number of cards in a random order.
-		Here we also initialize the 81 different cards.
-		Also should set up the initial configuration for the 12 buttons.
-		'''
-		pass
-
-	#Code needed.
-	def dealThreeCards(self):
-		'''
-		Post: Three new cards replaced the three old cards
-		that formed the set as verified in checkSet.
-		OR can also be used to replace 3 random cards if no set found.
-		Also check to make sure the deck has three more cards to change.
-		Verify that these three new cards make a valid set.
-		'''
 	#Code needed.
 	def checkEndGame(self):
 		'''
