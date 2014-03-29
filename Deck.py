@@ -2,14 +2,11 @@ from __future__ import print_function
 
 from itertools import combinations
 from random import sample
+from collections import namedtuple
+
 '''
 Building this class under the assumption that each card is unique in the world
 i.e. there won't be more than 81 one cards in existance
-'''
-'''
-TODO: Should the deck behave as some endless source of cards?
-Improve the speed of checking if a list of cards contains a set or not (currently slow on my old iPad)
-
 '''
 # Constants:
 # All constants must be capitalized.
@@ -34,10 +31,11 @@ STAR = 10
 SQUARE = 11
 CIRCLE = 12
 SHAPES = [STAR, SQUARE, CIRCLE]
+PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
 NUMVISIBLECARDS = 12
 NUMCARDS = 81
 
-from collections import namedtuple
+# A simple immutable card class
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
 
@@ -48,32 +46,32 @@ def indexFromCard(card):
 
 class Deck(object):
 
-    '''A deck class that stores all cards and all remaining cards in a game. '''
+    '''A deck class that stores all playable cards along with ways of checking properties of subsets of the deck '''
 
     def __init__(self):
         # a complete set of cards
         self.cards = set()
-        for number in NUMBERS:
-            for colour in COLOURS:
-                for filling in FILLINGS:
-                    for shape in SHAPES:
+        for number in PROPERTIES[0]:
+            for colour in PROPERTIES[1]:
+                for filling in PROPERTIES[2]:
+                    for shape in PROPERTIES[3]:
                         card = Card(
                             number=number, colour=colour, filling=filling, shape=shape)
                         self.cards.add(card)
 
     @staticmethod
     def allSameOrAllDifferent(*args):
-        '''Returns True if all the args are different or all the same'''
+        '''objects -> bool -- Returns True if all the args are different or all the same'''
         return len(set(args)) == 1 or len(set(args)) == len(args)
 
     @staticmethod
     def checkSet(card1, card2, card3):
-        '''Return true if these cards form a valid set, false otherwise'''
+        '''(card, card,card) -> bool -- Return true if these three cards form a valid set'''
         return all(Deck.allSameOrAllDifferent(card1[i], card2[i], card3[i]) for i in range(0, 4))
 
     @staticmethod
     def numberOfSets(cards):
-        ''' Returns the number of sets in a collections of cards '''
+        ''' cards -> int -- Returns the number of sets in a collections of cards '''
         return sum(Deck.checkSet(*c) for c in combinations(cards, 3))
 
     @staticmethod
@@ -81,16 +79,15 @@ class Deck(object):
         ''' list -> bool -- returns true if the cards contains an set'''
         return Deck.numberOfSets(cards) > 0
 
-    def drawGuarantee(self, othercards, numberofcards=3):
-        ''' Returns a number of cards cards, if you pass a list of other cards, it will return a set of cards that form a set along with the cards of othercards (or raise an error if impossible)'''
-        print("before picking new cards")
+    def drawGuarantee(self, othercards=set(), numberofcards=3):
+        ''' (list, int) -> list of cards -- Returns a numberofcards cards,
+        which will once combined with othercards form a set it or raise an error if impossible'''
         # verify that we have atleast one possible set
-        if not Deck.hasSet(othercards | self.cards) or (len(othercards) + numberofcards < 3):
+        if (len(othercards) + numberofcards < 3) or not Deck.hasSet(othercards | self.cards):
             raise ValueError("Can't form a set")
 
         newCards = set(sample(self.cards, numberofcards))
         while not Deck.hasSet(newCards | othercards):
-
             newCards = set(sample(self.cards, numberofcards))
         for card in newCards:
             self.cards.remove(card)
@@ -113,5 +110,11 @@ class TestDeck(unittest.TestCase):
             Deck.hasSet(set([Card(number=3, colour=5, filling=8, shape=11), Card(number=2, colour=6, filling=7, shape=12), Card(number=2, colour=6, filling=9, shape=11)])))
         self.assertTrue(Deck.hasSet(set([Card(number=3, colour=5, filling=8, shape=11), Card(number=2, colour=6, filling=7, shape=12), Card(number=2, colour=6, filling=9, shape=11)]) | {a}))
 
+        deck = Deck()
+        threeCards = deck.drawGuarantee()
+        self.assertTrue(Deck.hasSet(threeCards))
+        self.assertEqual(indexFromCard(a), '14910')
+        self.assertRaises(
+            ValueError, lambda x: deck.drawGuarantee(numberofcards=x), 0)
 if __name__ == "__main__":
     unittest.main()
