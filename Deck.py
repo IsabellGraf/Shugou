@@ -44,6 +44,28 @@ def indexFromCard(card):
     return str(card.number) + str(card.colour) + str(card.filling) + str(card.shape)
 
 
+def completeSet(card1, card2):
+    ''' card, card -> card -- Returns a third card that completes a set'''
+    if card1.number == card2.number:
+        number = card1.number
+    else:
+        number = (set(NUMBERS) ^ {card1.number, card2.number}).pop()
+    if card1.colour == card2.colour:
+        colour = card1.colour
+    else:
+        colour = (set(COLOURS) ^ {card1.colour, card2.colour}).pop()
+    if card1.filling == card2.filling:
+        filling = card1.filling
+    else:
+        filling = (set(FILLINGS) ^ {card1.filling, card2.filling}).pop()
+    if card1.shape == card2.shape:
+        shape = card1.shape
+    else:
+        shape = (set(SHAPES) ^ {card1.shape, card2.shape}).pop()
+
+    return Card(number, colour, filling, shape)
+
+
 class Deck(object):
 
     '''A deck class that stores all playable cards along with ways of checking properties of subsets of the deck '''
@@ -116,5 +138,11 @@ class TestDeck(unittest.TestCase):
         self.assertEqual(indexFromCard(a), '14910')
         self.assertRaises(
             ValueError, lambda x: deck.drawGuarantee(numberofcards=x), 0)
+
+    def test_card(self):
+        a = Card(ONE, RED, FILLED, STAR)
+        b = Card(TWO, RED, FILLED, STAR)
+        self.assertEqual(completeSet(a, b), Card(THREE, RED, FILLED, STAR))
+
 if __name__ == "__main__":
     unittest.main()
