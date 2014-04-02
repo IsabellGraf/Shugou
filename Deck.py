@@ -52,12 +52,6 @@ class Deck(object):
         return len(set(args)) == 1 or len(set(args)) == len(args)
 
     @staticmethod
-    def iterateProperties():
-        for property in PROPERTIES:
-            for value in property:
-                yield property, value
-
-    @staticmethod
     def checkSet(card1, card2, card3):
         '''(card, card,card) -> bool -- Return true if these three cards form a valid set'''
         return all(Deck.allSameOrAllDifferent(card1[i], card2[i], card3[i]) for i in range(0, 4))
