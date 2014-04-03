@@ -3,45 +3,36 @@ from __future__ import print_function
 from itertools import combinations
 from random import sample
 from collections import namedtuple
+from itertools import product
 
-'''
-Building this class under the assumption that each card is unique in the world
-i.e. there won't be more than 81 one cards in existance
-'''
-# Constants:
-# All constants must be capitalized.
-# Its a bit silly to make constants out of 1,2,3 but
-# I hope we all understand stylistically why I did this.
-# I think theses should typically handled with enums, but there is no
-# built in enum classes in python2 (they are available via pip or by
-# default in python3)
-ONE = 1
-TWO = 2
-THREE = 3
-NUMBERS = [ONE, TWO, THREE]
-RED = 4
-GREEN = 5
-BLUE = 6
-COLOURS = [RED, GREEN, BLUE]
-BLANK = 7
-STRIPED = 8
-FILLED = 9
-FILLINGS = [BLANK, STRIPED, FILLED]
-STAR = 10
-SQUARE = 11
-CIRCLE = 12
-SHAPES = [STAR, SQUARE, CIRCLE]
+# Enums for cards. A temporary solution. Should be handled in python3.4 or
+# by the enum34 module
+ONE, TWO, THREE = NUMBERS = [1, 2, 3]
+RED, GREEN, BLUE = COLOURS = [1, 2, 3]
+BLANK, STRIPED, FILLED = FILLINGS = [1, 2, 3]
+STAR, SQUARE, CIRCLE = SHAPES = [1, 2, 3]
 PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
-NUMVISIBLECARDS = 12
-NUMCARDS = 81
 
 # A simple immutable card class
+# Each has three states which takes on values 1,2,3
+# Thus, ONE, RED, FILLED, STAR is 1132
+# This allows each card to be represented by a unique integer
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
+# We extend the class so that it can fetch its own picture resource.
 
-def indexFromCard(card):
+
+def index(self):
     ''' card -> int - returns an index base on a card for the purpose of looking up filenames of the associated card'''
-    return str(card.number) + str(card.colour) + str(card.filling) + str(card.shape)
+    return str(self.number) + str(self.colour) + str(self.filling) + str(self.shape)
+Card.index = index
+
+
+def filename(self):
+    ''' Where the file should be stored for the card's image'''
+    # This will need to be changed once we have the file structure workedout.
+    return self.index() + ".png"
+Card.filename = filename
 
 
 class Deck(object):
@@ -51,13 +42,9 @@ class Deck(object):
     def __init__(self):
         # a complete set of cards
         self.cards = set()
-        for number in PROPERTIES[0]:
-            for colour in PROPERTIES[1]:
-                for filling in PROPERTIES[2]:
-                    for shape in PROPERTIES[3]:
-                        card = Card(
-                            number=number, colour=colour, filling=filling, shape=shape)
-                        self.cards.add(card)
+        for property in product([1, 2, 3], repeat=4):
+            card = Card(*property)
+            self.cards.add(card)
 
     @staticmethod
     def allSameOrAllDifferent(*args):
@@ -77,7 +64,7 @@ class Deck(object):
     @staticmethod
     def hasSet(cards):
         ''' list -> bool -- returns true if the cards contains an set'''
-        return Deck.numberOfSets(cards) > 0
+        return any(Deck.checkSet(*c) for c in combinations(cards, 3))
 
     def drawGuarantee(self, othercards=set(), numberofcards=3):
         ''' (list, int) -> list of cards -- Returns a numberofcards cards,
@@ -113,7 +100,8 @@ class TestDeck(unittest.TestCase):
         deck = Deck()
         threeCards = deck.drawGuarantee()
         self.assertTrue(Deck.hasSet(threeCards))
-        self.assertEqual(indexFromCard(a), '14910')
+        a = Card(ONE, RED, BLANK, STAR)
+        self.assertEqual(a.index(), '1111')
         self.assertRaises(
             ValueError, lambda x: deck.drawGuarantee(numberofcards=x), 0)
 if __name__ == "__main__":
