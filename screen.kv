@@ -1,0 +1,41 @@
+<GameLayout>:
+#    mainpage: mainpage
+#    FloatLayout:
+    ScreenManager:
+        id: _screen_manager
+        Screen:
+            id: fontpage
+            name: 'screen1'
+            Label: 
+                text: 'The first screen'
+            Button:
+                size_hint: (None, None)
+                pos: root.width/2., root.height/2.
+                size: 200,200
+                text: 'Play Game'
+                on_press:  
+                    root.play()
+                    _screen_manager.current = 'screen2'
+        Screen:
+            id: mainpage
+            name: 'screen2'
+            Label: 
+                text: 'The Game Play Page.'
+            GridLayout:
+                cols: 3
+                spacing: '10dp'
+                padding: [100,200,100,100]
+#                ToggleButton:     
+#                    size_hint: (None, None)
+#                    size: 100,100
+#                    text: 'Button 1'
+#                    state: root.state
+#                    on_press: root.press()
+        Screen:
+            id: gameoverpage
+            name: 'screen3'
+            Label: 
+                text: 'The GameOver Page.'
+            Button:
+                text: 'Game Over'
+                on_press: _screen_manager.current = 'screen1'
