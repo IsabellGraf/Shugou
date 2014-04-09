@@ -64,7 +64,7 @@ class Deck(object):
 
     @staticmethod
     def allSets(cards):
-         return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
+        return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
 
     @staticmethod
     def checkSet(card1, card2, card3):
