@@ -50,6 +50,21 @@ class Deck(object):
     def allSameOrAllDifferent(*args):
         '''objects -> bool -- Returns True if all the args are different or all the same'''
         return len(set(args)) == 1 or len(set(args)) == len(args)
+        
+    @staticmethod
+    def similarities(*cards):
+        similarities = 0
+        for i in range(0,4):
+            similarities += Deck.allSame(*[card[i] for card in cards])
+        return similarities
+    
+    @staticmethod
+    def allSame(*args):
+        return len(set(args)) == 1
+
+    @staticmethod
+    def allSets(cards):
+        return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
 
     @staticmethod
     def checkSet(card1, card2, card3):
