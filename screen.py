@@ -9,6 +9,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from Deck import Deck
 
 class MyToggleButton(ToggleButton):
     pass
@@ -16,25 +17,32 @@ class MyToggleButton(ToggleButton):
 class GameLayout(FloatLayout):
 
     def __init__(self, **kwargs):
-        self.btns = [None] * 12
+        self.buttons = [None] * 12
         super(GameLayout, self).__init__(**kwargs)
         playscreen = self.children[0].get_screen('screen2')
+        self.deck = Deck()
+        self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
-            self.btns[i] = MyToggleButton()
-            self.btns[i].bind(on_press=self.on_press_callback, state=self.state_callback)
-            self.btns[i].children[0].text =  "[color=ff3333]Button[/color][color=3333ff]" + str(i) + "[/color]"
-            self.btns[i].children[0].markup = True
-            playscreen.children[0].add_widget(self.btns[i])            
+            self.buttons[i] = MyToggleButton()
+            self.buttons[i].bind(on_press=self.on_press_callback, state=self.state_callback)
+            self.buttons[i].children[0].text =  str(self.cards[i])
+            self.buttons[i].children[0].markup = True
+            playscreen.children[0].add_widget(self.buttons[i])            
 
     def play(self):
         pass
 
     def on_press_callback(self, obj):
-        total = 0
-        for btn in self.btns:
-            if btn.state == 'down':
-                total += 1
+        down = []
+        for index, button in enumerate(self.buttons):
+            if button.state == 'down':
+                down.append(index)
+        if len(down) == 3:
+            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+                print("That is a set!")
+            else:
+                print("That is not a set~~")
 
     def state_callback(self, obj, value):
         pass
