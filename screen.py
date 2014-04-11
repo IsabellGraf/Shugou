@@ -42,9 +42,15 @@ class GameLayout(FloatLayout):
                 down.append(index)
         if len(down) == 3:
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-                print("That is a set!")
+                selectedcards = {self.cards[i] for i in down}
+                newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+                
+                for index, i in enumerate(down):
+                    self.buttons[i].children[0].text = str(newcards[index])
+                    self.buttons[i].state = 'normal'
             else:
-                print("That is not a set~~")
+                for i in down:
+                    self.buttons[i].state = 'normal'
 
     def state_callback(self, obj, value):
         pass
