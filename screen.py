@@ -17,7 +17,6 @@ class MyToggleButton(ToggleButton):
 
 
 class GameLayout(FloatLayout):
-
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
         super(GameLayout, self).__init__(**kwargs)
