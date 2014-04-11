@@ -34,17 +34,22 @@ def filename(self):
     return "images/" + self.index() + ".png"
 Card.filename = filename
 
-def cardPrint(self):
-    shapes = ['!','@','#']
-    colours = ['ff3333', '3333ff', '33ff33']
-    fillings = ['b', 'i', '']
-    string = shapes[self.shape-1]*self.number
-    string = '[' + fillings[self.filling - 1] + ']' + string + '[/' + fillings[self.filling - 1] + ']' if self.filling != 3 else string
-    string = '[color=' + colours[self.colour-1] + ']' + string + '[/color]'
 
-    return string 
+def cardPrint(self):
+    shapes = ['!', '@', '#']
+    colours = ['ff3333', '3333ff', '33ff33']
+    # fillings = ['b', 'i', ''] # bold, italics
+    fillings = ['_', '*', '']  # easier to read than bold and italics
+    string = shapes[self.shape - 1] * self.number
+    #string = '[' + fillings[self.filling - 1] + ']' + string + '[/' + fillings[self.filling - 1] + ']' if self.filling != 3 else string
+    string = fillings[self.filling - 1] + string + fillings[
+        self.filling - 1] if self.filling != 3 else string
+    string = '[color=' + colours[self.colour - 1] + ']' + string + '[/color]'
+
+    return string
 
 Card.__str__ = cardPrint
+
 
 class Deck(object):
 
@@ -61,14 +66,14 @@ class Deck(object):
     def allSameOrAllDifferent(*args):
         '''objects -> bool -- Returns True if all the args are different or all the same'''
         return len(set(args)) == 1 or len(set(args)) == len(args)
-        
+
     @staticmethod
     def similarities(*cards):
         similarities = 0
-        for i in range(0,4):
+        for i in range(0, 4):
             similarities += Deck.allSame(*[card[i] for card in cards])
         return similarities
-    
+
     @staticmethod
     def allSame(*args):
         return len(set(args)) == 1

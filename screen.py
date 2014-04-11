@@ -11,8 +11,10 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from Deck import Deck
 
+
 class MyToggleButton(ToggleButton):
     pass
+
 
 class GameLayout(FloatLayout):
 
@@ -25,10 +27,10 @@ class GameLayout(FloatLayout):
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
             self.buttons[i] = MyToggleButton()
-            self.buttons[i].bind(on_press=self.on_press_callback, state=self.state_callback)
-            self.buttons[i].children[0].text =  str(self.cards[i])
-            self.buttons[i].children[0].markup = True
-            playscreen.children[0].add_widget(self.buttons[i])            
+            self.buttons[i].bind(
+                on_press=self.on_press_callback, state=self.state_callback)
+            self.buttons[i].children[0].text = str(self.cards[i])
+            playscreen.children[0].add_widget(self.buttons[i])
 
     def play(self):
         pass
@@ -47,7 +49,9 @@ class GameLayout(FloatLayout):
     def state_callback(self, obj, value):
         pass
 
+
 class ScreenApp(App):
+
     def build(self):
         return GameLayout()
 
