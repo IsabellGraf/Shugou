@@ -8,7 +8,10 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
     ObjectProperty
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
+from kivy.uix.label import Label
 
+class MyToggleButton(ToggleButton):
+    pass
 
 class GameLayout(FloatLayout):
 
@@ -18,34 +21,25 @@ class GameLayout(FloatLayout):
         playscreen = self.children[0].get_screen('screen2')
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
-            self.btns[i] = ToggleButton(text=btn_text)
-            self.btns[i].bind(
-                on_press=self.on_press_callback, state=self.state_callback)
-            # print(self.btns[i].center)
-            playscreen.children[0].add_widget(self.btns[i])
+            self.btns[i] = MyToggleButton()
+            self.btns[i].bind(on_press=self.on_press_callback, state=self.state_callback)
+            self.btns[i].children[0].text =  "[color=ff3333]Button[/color][color=3333ff]" + str(i) + "[/color]"
+            self.btns[i].children[0].markup = True
+            playscreen.children[0].add_widget(self.btns[i])            
 
     def play(self):
-        playscreen = self.children[0].get_screen('screen2')
-        for i in range(12):
-            mybtn = playscreen.children[0].children[i]
-            #print(mybtn, mybtn.pos, mybtn.size)
-            mybtn.add_widget(
-                Image(source='images/1111.png', allow_stretch=True))
+        pass
 
     def on_press_callback(self, obj):
         total = 0
         for btn in self.btns:
             if btn.state == 'down':
                 total += 1
-        # print(obj.size,obj.pos)
-        obj.add_widget(
-            Image(source='images/1111.png', size=obj.size, pos=obj.pos, allow_stretch=True))
 
     def state_callback(self, obj, value):
         pass
 
 class ScreenApp(App):
-
     def build(self):
         return GameLayout()
 
