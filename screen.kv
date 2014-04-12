@@ -26,6 +26,14 @@
         Screen:
             id: mainpage
             name: 'screen2'
+            Label:
+                text: "score " + str(root.score)
+                x: 100
+                y: 150
+            Label:
+                text: str(root.numberofsets) + " sets available"
+                x: 100
+                y: 180                
             Label: 
                 text: 'The Game Play Page.'
             GridLayout:
