@@ -17,6 +17,8 @@ class MyToggleButton(ToggleButton):
 
 
 class GameLayout(FloatLayout):
+    score = NumericProperty(0)
+    numberofsets = NumericProperty(0)
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
         super(GameLayout, self).__init__(**kwargs)
@@ -30,6 +32,7 @@ class GameLayout(FloatLayout):
                 on_press=self.on_press_callback, state=self.state_callback)
             self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
+        self.numberofsets = self.deck.numberOfSets(self.cards)
 
     def play(self):
         pass
@@ -43,10 +46,12 @@ class GameLayout(FloatLayout):
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                
+                self.score += 1
+                self.numberofsets = self.deck.numberOfSets(self.cards)
                 for index, i in enumerate(down):
                     self.buttons[i].children[0].text = str(newcards[index])
                     self.buttons[i].state = 'normal'
+                    self.cards[i] = newcards[index]
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
