@@ -1,13 +1,12 @@
 <MyToggleButton>:
+    #background_color: (205,201,201,10)
     Label:
-        x: root.x
-        y: root.y
+        x: root.x + 15
+        y: root.y + 15
         markup: True
         font_size: 30
 
 <GameLayout>:
-#    mainpage: mainpage
-#    FloatLayout:
     ScreenManager:
         id: _screen_manager
         Screen:
@@ -26,20 +25,21 @@
         Screen:
             id: mainpage
             name: 'screen2'
+            Label: 
+                text: '[b]Collection[/b]'
+                font_size: 30
+                markup: True
+                y: 450
             Label:
                 text: "score " + str(root.score)
-                x: 100
-                y: 150
-            Label:
-                text: str(root.numberofsets) + " sets available"
-                x: 100
-                y: 180                
-            Label: 
-                text: 'The Game Play Page.'
+                x: (cards_layout.width - 100)//2
+                y: cards_layout.top - 200                  
             GridLayout:
+                id: cards_layout
                 cols: 3
                 spacing: '10dp'
-                padding: [100,200,100,100]
+                padding: [100,100,100,200]
+
         Screen:
             id: gameoverpage
             name: 'screen3'
