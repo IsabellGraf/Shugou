@@ -5,8 +5,7 @@ from random import sample
 from collections import namedtuple
 from itertools import product
 
-# Enums for cards. A temporary solution. Should be handled in python3.4 or
-# by the enum34 module
+# Enums for cards.
 ONE, TWO, THREE = NUMBERS = [1, 2, 3]
 RED, GREEN, BLUE = COLOURS = [1, 2, 3]
 BLANK, STRIPED, FILLED = FILLINGS = [1, 2, 3]
@@ -19,11 +18,12 @@ PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
 # This allows each card to be represented by a unique integer
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
-# We extend the class so that it can fetch its own picture resource.
+# We extend the class for to know how it the card should be represented on screen
 
 
 def index(self):
-    ''' card -> int - returns an index base on a card for the purpose of looking up filenames of the associated card'''
+    ''' card -> int - returns an index base on a card for 
+    the purpose of looking up filenames of the associated card'''
     return str(self.number) + str(self.colour) + str(self.filling) + str(self.shape)
 Card.index = index
 
@@ -36,12 +36,11 @@ Card.filename = filename
 
 
 def cardPrint(self):
+    ''' Returns a basic formating for a card '''
     shapes = ['!', '@', '#']
     colours = ['ff3333', '3333ff', '33ff33']
-    # fillings = ['b', 'i', ''] # bold, italics
     fillings = ['_', '*', '']  # easier to read than bold and italics
     string = shapes[self.shape - 1] * self.number
-    #string = '[' + fillings[self.filling - 1] + ']' + string + '[/' + fillings[self.filling - 1] + ']' if self.filling != 3 else string
     string = fillings[self.filling - 1] + string + fillings[
         self.filling - 1] if self.filling != 3 else string
     string = '[color=' + colours[self.colour - 1] + ']' + string + '[/color]'
@@ -53,11 +52,13 @@ Card.__str__ = cardPrint
 
 class Deck(object):
 
-    '''A deck class that stores all playable cards along with ways of checking properties of subsets of the deck '''
+    '''A deck class that stores all playable cards along
+    with ways of checking properties of subsets of the deck '''
 
     def __init__(self):
-        # a complete set of cards
-        self.cards = set()
+        # a complete set of cards stored in a set
+        # thus, can never be taken out "in order"
+        self.cards = set() 
         for property in product([1, 2, 3], repeat=4):
             card = Card(*property)
             self.cards.add(card)
@@ -69,6 +70,7 @@ class Deck(object):
 
     @staticmethod
     def similarities(*cards):
+        ''' cards -> int -- returns the number of similarities in the sets of cards'''
         similarities = 0
         for i in range(0, 4):
             similarities += Deck.allSame(*[card[i] for card in cards])
@@ -76,10 +78,12 @@ class Deck(object):
 
     @staticmethod
     def allSame(*args):
+        ''' Helper method to check if all given elements are the same '''
         return len(set(args)) == 1
 
     @staticmethod
     def allSets(cards):
+        ''' Returns all sets in a collections of cards '''
         return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
 
     @staticmethod
@@ -110,30 +114,3 @@ class Deck(object):
         for card in newCards:
             self.cards.remove(card)
         return list(newCards)
-
-import unittest
-
-
-class TestDeck(unittest.TestCase):
-
-    def test_deck(self):
-        a = Card(ONE, RED, FILLED, STAR)
-        b = Card(TWO, RED, FILLED, STAR)
-        c = Card(THREE, RED, FILLED, STAR)
-        d = Card(THREE, RED, FILLED, CIRCLE)
-        e = Card(THREE, RED, FILLED, SQUARE)
-        self.assertEqual(Deck.numberOfSets([a, b, c, d, e]), 2)
-        self.assertTrue(Deck.hasSet([a, b, c, d, e]))
-        self.assertFalse(
-            Deck.hasSet(set([Card(number=3, colour=5, filling=8, shape=11), Card(number=2, colour=6, filling=7, shape=12), Card(number=2, colour=6, filling=9, shape=11)])))
-        self.assertTrue(Deck.hasSet(set([Card(number=3, colour=5, filling=8, shape=11), Card(number=2, colour=6, filling=7, shape=12), Card(number=2, colour=6, filling=9, shape=11)]) | {a}))
-
-        deck = Deck()
-        threeCards = deck.drawGuarantee()
-        self.assertTrue(Deck.hasSet(threeCards))
-        a = Card(ONE, RED, BLANK, STAR)
-        self.assertEqual(a.index(), '1111')
-        self.assertRaises(
-            ValueError, lambda x: deck.drawGuarantee(numberofcards=x), 0)
-if __name__ == "__main__":
-    unittest.main()
