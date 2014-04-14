@@ -34,6 +34,16 @@
                 text: "score " + str(root.score)
                 x: (cards_layout.width - 100)//2
                 y: cards_layout.top - 200                  
+            Label:
+                text: str(root.numberofsets) + " sets available"
+                x: 100
+                y: 180
+            Label:
+                text: root.scores
+                x: 10
+                y: 200                
+            Label: 
+                text: 'The Game Play Page.'
             GridLayout:
                 id: cards_layout
                 cols: 3
