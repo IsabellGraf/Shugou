@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from itertools import combinations
 from random import sample
 from collections import namedtuple
@@ -18,11 +16,11 @@ PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
 # This allows each card to be represented by a unique integer
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
-# We extend the class for to know how it the card should be represented on screen
+# We extend the class to help with its representation
 
 
 def index(self):
-    ''' card -> int - returns an index base on a card for 
+    ''' card -> int - returns an index base on a card for
     the purpose of looking up filenames of the associated card'''
     return str(self.number) + str(self.colour) + str(self.filling) + str(self.shape)
 Card.index = index
@@ -58,7 +56,7 @@ class Deck(object):
     def __init__(self):
         # a complete set of cards stored in a set
         # thus, can never be taken out "in order"
-        self.cards = set() 
+        self.cards = set()
         for property in product([1, 2, 3], repeat=4):
             card = Card(*property)
             self.cards.add(card)
