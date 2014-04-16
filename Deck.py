@@ -112,6 +112,11 @@ class Deck(object):
         return sum(Deck.checkSet(*c) for c in combinations(cards, 3))
 
     @staticmethod
+    def idOfSet(cards):
+        sortedCards = sorted(cards)
+        return ''.join([sortedCards[i].index for i in range(len(cards))])
+
+    @staticmethod
     def hasSet(cards):
         ''' list -> bool -- returns true if the cards contains an set'''
         return any(Deck.checkSet(*c) for c in combinations(cards, 3))
