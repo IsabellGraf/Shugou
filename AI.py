@@ -15,9 +15,7 @@ def AI(table):
 
 
 def get_difficulties(the_set):
-#    num_similar = Deck.similarities(the_set[0], the_set[1], the_set[2])
-#    difficulty = 4-num_similar
-    return ratingList[Deck.setIdentifier(the-set)]
+    return ratingList[Deck.setIdentifier(the_set)]
     
     
 def get_time(set_difficulties):
@@ -33,6 +31,7 @@ def get_time(set_difficulties):
 
 
 def demo():
+    ratingList = dict()
     c1=Card(1,1,1,1)
     c2=Card(2,3,1,2)
     c3=Card(1,2,3,1)
@@ -64,12 +63,25 @@ def newRatings(winnerRating, loserRating, K = 32):
     newLoserRating = loserRating + K*(0-ELoser)
     return newWinnerRating, newLoserRating
 
+
+def updateRatingsAI(table):
+    '''AI was faster, so all sets involved are actually harder than we thought, ie increase their rating
+    
+    Please call
+    >> updateRatingsAI(table)
+    whenever an AI finds a set
+    '''
+
+    allSets = Deck.allSets(table)
+    for the_set in allSets:
+        ratingList[Deck.setIdentifier(the_set)] += 50
+
         
-def updateRatings(table, setFound):
+def updateRatingsHuman(table, setFound):
     '''updates the ratings of all sets involved in this round
     
     Please call
-    >> updateRatings(table, setFound)
+    >> updateRatingsHuman(table, setFound)
     whenever a human finds a set
     '''
     initialRating = 1500 #any number would work, chess uses something like this usually, so why not...
