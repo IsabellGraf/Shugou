@@ -3,6 +3,4 @@
 
 .coverage
 
-*.png
-
 *.pkl
