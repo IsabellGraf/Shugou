@@ -1,11 +1,8 @@
 <MyToggleButton>:
     #background_color: (205,201,201,10)
     #on_press: self.parent.parent.parent.parent.on_press_callback(self)
-    Label:
-        x: root.x + 15
-        y: root.y + 15
-        markup: True
-        font_size: 30
+    background_normal: root.normalimage          
+    background_down: root.downimage
 
 <GameLayout>:
     ScreenManager:

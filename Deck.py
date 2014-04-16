@@ -26,12 +26,17 @@ def index(self):
 Card.index = index
 
 
-def filename(self):
+def normalimage(self):
     ''' Where the file should be stored for the card's image'''
     # This will need to be changed once we have the file structure workedout.
     return "images/" + self.index() + ".png"
-Card.filename = filename
+Card.normalimage = normalimage
 
+def downimage(self):
+    ''' Where the file should be stored for the card's image'''
+    # This will need to be changed once we have the file structure workedout.
+    return "images/" + self.index() + "_down.png"
+Card.downimage = downimage
 
 def cardPrint(self):
     ''' Returns a basic formating for a card '''
