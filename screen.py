@@ -76,8 +76,13 @@ def configure(ctx):
 
 
 class MyToggleButton(ToggleButton):
-    pass
-
+    normalimage = StringProperty('')
+    downimage = StringProperty('')
+    def __init__(self,card,**kwargs):
+        super(MyToggleButton, self).__init__(**kwargs)
+        self.card = card
+        self.normalimage = self.card.normalimage()
+        self.downimage = self.card.downimage()
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -91,10 +96,10 @@ class GameLayout(FloatLayout):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
-            self.buttons[i] = MyToggleButton()
+            self.buttons[i] = MyToggleButton(self.cards[i])
             self.buttons[i].bind(
                 on_press=self.on_press_callback, state=self.state_callback)
-            self.buttons[i].children[0].text = str(self.cards[i])
+            #self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
         self.setUpHint()
@@ -117,8 +122,9 @@ class GameLayout(FloatLayout):
         for name in name_of_players:
             self.scores += name + '      '+str(player_scores[name])+ '      '
 
-    def play(self):
-        pass
+    def play(self,numPlayers):
+        global number_of_players
+        number_of_players = numPlayers
 
     def setUpHint(self):
         self.hint = Deck.hint(self.cards)
