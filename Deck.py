@@ -116,8 +116,9 @@ class Deck(object):
         which will once combined with othercards form a set it or raise an error if impossible'''
         # verify that we have atleast one possible set
         if (len(othercards) + numberofcards < 3) or not Deck.hasSet(othercards | self.cards):
-            raise ValueError("Can't form a set")
-
+	        return False
+		if len(self.cards) < 3:
+			return False
         newCards = set(sample(self.cards, numberofcards))
         while not Deck.hasSet(newCards | othercards):
             newCards = set(sample(self.cards, numberofcards))

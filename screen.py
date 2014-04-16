@@ -161,16 +161,19 @@ class GameLayout(FloatLayout):
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                if number_of_players > 1:
-                    player_scores[value] += 1
+                if newcards is False:
+                    self.children[0].current = 'screen3'
                 else:
-                    self.score += 1
-                self.numberofsets = self.deck.numberOfSets(self.cards)
-                for index, i in enumerate(down):
-                    self.buttons[i].children[0].text = str(newcards[index])
-                    self.buttons[i].state = 'normal'
-                    self.cards[i] = newcards[index]
-                self.setUpHint()
+					if number_of_players > 1:
+						player_scores[value] += 1
+					else:
+						self.score += 1
+					self.numberofsets = self.deck.numberOfSets(self.cards)
+					for index, i in enumerate(down):
+						self.buttons[i].children[0].text = str(newcards[index])
+						self.buttons[i].state = 'normal'
+						self.cards[i] = newcards[index]
+					self.setUpHint()
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
