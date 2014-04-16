@@ -85,6 +85,18 @@ class Deck(object):
         return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
 
     @staticmethod
+    def hint(cards):
+        ''' Returns 2 cards that belong to a set amongs the cards or returns None if no set is found'''
+        return Deck.aSet(cards)[0:2]
+
+    @staticmethod
+    def aSet(cards):
+        ''' Returns a set of 3 cards or returns None if no set is found'''
+        for c in combinations(cards,3):
+            if Deck.checkSet(*c):
+                return c
+
+    @staticmethod
     def checkSet(card1, card2, card3):
         '''(card, card,card) -> bool -- Return true if these three cards form a valid set'''
         return all(Deck.allSameOrAllDifferent(card1[i], card2[i], card3[i]) for i in range(0, 4))

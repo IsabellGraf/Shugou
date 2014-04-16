@@ -10,7 +10,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from Deck import Deck
-
+from kivy.clock import Clock
 
 import sys
 from os import environ
@@ -89,9 +89,19 @@ class GameLayout(FloatLayout):
             self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
+        self.hint = Deck.hint(self.cards)
+        # After 10 second show a hint
+        Clock.schedule_interval(self.displayHint, 10)
 
     def play(self):
         pass
+
+    def displayHint(self,*arg):
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in self.hint:
+                button.state = 'down'
+            else:
+                button.state = 'normal'
 
     def on_press_callback(self, obj):
         down = []
@@ -108,6 +118,7 @@ class GameLayout(FloatLayout):
                     self.buttons[i].children[0].text = str(newcards[index])
                     self.buttons[i].state = 'normal'
                     self.cards[i] = newcards[index]
+                Clock.schedule_interval(self.displayHint, 10)
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
