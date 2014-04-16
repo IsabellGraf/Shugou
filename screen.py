@@ -117,8 +117,9 @@ class GameLayout(FloatLayout):
         for name in name_of_players:
             self.scores += name + '      '+str(player_scores[name])+ '      '
 
-    def play(self):
-        pass
+    def play(self,numPlayers):
+        global number_of_players
+        number_of_players = numPlayers
 
     def setUpHint(self):
         self.hint = Deck.hint(self.cards)

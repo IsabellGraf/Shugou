@@ -43,7 +43,6 @@ num_players = 0
 class TitleLayout(GridLayout):
     pass
 
-
 # Here is the game layout.
 # Currently, we organize everything into 3 columns.
 
