@@ -33,8 +33,12 @@
                 y: 450
             Label:
                 text: "score " + str(root.score)
-                x: (cards_layout.width - 100)//2
-                y: cards_layout.top - 200                  
+                x: cards_layout.x + 200
+                y: cards_layout.top - cards_layout.height - 400   
+            Label:
+                text: "Number of sets " + str(root.numberofsets)
+                x: cards_layout.x - 200
+                y: cards_layout.top - cards_layout.height -400                                  
             GridLayout:
                 id: cards_layout
                 cols: 3
