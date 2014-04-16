@@ -1,0 +1,61 @@
+<MyToggleButton>:
+    #background_color: (205,201,201,10)
+    #on_press: self.parent.parent.parent.parent.on_press_callback(self)
+    Label:
+        x: root.x + 15
+        y: root.y + 15
+        markup: True
+        font_size: 30
+
+<GameLayout>:
+    ScreenManager:
+        id: _screen_manager
+        Screen:
+            id: fontpage
+            name: 'screen1'
+            Label: 
+                text: 'The first screen'
+            Button:
+                size_hint: (None, None)
+                pos: root.width/2., root.height/2.
+                size: 200,200
+                text: 'Play Game'
+                on_press:  
+                    root.play()
+                    _screen_manager.current = 'screen2'
+        Screen:
+            id: mainpage
+            name: 'screen2'
+            Label: 
+                text: '[b]Collection[/b]'
+                font_size: 30
+                markup: True
+                y: 450
+            Label:
+                text: "score " + str(root.score)
+                x: (cards_layout.width - 100)//2
+                y: cards_layout.top - cards_layout.height - 200
+            Label:
+                text: str(root.numberofsets) + " sets available"
+                x: 100
+                y: 220
+            Label:
+                text: root.scores
+                x: 10
+                y: 240                
+            Label: 
+                text: 'The Game Play Page.'
+            GridLayout:
+                id: cards_layout
+                cols: 3
+                spacing: '10dp'
+                padding: [100,100,100,200]
+
+        Screen:
+            id: gameoverpage
+            name: 'screen3'
+            Label: 
+                text: 'The GameOver Page.'
+            Button:
+                text: 'Game Over'
+                on_press: _screen_manager.current = 'screen1'
