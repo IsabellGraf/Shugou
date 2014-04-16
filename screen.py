@@ -161,9 +161,10 @@ class GameLayout(FloatLayout):
         else:
             for i in down:
                 self.buttons[i].state = 'normal'
-        self.scores = ''
-        for name in name_of_players:
-            self.scores += name + '      '+str(player_scores[name])+ '      '
+        if number_of_players > 1:
+            self.scores = ''
+            for name in name_of_players:
+                self.scores += name + '      '+str(player_scores[name])+ '      '
 
 
     def state_callback(self, obj, value):
