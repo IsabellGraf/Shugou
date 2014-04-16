@@ -8,7 +8,7 @@ from Deck import Deck,Card
 class AI(object):
 
     def __init__(self):
-        self.ratingList =  AI.loadData()
+        self.ratingList =  self.loadData()
     
     def loadData(self):
         try:
@@ -21,7 +21,7 @@ class AI(object):
 
     def dumpData(self):
         output = open('AIdata.pkl', 'wb')
-        dump(self.ratinglist, output)
+        dump(self.ratingList, output)
         output.close()
 
     def reset(self):
@@ -34,9 +34,9 @@ class AI(object):
         set_difficulties = []
 
         for the_set in all_sets:
-            set_difficulties.append(get_difficulties(the_set))
+            set_difficulties.append(self.get_difficulties(the_set))
 
-        time,index = get_time(set_difficulties)
+        time,index = self.get_time(set_difficulties)
         set_cards1, set_cards2, set_cards3 = all_sets[index]
 
         return time, set_cards1, set_cards2, set_cards3
@@ -102,10 +102,13 @@ class AI(object):
                 losingSetRating = self.ratingList[losingSetKey]
             except KeyError: #first time this set shows up
                 losingSetRating = initialRating
-            newWinnerRating, newLoserRating = newRatings(setFoundRating, losingSetRating)
+            newWinnerRating, newLoserRating = self.newRatings(setFoundRating, losingSetRating)
             self.ratingList[setFoundKey] = newWinnerRating
             self.ratingList[losingSetKey] = newLoserRating
         self.dumpData()
+
+    def pprint(self):
+        return [ (key,self.ratingList[key]) for key in self.ratingList if self.ratingList[key] != 1500 ]
 
 if __name__ == "__main__":
     demo()
