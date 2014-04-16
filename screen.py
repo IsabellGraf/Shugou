@@ -12,6 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from Deck import Deck
+from kivy.clock import Clock
 
 number_of_players = 4
 name_of_players = ['John','Sally','Sam','Joey']
@@ -96,6 +97,7 @@ class GameLayout(FloatLayout):
             self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
+        self.setUpHint()
 
         # add a dropdown button for 'Set' call
         if number_of_players > 1:
@@ -117,6 +119,18 @@ class GameLayout(FloatLayout):
 
     def play(self):
         pass
+
+    def setUpHint(self):
+        self.hint = Deck.hint(self.cards)
+        # After 10 second show a hint
+        Clock.schedule_once(self.displayHint, 5)
+
+    def displayHint(self,*arg):
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in self.hint:
+                button.state = 'down'
+            else:
+                button.state = 'normal'
 
     def on_press_callback(self, obj):
         pass
@@ -155,6 +169,7 @@ class GameLayout(FloatLayout):
                     self.buttons[i].children[0].text = str(newcards[index])
                     self.buttons[i].state = 'normal'
                     self.cards[i] = newcards[index]
+                self.setUpHint()
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
