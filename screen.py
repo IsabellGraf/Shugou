@@ -89,12 +89,15 @@ class GameLayout(FloatLayout):
             self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
-        self.hint = Deck.hint(self.cards)
-        # After 10 second show a hint
-        Clock.schedule_interval(self.displayHint, 10)
+        self.setUpHint()
 
     def play(self):
         pass
+
+    def setUpHint(self):
+        self.hint = Deck.hint(self.cards)
+        # After 10 second show a hint
+        Clock.schedule_once(self.displayHint, 5)
 
     def displayHint(self,*arg):
         for index, button in enumerate(self.buttons):
@@ -118,7 +121,7 @@ class GameLayout(FloatLayout):
                     self.buttons[i].children[0].text = str(newcards[index])
                     self.buttons[i].state = 'normal'
                     self.cards[i] = newcards[index]
-                Clock.schedule_interval(self.displayHint, 10)
+                self.setUpHint()
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'

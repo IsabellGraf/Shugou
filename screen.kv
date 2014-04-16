@@ -1,6 +1,6 @@
 <MyToggleButton>:
     #background_color: (205,201,201,10)
-    on_press: self.parent.parent.parent.parent.on_press_callback(self)
+    #on_press: self.parent.parent.parent.parent.on_press_callback(self)
     Label:
         x: root.x + 15
         y: root.y + 15
@@ -34,7 +34,7 @@
             Label:
                 text: "score " + str(root.score)
                 x: (cards_layout.width - 100)//2
-                y: cards_layout.top - 200                  
+                y: cards_layout.top - cards_layout.height - 200
             GridLayout:
                 id: cards_layout
                 cols: 3
