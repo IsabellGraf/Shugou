@@ -26,12 +26,17 @@ def index(self):
 Card.index = index
 
 
-def filename(self):
+def normalimage(self):
     ''' Where the file should be stored for the card's image'''
     # This will need to be changed once we have the file structure workedout.
     return "images/" + self.index() + ".png"
-Card.filename = filename
+Card.normalimage = normalimage
 
+def downimage(self):
+    ''' Where the file should be stored for the card's image'''
+    # This will need to be changed once we have the file structure workedout.
+    return "images/" + self.index() + "_down.png"
+Card.downimage = downimage
 
 def cardPrint(self):
     ''' Returns a basic formating for a card '''
@@ -107,17 +112,26 @@ class Deck(object):
         return sum(Deck.checkSet(*c) for c in combinations(cards, 3))
 
     @staticmethod
+    def idOfSet(cards):
+        sortedCards = sorted(cards)
+        return ''.join([sortedCards[i].index() for i in range(len(cards))])
+
+    @staticmethod
     def hasSet(cards):
         ''' list -> bool -- returns true if the cards contains an set'''
         return any(Deck.checkSet(*c) for c in combinations(cards, 3))
+
+    def draw(self,numberofcards=12):
+        return self.drawGuarantee(numberofcards=12)
 
     def drawGuarantee(self, othercards=set(), numberofcards=3):
         ''' (list, int) -> list of cards -- Returns a numberofcards cards,
         which will once combined with othercards form a set it or raise an error if impossible'''
         # verify that we have atleast one possible set
         if (len(othercards) + numberofcards < 3) or not Deck.hasSet(othercards | self.cards):
-            raise ValueError("Can't form a set")
-
+	        return False
+		if len(self.cards) < 3:
+			return False
         newCards = set(sample(self.cards, numberofcards))
         while not Deck.hasSet(newCards | othercards):
             newCards = set(sample(self.cards, numberofcards))

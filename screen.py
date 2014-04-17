@@ -76,8 +76,13 @@ def configure(ctx):
 
 
 class MyToggleButton(ToggleButton):
-    pass
-
+    normalimage = StringProperty('')
+    downimage = StringProperty('')
+    def __init__(self,card,**kwargs):
+        super(MyToggleButton, self).__init__(**kwargs)
+        self.card = card
+        self.normalimage = self.card.normalimage()
+        self.downimage = self.card.downimage()
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -91,10 +96,10 @@ class GameLayout(FloatLayout):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
-            self.buttons[i] = MyToggleButton()
+            self.buttons[i] = MyToggleButton(self.cards[i])
             self.buttons[i].bind(
                 on_press=self.on_press_callback, state=self.state_callback)
-            self.buttons[i].children[0].text = str(self.cards[i])
+            #self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
         self.setUpHint()
@@ -161,16 +166,19 @@ class GameLayout(FloatLayout):
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                if number_of_players > 1:
-                    player_scores[value] += 1
+                if newcards is False:
+                    self.children[0].current = 'screen3'
                 else:
-                    self.score += 1
-                self.numberofsets = self.deck.numberOfSets(self.cards)
-                for index, i in enumerate(down):
-                    self.buttons[i].children[0].text = str(newcards[index])
-                    self.buttons[i].state = 'normal'
-                    self.cards[i] = newcards[index]
-                self.setUpHint()
+					if number_of_players > 1:
+						player_scores[value] += 1
+					else:
+						self.score += 1
+					self.numberofsets = self.deck.numberOfSets(self.cards)
+					for index, i in enumerate(down):
+						self.buttons[i].children[0].text = str(newcards[index])
+						self.buttons[i].state = 'normal'
+						self.cards[i] = newcards[index]
+					self.setUpHint()
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
