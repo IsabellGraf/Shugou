@@ -76,7 +76,7 @@ for color_number,color in enumerate(colors):
                         draw2.polygon(shape(infovec,size),fill = color, outline = None)
                 del draw1
 		del draw2
-                im1.save('images/' + str(color_number+1)+str(shape_number+1)+str(number_number+1)+str(filling_number+1)+'w'+'.png')
-                im2.save('images/' + str(color_number+1)+str(shape_number+1)+str(number_number+1)+str(filling_number+1)+'r'+'.png')
+                im1.save('images/' + str(color_number+1)+str(shape_number+1)+str(number_number+1)+str(filling_number+1)+'.png')
+                im2.save('images/' + str(color_number+1)+str(shape_number+1)+str(number_number+1)+str(filling_number+1)+'_down'+'.png')
                 
                 
