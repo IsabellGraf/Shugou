@@ -1,6 +1,6 @@
-
+*~
 *.pyc
 
 .coverage
 
-*.png
+*.pkl

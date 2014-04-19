@@ -12,6 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from Deck import Deck
+from kivy.clock import Clock
 
 number_of_players = 4
 name_of_players = ['John','Sally','Sam','Joey']
@@ -75,8 +76,13 @@ def configure(ctx):
 
 
 class MyToggleButton(ToggleButton):
-    pass
-
+    normalimage = StringProperty('')
+    downimage = StringProperty('')
+    def __init__(self,card,**kwargs):
+        super(MyToggleButton, self).__init__(**kwargs)
+        self.card = card
+        self.normalimage = self.card.normalimage()
+        self.downimage = self.card.downimage()
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -90,12 +96,13 @@ class GameLayout(FloatLayout):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(12):
             btn_text = 'Button' + str(i + 1)
-            self.buttons[i] = MyToggleButton()
+            self.buttons[i] = MyToggleButton(self.cards[i])
             self.buttons[i].bind(
                 on_press=self.on_press_callback, state=self.state_callback)
-            self.buttons[i].children[0].text = str(self.cards[i])
+            #self.buttons[i].children[0].text = str(self.cards[i])
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
+        self.setUpHint()
 
         # add a dropdown button for 'Set' call
         if number_of_players > 1:
@@ -115,8 +122,21 @@ class GameLayout(FloatLayout):
         for name in name_of_players:
             self.scores += name + '      '+str(player_scores[name])+ '      '
 
-    def play(self):
-        pass
+    def play(self,numPlayers):
+        global number_of_players
+        number_of_players = numPlayers
+
+    def setUpHint(self):
+        self.hint = Deck.hint(self.cards)
+        # After 10 second show a hint
+        Clock.schedule_once(self.displayHint, 5)
+
+    def displayHint(self,*arg):
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in self.hint:
+                button.state = 'down'
+            else:
+                button.state = 'normal'
 
     def on_press_callback(self, obj):
         pass
@@ -146,15 +166,19 @@ class GameLayout(FloatLayout):
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                if number_of_players > 1:
-                    player_scores[value] += 1
+                if newcards is False:
+                    self.children[0].current = 'screen3'
                 else:
-                    self.score += 1
-                self.numberofsets = self.deck.numberOfSets(self.cards)
-                for index, i in enumerate(down):
-                    self.buttons[i].children[0].text = str(newcards[index])
-                    self.buttons[i].state = 'normal'
-                    self.cards[i] = newcards[index]
+					if number_of_players > 1:
+						player_scores[value] += 1
+					else:
+						self.score += 1
+					self.numberofsets = self.deck.numberOfSets(self.cards)
+					for index, i in enumerate(down):
+						self.buttons[i].children[0].text = str(newcards[index])
+						self.buttons[i].state = 'normal'
+						self.cards[i] = newcards[index]
+					self.setUpHint()
             else:
                 for i in down:
                     self.buttons[i].state = 'normal'
