@@ -39,6 +39,7 @@ class GameLayout(FloatLayout):
     score = NumericProperty(0)
     scores = StringProperty('')
     numberofsets = NumericProperty(0)
+    number_of_players = NumericProperty(1)
 
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
@@ -79,10 +80,6 @@ class GameLayout(FloatLayout):
         for name in name_of_players:
             self.scores += name + '      ' + \
                 str(player_scores[name]) + '      '
-
-    def play(self, numPlayers):
-        global number_of_players
-        number_of_players = numPlayers
 
     def setUpHint(self):
         self.hint = Deck.hint(self.cards)
