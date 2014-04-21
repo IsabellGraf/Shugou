@@ -1,8 +1,15 @@
 <MyToggleButton>:
-    #background_color: (205,201,201,10)
-    #on_press: self.parent.parent.parent.parent.on_press_callback(self)
     background_normal: root.normalimage          
     background_down: root.downimage
+
+<PlayerSection@Button>:
+    value: 0
+    size_hint: (None, None)
+    size: 200,100
+    text: str(self.value) + ' Player'
+    # How to use different fonts
+    # Maybe we'll need to include the font in the game itself?
+    #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
 
 <GameLayout>:
     ScreenManager:
@@ -19,41 +26,34 @@
                 size: 100,100
 				pos: (root.width-100)/2, root.height-100
 				
-            Button:
-                size_hint: (None, None)
+            PlayerSection:
+                value: 1
                 pos: (root.width-200)/2., 4*root.height/5-100.
-                size: 200,100
-                text: '1 Player'
-                on_press:  
-                    root.play(1)
-                    _screen_manager.current = 'screen2'
-                    
-            Button:
-                size_hint: (None, None)
+                on_press:
+                    root.number_of_players = self.value
+                    _screen_manager.current = 'screen2'                    
+
+            PlayerSection:
+                value: 2
                 pos: (root.width-200)/2., 3*root.height/5-100.
-                size: 200,100
-                text: '2 Player'
-                on_press:  
-                    root.play(2)
-                    _screen_manager.current = 'screen2'
-                    
-            Button:
-                size_hint: (None, None)
+                on_press:
+                    root.number_of_players = self.value
+                    _screen_manager.current = 'screen2'     
+
+            PlayerSection:
+                value: 3
                 pos: (root.width-200)/2., 2*root.height/5-100.
-                size: 200,100
-                text: '3 Player'
-                on_press:  
-                    root.play(3)
-                    _screen_manager.current = 'screen2'
-                    
-            Button:
-                size_hint: (None, None)
+                on_press:
+                    root.number_of_players = self.value
+                    _screen_manager.current = 'screen2'     
+
+            PlayerSection:
+                value: 4
                 pos: (root.width-200)/2., root.height/5-100.
-                size: 200,100
-                text: '4 Player'
-                on_press:  
-                    root.play(4)
-                    _screen_manager.current = 'screen2'
+                on_press:
+                    root.number_of_players = self.value
+                    _screen_manager.current = 'screen2'     
+                    
 			Button:
                 size_hint: (None, None)
                 pos: (root.width-200)/8., 4*root.height/5-100.

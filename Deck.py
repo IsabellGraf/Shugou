@@ -61,6 +61,10 @@ class Deck(object):
     def __init__(self):
         # a complete set of cards stored in a set
         # thus, can never be taken out "in order"
+        self.fill()
+
+    def fill(self):
+        '''Fill the deck with a new sets of cards'''
         self.cards = set()
         for property in product([1, 2, 3], repeat=4):
             card = Card(*property)
