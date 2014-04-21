@@ -125,6 +125,10 @@ class Deck(object):
         ''' list -> bool -- returns true if the cards contains an set'''
         return any(Deck.checkSet(*c) for c in combinations(cards, 3))
 
+    def __iter__(self):
+        for card in self.cards:
+            yield card
+            
     def draw(self,numberofcards=12):
         return self.drawGuarantee(numberofcards=12)
 
@@ -133,9 +137,9 @@ class Deck(object):
         which will once combined with othercards form a set it or raise an error if impossible'''
         # verify that we have atleast one possible set
         if (len(othercards) + numberofcards < 3) or not Deck.hasSet(othercards | self.cards):
-	        return False
-		if len(self.cards) < 3:
-			return False
+            return False
+        if len(self.cards) < 3:
+            return False
         newCards = set(sample(self.cards, numberofcards))
         while not Deck.hasSet(newCards | othercards):
             newCards = set(sample(self.cards, numberofcards))
