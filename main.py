@@ -111,7 +111,7 @@ class GameLayout(FloatLayout):
             button.state = 'normal'
 
     def checkIfSetOnBoard(self, obj):
-        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the deck'''
+        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
         if len(down) != 3:
             return
