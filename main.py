@@ -27,13 +27,12 @@ from kivy.logger import Logger
 class MyToggleButton(ToggleButton):
     normalimage = StringProperty('')
     downimage = StringProperty('')
+    card = ObjectProperty()
 
-    def __init__(self, card, **kwargs):
-        super(MyToggleButton, self).__init__(**kwargs)
-        self.card = card
+    def on_card(self, instance, value):
+        self.card = value
         self.normalimage = self.card.normalimage()
-        self.downimage = self.card.downimage()
-
+        self.downimage = self.card.downimage()        
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -48,14 +47,12 @@ class GameLayout(FloatLayout):
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(12):
-            btn_text = 'Button' + str(i + 1)
-            self.buttons[i] = MyToggleButton(self.cards[i])
-            self.buttons[i].bind(
-                on_press=self.on_press_callback, state=self.state_callback)
-            #self.buttons[i].children[0].text = str(self.cards[i])
+            self.buttons[i] = MyToggleButton()
+            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
         self.setUpHint()
+        self.updateGrid()
 
         # add a dropdown button for 'Set' call
         if number_of_players > 1:
@@ -81,7 +78,14 @@ class GameLayout(FloatLayout):
             self.scores += name + '      ' + \
                 str(player_scores[name]) + '      '
 
+    def updateGrid(self):
+        '''Updates the cards being displayed'''
+        for i, card in enumerate(self.cards):
+            self.buttons[i].card = card
+            self.buttons[i].state = 'normal'
+
     def setUpHint(self):
+        '''Set-up which cards will be part of the hint'''
         self.hint = Deck.hint(self.cards)
         # After 10 second show a hint
         Clock.schedule_once(self.displayHint, 5)
@@ -93,27 +97,36 @@ class GameLayout(FloatLayout):
             else:
                 button.state = 'normal'
 
-    def on_press_callback(self, obj):
-        pass
-        # down = []
-        # for index, button in enumerate(self.buttons):
-        #     if button.state == 'down':
-        #         down.append(index)
-        # if len(down) == 3:
-        #     if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-        #         selectedcards = {self.cards[i] for i in down}
-        #         newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-        #         self.score += 1
-        #         self.numberofsets = self.deck.numberOfSets(self.cards)
-        #         for index, i in enumerate(down):
-        #             self.buttons[i].children[0].text = str(newcards[index])
-        #             self.buttons[i].state = 'normal'
-        #             self.cards[i] = newcards[index]
-        #     else:
-        #         for i in down:
-        #             self.buttons[i].state = 'normal'
+    def selected(self):
+        '''Returns the indices of all the selected ToggleButton'''
+        down = []
+        for index, button in enumerate(self.buttons):
+            if button.state == 'down':
+                down.append(index)
+        return down  
+
+    def unselectAll(self):
+        ''' Unselect all the toggle buttons '''
+        for button in self.buttons:
+            button.state = 'normal'
+
+    def checkIfSetOnBoard(self, obj):
+        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the deck'''
+        down = self.selected()
+        if len(down) != 3:
+            return
+        if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+            selectedcards = {self.cards[i] for i in down}
+            newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+            self.numberofsets = self.deck.numberOfSets(self.cards)
+            for index, i in enumerate(down):
+                self.cards[i] = newcards[index]
+            self.updateGrid()
+        else:
+            self.unselectAll()
 
     def on_set_callback(self, obj, value):
+        '''Called when the player button is pressed'''
         down = []
         for index, button in enumerate(self.buttons):
             if button.state == 'down':
@@ -142,13 +155,6 @@ class GameLayout(FloatLayout):
         else:
             for i in down:
                 self.buttons[i].state = 'normal'
-        #self.scores = ''
-        #for name in name_of_players:
-        #    self.scores += name + '      ' + \
-        #        str(player_scores[name]) + '      '
-
-    def state_callback(self, obj, value):
-        pass
 
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
