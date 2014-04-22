@@ -25,6 +25,8 @@ from os import environ
 from kivy.config import Config
 from kivy.logger import Logger
 
+from AI import AI
+
 class PlayerSection(Button):
     def __init__(self,**kwargs):
         super(PlayerSection, self).__init__(**kwargs)
@@ -53,12 +55,17 @@ class GameLayout(FloatLayout):
         playscreen = self.children[0].get_screen('screen2')
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
+        if AI_on:
+            pass
+
+        self.ai = AI()
         for i in range(12):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
         self.setUpHint()
+        self.setUpAI()
         self.updateGrid()
 
         # add a dropdown button for 'Set' call
@@ -96,6 +103,13 @@ class GameLayout(FloatLayout):
         self.hint = Deck.hint(self.cards)
         # After 10 second show a hint
         Clock.schedule_once(self.displayHint, 5)
+
+    def setUpAI(self):
+        (time, self.aiCards) = ai.suggestion(self.cards)
+        Clock.schedule_once(self.AIplay, 2)
+
+    def AIplay(self):
+        print(self.aiCards)
 
     def displayHint(self, *arg):
         for index, button in enumerate(self.buttons):
