@@ -13,6 +13,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from Deck import Deck
 from kivy.clock import Clock
+from kivy.core.window import Window
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
@@ -23,6 +24,12 @@ import sys
 from os import environ
 from kivy.config import Config
 from kivy.logger import Logger
+
+class PlayerSection(Button):
+    def __init__(self,**kwargs):
+        super(PlayerSection, self).__init__(**kwargs)
+        self.size = Window.size[0]//6, Window.size[1]//6
+
 
 class MyToggleButton(ToggleButton):
     normalimage = StringProperty('')
