@@ -20,37 +20,40 @@ def make_star(infos, size):
 
 
 def make_triangle(infos, size):
-    a = infos[0] * size
+    a = infos[0] * 0.95 * size
     d = infos[1]
     c = infos[2]
-    xx = [(d - 0.2 * a, c - 0.7 * a), (d + 0.75 * a, c + 0.8 * a), (d - a, c)]
+    xx = [(d - 0.75 * a, c - 0.3 * a), (d + 0.1 * a, c - a), (d + 0.67 * a, c + a)]
     return xx
 
 
 def make_square(infos, size):
-    a = infos[0] * 0.7 * size
+    a = infos[0] * 0.9 * size
     d = infos[1]
     c = infos[2]
-    xx = [d - a, c - a, d - a, c + a, d + a, c + a, d + a, c - a]
+    #xx = [d - a, c - a, d - a, c + a, d + a, c + a, d + a, c - a]
+    xx = [(d - 0.6 * a, c - a), (d + a, c - 0.6 * a), (d + 0.6 * a, c + a), (d - a, c + 0.6 * a)]
     return xx
 
 
 white = (255, 255, 255)
 red = (255, 200, 200)
 
-double = 5
+double = 9
+smaller = 0.8
 colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (253, 236, 0)}
 shapes = {1: make_star, 2: make_square, 3: make_triangle}
 # [size, x, y]
-numbers = {1: [[double*50, double*100, double*50]], 2: [[double*40, double*50, double*50], [double*40, double*150, double*50]],
-           3: [[double*35, double*37, double*60], [double*35, double*100, double*40], [double*35, double*162, double*60]]}
+numbers = {1: [[double*19, double*31, double*19]], 
+           2: [[double*14, double*16.5, double*19], [double*14, double*43.5, double*19]],
+           3: [[double*12.5, double*13, double*23], [double*12.5, double*31, double*15], [double*12.5, double*48, double*23]]}
 
 
 deck = Deck()
 
 for card in deck:
-    im1 = Image.new('RGB', (double*200, double*100), white) # normal state
-    im2 = Image.new('RGB', (double*200, double*100), red) # down state
+    im1 = Image.new('RGB', (double*62, double*38), white) # normal state
+    im2 = Image.new('RGB', (double*62, double*38), red) # down state
     draw1 = ImageDraw.Draw(im1)
     draw2 = ImageDraw.Draw(im2)
 
@@ -58,29 +61,35 @@ for card in deck:
     shape = shapes[card.shape]
     color = colors[card.colour]
 
-    for info in number: # create 1, 2 or 3 object
-        size = 1
+    for counter,info in enumerate(number): # create 1, 2 or 3 object
+        size = smaller
         infovec = list(info) # copying the data
         if card.number == 3 and card.shape == 3:
-            infovec[2] = double*50
+            infovec[2] = double*19
+        if card.number == 3 and card.shape == 2 and counter == 1:
+            infovec[1] = double*32.5
         draw1.polygon(shape(infovec, size), fill=color, outline=None)
         draw2.polygon(shape(infovec, size), fill=color, outline=None)
 
     if card.filling > 1:
-        for infos in number:
-            size=0.7
+        for counter,infos in enumerate(number):
+            size=0.7 * smaller
             infovec = list(infos)
             if card.number == 3 and card.shape == 3:
-                infovec[2] = double*50
+                infovec[2] = double*19
+            if card.number == 3 and card.shape == 2 and counter == 1:
+                infovec[1] = double*32.5
             draw1.polygon(shape(infovec,size),fill = white, outline = None)
             draw2.polygon(shape(infovec,size),fill = red, outline = None)
 
     if card.filling > 2:
-        for info in number:
-            size = 0.4
+        for counter,info in enumerate(number):
+            size = 0.4 * smaller
             infovec = list(info)
             if card.number == 3 and card.shape == 3:
-                infovec[2] = double*50
+                infovec[2] = double*19
+            if card.number == 3 and card.shape == 2 and counter == 1:
+                infovec[1] = double*32.5
             draw1.polygon(
                 shape(infovec, size), fill=color, outline=None)
             draw2.polygon(
