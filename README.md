@@ -3,7 +3,7 @@ Collections
 
 Organization:
 
-1. Front page: @ChristinaLK
+1. Front Page/ Tutorial/ Documentation: @ChristinaLK
 
 2. Pictures: IsabellGraf
 
