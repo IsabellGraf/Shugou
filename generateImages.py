@@ -66,7 +66,18 @@ for card in deck:
         draw1.polygon(shape(infovec, size), fill=color, outline=None)
         draw2.polygon(shape(infovec, size), fill=color, outline=None)
 
-    if filling > 1:
+    if filling == 0:
+        for info in number:
+            size = 0.7
+            infovec = list(info)
+            if card.number == 3 and card.shape == 3:
+                infovec[2] = 50
+            draw1.polygon(
+                shape(infovec, size), fill=white, outline=None)
+            draw2.polygon(
+                shape(infovec, size), fill=red, outline=None)
+
+    if filling == 1:
         for info in number:
             size = 0.7
             infovec = list(info)
