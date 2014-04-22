@@ -55,8 +55,7 @@ class GameLayout(FloatLayout):
         playscreen = self.children[0].get_screen('screen2')
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
-        if AI_on:
-            pass
+
 
         self.ai = AI()
         for i in range(12):
@@ -105,7 +104,7 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(self.displayHint, 5)
 
     def setUpAI(self):
-        (time, self.aiCards) = ai.suggestion(self.cards)
+        (time, self.aiCards) = self.ai.suggestion(self.cards)
         Clock.schedule_once(self.AIplay, 2)
 
     def AIplay(self):
