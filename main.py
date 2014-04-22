@@ -22,6 +22,7 @@ player_scores = dict.fromkeys(name_of_players, 0)
 
 import sys
 from os import environ
+import time
 from kivy.config import Config
 from kivy.logger import Logger
 
@@ -96,6 +97,8 @@ class GameLayout(FloatLayout):
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
+        self.t0 = time.clock()
+
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint'''
@@ -106,7 +109,6 @@ class GameLayout(FloatLayout):
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
         #print(self.aiCards, time)
-
         Clock.schedule_once(self.AIplay, 6)
 
     def AIplay(self, *arg):
@@ -118,6 +120,7 @@ class GameLayout(FloatLayout):
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 3)
+        self.AIplayed = True
 
     def displayHint(self, *arg):
         for index, button in enumerate(self.buttons):
@@ -150,10 +153,10 @@ class GameLayout(FloatLayout):
             self.numberofsets = self.deck.numberOfSets(self.cards)
             for index, i in enumerate(down):
                 self.cards[i] = newcards[index]
+            print(time.clock()-self.t0)
+            
             self.updateGrid()
-
             self.setUpAI()
-
         else:
             self.unselectAll()
 

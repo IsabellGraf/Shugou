@@ -16,10 +16,10 @@ AISet = allSets[1]
 ai = AI()
 
 for i in range(10):
-	ai.updateRatingsHuman(cards,playerSet)
+	ai.updateRatingsHuman(cards, playerSet, 3)
 	print(ai.pprint())
 
-ai.updateRatingsAI(cards)
+ai.updateRatingsAI(cards, playerSet, 2)
 
 print("Ai")
 print(ai.pprint())

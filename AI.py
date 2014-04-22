@@ -71,7 +71,7 @@ class AI(object):
         return newWinnerRating, newLoserRating
 
 
-    def updateRatingsAI(self, table):
+    def updateRatingsAI(self, table, setFound, the_time):
         '''AI was faster, so all sets involved are actually harder than we thought, ie increase their rating
         
         Please call
@@ -83,8 +83,8 @@ class AI(object):
         for the_set in allSets:
             self.ratingList[Deck.idOfSet(the_set)] += 50
         self.dumpData()
-            
-    def updateRatingsHuman(self, table, setFound):
+
+    def updateRatingsHuman(self, table, setFound, the_time):
         '''updates the ratings of all sets involved in this round
         
         Please call
