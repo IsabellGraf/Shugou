@@ -38,65 +38,54 @@ def make_square(infos, size):
 white = (255, 255, 255)
 red = (255, 200, 200)
 
+double = 5
 colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (253, 236, 0)}
 shapes = {1: make_star, 2: make_square, 3: make_triangle}
-fillings = {1: 0, 2: 1, 3: 2}
-numbers = {1: [[50, 100, 50]], 2: [[40, 50, 50], [40, 150, 50]],
-           3: [[35, 37, 60], [35, 100, 40], [35, 162, 60]]}
+# [size, x, y]
+numbers = {1: [[double*50, double*100, double*50]], 2: [[double*40, double*50, double*50], [double*40, double*150, double*50]],
+           3: [[double*35, double*37, double*60], [double*35, double*100, double*40], [double*35, double*162, double*60]]}
 
 
 deck = Deck()
 
 for card in deck:
-    im1 = Image.new('RGB', (200, 100), white) # normal state
-    im2 = Image.new('RGB', (200, 100), red) # down state
+    im1 = Image.new('RGB', (double*200, double*100), white) # normal state
+    im2 = Image.new('RGB', (double*200, double*100), red) # down state
     draw1 = ImageDraw.Draw(im1)
     draw2 = ImageDraw.Draw(im2)
 
     number = numbers[card.number]
     shape = shapes[card.shape]
     color = colors[card.colour]
-    filling = fillings[card.filling]
 
     for info in number: # create 1, 2 or 3 object
         size = 1
         infovec = list(info) # copying the data
         if card.number == 3 and card.shape == 3:
-            infovec[2] = 50
+            infovec[2] = double*50
         draw1.polygon(shape(infovec, size), fill=color, outline=None)
         draw2.polygon(shape(infovec, size), fill=color, outline=None)
 
-    if filling == 0:
-        for info in number:
-            size = 0.7
-            infovec = list(info)
+    if card.filling > 1:
+        for infos in number:
+            size=0.7
+            infovec = list(infos)
             if card.number == 3 and card.shape == 3:
-                infovec[2] = 50
-            draw1.polygon(
-                shape(infovec, size), fill=white, outline=None)
-            draw2.polygon(
-                shape(infovec, size), fill=red, outline=None)
+                infovec[2] = double*50
+            draw1.polygon(shape(infovec,size),fill = white, outline = None)
+            draw2.polygon(shape(infovec,size),fill = red, outline = None)
 
-    if filling == 1:
-        for info in number:
-            size = 0.7
-            infovec = list(info)
-            if card.number == 3 and card.shape == 3:
-                infovec[2] = 50
-            draw1.polygon(
-                shape(infovec, size), fill=white, outline=None)
-            draw2.polygon(
-                shape(infovec, size), fill=red, outline=None)
-
-    if filling == 2:
+    if card.filling > 2:
         for info in number:
             size = 0.4
             infovec = list(info)
             if card.number == 3 and card.shape == 3:
-                infovec[2] = 50
+                infovec[2] = double*50
             draw1.polygon(
                 shape(infovec, size), fill=color, outline=None)
             draw2.polygon(
                 shape(infovec, size), fill=color, outline=None)
+
+          
     im1.save(card.normalimage())
     im2.save(card.downimage())
