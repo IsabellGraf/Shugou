@@ -39,7 +39,7 @@ def make_square(infos, size):
 white = (255, 255, 255)
 red = (255, 200, 200)
 
-double = 5
+double = 9
 smaller = 0.8
 colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (253, 236, 0)}
 shapes = {1: make_star, 2: make_square, 3: make_triangle}
