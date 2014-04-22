@@ -162,6 +162,8 @@ class GameLayout(FloatLayout):
                 if number_of_players>1:
                     # Load the popup
                     self.select_player_popup()
+                else:
+                    self.score += 1
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
                 self.numberofsets = self.deck.numberOfSets(self.cards)
