@@ -28,7 +28,6 @@ from kivy.config import Config
 from kivy.logger import Logger
 
 class SelectPlayersPopup(Popup):
-    # player_scores[1]=0
     current_player = StringProperty('None')
     def get_players_name(self,value):
         return name_of_players[value]
