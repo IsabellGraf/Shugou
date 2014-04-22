@@ -25,6 +25,8 @@ from os import environ
 from kivy.config import Config
 from kivy.logger import Logger
 
+from AI import AI
+
 class PlayerSection(Button):
     def __init__(self,**kwargs):
         super(PlayerSection, self).__init__(**kwargs)
@@ -46,19 +48,23 @@ class GameLayout(FloatLayout):
     scores = StringProperty('')
     numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
-
+    
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
         super(GameLayout, self).__init__(**kwargs)
         playscreen = self.children[0].get_screen('screen2')
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
+
+
+        self.ai = AI()
         for i in range(12):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
-        self.setUpHint()
+        #self.setUpHint()
+        self.setUpAI()
         self.updateGrid()
 
         # add a dropdown button for 'Set' call
@@ -94,8 +100,24 @@ class GameLayout(FloatLayout):
     def setUpHint(self):
         '''Set-up which cards will be part of the hint'''
         self.hint = Deck.hint(self.cards)
-        # After 10 second show a hint
+        # After some time in seconds show a hint
         Clock.schedule_once(self.displayHint, 5)
+
+    def setUpAI(self):
+        (time, self.aiCards) = self.ai.suggestion(self.cards)
+        #print(self.aiCards, time)
+
+        Clock.schedule_once(self.AIplay, 6)
+
+    def AIplay(self, *arg):
+        print(self.aiCards)
+        for index, card in enumerate(self.cards):
+            if card in self.aiCards:
+                self.buttons[index].state = 'down'
+            else:
+                self.buttons[index].state = 'normal'
+        # Basic AI animation.
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 3)
 
     def displayHint(self, *arg):
         for index, button in enumerate(self.buttons):
@@ -129,6 +151,9 @@ class GameLayout(FloatLayout):
             for index, i in enumerate(down):
                 self.cards[i] = newcards[index]
             self.updateGrid()
+
+            self.setUpAI()
+
         else:
             self.unselectAll()
 
@@ -147,12 +172,13 @@ class GameLayout(FloatLayout):
                     self.children[0].current = 'screen3'
                 else:
                     if number_of_players > 1:
-                        player_scores[value] += 1
+                        #player_scores[value] += 1
+                        pass
                     else:
                         self.score += 1
                     self.numberofsets = self.deck.numberOfSets(self.cards)
                     for index, i in enumerate(down):
-                        self.buttons[i].children[0].text = str(newcards[index])
+                        
                         self.buttons[i].state = 'normal'
                         self.cards[i] = newcards[index]
                     self.setUpHint()
