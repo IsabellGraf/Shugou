@@ -39,11 +39,14 @@ class AI(object):
         time,index = self.get_time(set_difficulties)
         set_cards1, set_cards2, set_cards3 = all_sets[index]
 
-        return time, set_cards1, set_cards2, set_cards3
+        return time, (set_cards1, set_cards2, set_cards3)
 
 
     def get_difficulties(self,the_set):
-        return self.ratingList[Deck.idOfSet(the_set)]
+        try:
+            return self.ratingList[Deck.idOfSet(the_set)]
+        except KeyError:
+            return 1500
     
     
     def get_time(self, set_difficulties):
@@ -68,7 +71,7 @@ class AI(object):
         return newWinnerRating, newLoserRating
 
 
-    def updateRatingsAI(self, table):
+    def updateRatingsAI(self, table, setFound, the_time):
         '''AI was faster, so all sets involved are actually harder than we thought, ie increase their rating
         
         Please call
@@ -78,10 +81,13 @@ class AI(object):
 
         allSets = Deck.allSets(table)
         for the_set in allSets:
-            self.ratingList[Deck.idOfSet(the_set)] += 50
+            try:
+                self.ratingList[Deck.idOfSet(the_set)] += 50
+            except:
+                self.ratingList[Deck.idOfSet(the_set)] = 1550
         self.dumpData()
-            
-    def updateRatingsHuman(self, table, setFound):
+
+    def updateRatingsHuman(self, table, setFound, the_time):
         '''updates the ratings of all sets involved in this round
         
         Please call
