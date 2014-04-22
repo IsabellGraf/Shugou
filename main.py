@@ -14,6 +14,7 @@ from kivy.base import runTouchApp
 from Deck import Deck
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.uix.popup import Popup
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
@@ -24,6 +25,16 @@ import sys
 from os import environ
 from kivy.config import Config
 from kivy.logger import Logger
+
+class SelectPlayersPopup(Popup):
+    # player_scores[1]=0
+    current_player = StringProperty('None')
+    def get_players_name(self,value):
+        return name_of_players[value]
+
+    def update_scores(self,value):
+        player_scores[name_of_players[value]] += 1
+        # player_scores[self.current_player] += 1
 
 class PlayerSection(Button):
     def __init__(self,**kwargs):
@@ -45,7 +56,7 @@ class GameLayout(FloatLayout):
     score = NumericProperty(0)
     scores = StringProperty('')
     numberofsets = NumericProperty(0)
-    number_of_players = NumericProperty(1)
+    #number_of_players = NumericProperty(1)
 
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
@@ -62,25 +73,25 @@ class GameLayout(FloatLayout):
         self.updateGrid()
 
         # add a dropdown button for 'Set' call
-        if number_of_players > 1:
-            self.setbutton = DropDown()
-            for index in range(number_of_players):
-                btn = Button(
-                    text=str(name_of_players[index - 1]), size_hint_y=None, height=20)
-                btn.bind(
-                    on_release=lambda btn: self.setbutton.select(btn.text))
-                self.setbutton.add_widget(btn)
+        # if number_of_players > 1:
+        #     self.setbutton = DropDown()
+        #     for index in range(number_of_players):
+        #         btn = Button(
+        #             text=str(name_of_players[index - 1]), size_hint_y=None, height=20)
+        #         btn.bind(
+        #             on_release=lambda btn: self.setbutton.select(btn.text))
+        #         self.setbutton.add_widget(btn)
 
-            self.mainbutton = Button(
-                text='Set', size_hint=(None, None), size=(100, 100))
-            self.mainbutton.bind(on_release=self.setbutton.open)
-            # to verify if there is a set
-            self.setbutton.bind(on_select=self.on_set_callback)
-        else:
-            self.mainbutton = Button(
-                text='Set', size_hint=(None, None), size=(100, 100))
-            self.mainbutton.bind(on_release=self.on_set_callback)
-        playscreen.add_widget(self.mainbutton)
+        #     self.mainbutton = Button(
+        #         text='Set', size_hint=(None, None), size=(100, 100))
+        #     self.mainbutton.bind(on_release=self.setbutton.open)
+        #     # to verify if there is a set
+        #     self.setbutton.bind(on_select=self.on_set_callback)
+        # else:
+        #     self.mainbutton = Button(
+        #         text='Set', size_hint=(None, None), size=(100, 100))
+        #     self.mainbutton.bind(on_release=self.on_set_callback)
+        # playscreen.add_widget(self.mainbutton)
         for name in name_of_players:
             self.scores += name + '      ' + \
                 str(player_scores[name]) + '      '
@@ -95,7 +106,7 @@ class GameLayout(FloatLayout):
         '''Set-up which cards will be part of the hint'''
         self.hint = Deck.hint(self.cards)
         # After 10 second show a hint
-        Clock.schedule_once(self.displayHint, 5)
+        Clock.schedule_once(self.displayHint, 1)
 
     def displayHint(self, *arg):
         for index, button in enumerate(self.buttons):
@@ -120,17 +131,20 @@ class GameLayout(FloatLayout):
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
-        if len(down) != 3:
-            return
-        if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-            selectedcards = {self.cards[i] for i in down}
-            newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            self.numberofsets = self.deck.numberOfSets(self.cards)
-            for index, i in enumerate(down):
-                self.cards[i] = newcards[index]
-            self.updateGrid()
-        else:
-            self.unselectAll()
+        if len(down) == 3:
+            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+                if number_of_players>1:
+                    # Load the popup
+                    self.select_player_popup()
+                selectedcards = {self.cards[i] for i in down}
+                newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+                self.numberofsets = self.deck.numberOfSets(self.cards)
+                for index, i in enumerate(down):
+                    self.cards[i] = newcards[index]
+                self.updateGrid()
+            else:
+                self.unselectAll()
+
 
     def on_set_callback(self, obj, value):
         '''Called when the player button is pressed'''
@@ -162,7 +176,6 @@ class GameLayout(FloatLayout):
         else:
             for i in down:
                 self.buttons[i].state = 'normal'
-<<<<<<< HEAD
         if number_of_players > 1:
             self.scores = ''
             for name in name_of_players:
@@ -171,8 +184,14 @@ class GameLayout(FloatLayout):
 
     def state_callback(self, obj, value):
         pass
-=======
->>>>>>> 43adc1e74be6bdb92702790891521931277ea27d
+
+    def select_player_popup(self, *args):
+        popup = SelectPlayersPopup()
+        popup.open()
+    def set_players(self,value):
+        global number_of_players
+        number_of_players = value
+
 
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3

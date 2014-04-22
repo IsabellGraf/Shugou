@@ -5,7 +5,7 @@
 <PlayerSection@Button>:
     value: 0
     size_hint: (None, None)
-    #size: 200,100
+    size: 200,100
     text: str(self.value) + ' Player'
     # How to use different fonts
     # Maybe we'll need to include the font in the game itself?
@@ -18,51 +18,51 @@
             id: fontpage
             name: 'screen1'
             Label: 
-			    size_hint: (None, None)
+                size_hint: (None, None)
                 text: 'The Game Set'
                 font_size:40
                 font_name: 'DroidSans'
                 markup: True
                 size: 100,100
-				pos: (root.width-100)/2, root.height-100
-				
+                pos: (root.width-100)/2, root.height-100
+                
             PlayerSection:
                 value: 1
                 pos: (root.width-200)/2., 4*root.height/5-100.
                 on_press:
-                    root.number_of_players = self.value
+                    root.set_players(1)
                     _screen_manager.current = 'screen2'                    
 
             PlayerSection:
                 value: 2
                 pos: (root.width-200)/2., 3*root.height/5-100.
                 on_press:
-                    root.number_of_players = self.value
+                    root.set_players(2)
                     _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 3
                 pos: (root.width-200)/2., 2*root.height/5-100.
                 on_press:
-                    root.number_of_players = self.value
+                    root.set_players(3)
                     _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 4
                 pos: (root.width-200)/2., root.height/5-100.
                 on_press:
-                    root.number_of_players = self.value
+                    root.set_players(4)
                     _screen_manager.current = 'screen2'     
                     
-			Button:
+            Button:
                 size_hint: (None, None)
                 pos: (root.width-200)/8., 4*root.height/5-100.
                 size: 200,50
                 text: 'Tutorial'
                 on_press:  
                     _screen_manager.current = 'screen4'
-			
-			
+            
+            
         Screen:
             id: mainpage
             name: 'screen2'
@@ -89,43 +89,96 @@
             id: gameoverpage
             name: 'screen3'
             Label:
-			    size_hint: (None, None)
+                size_hint: (None, None)
                 text: 'Game Over'
-				font_size:40
+                font_size:40
                 font_name: 'DroidSans'
-				pos: (root.width-100)/2, root.height-100
-			Label:
-			    size_hint: (None, None)
+                pos: (root.width-100)/2, root.height-100
+            Label:
+                size_hint: (None, None)
                 text: 'scores will go here'
                 font_name: 'DroidSans'
-				pos: (root.width-100)/2, root.height-200 
+                pos: (root.width-100)/2, root.height-200 
             Button:
                 text: 'Back to Main Screen'
-				size_hint: (None,None)
-				pos: (root.width-200)/2., root.height/5-100.
+                size_hint: (None,None)
+                pos: (root.width-200)/2., root.height/5-100.
                 size: 200,100
                 on_press: _screen_manager.current = 'screen1'
-		Screen:
+        Screen:
             id: tutorial
             name: 'screen4'
             Label: 
-			    size_hint: (None, None)
+                size_hint: (None, None)
                 text: 'How To Play Set'
                 font_size:40
                 font_name: 'DroidSans'
                 markup: True
                 size: 100,100
-				pos: (root.width-100)/2, root.height-100
-			Label: 
-			    size_hint: (None, None)
+                pos: (root.width-100)/2, root.height-100
+            Label: 
+                size_hint: (None, None)
                 text: 'Instructions here'
                 font_name: 'DroidSans'
                 markup: True
                 size: 100,100
-				pos: (root.width-100)/2, root.height-200
+                pos: (root.width-100)/2, root.height-200
             Button:
                 text: 'Back to Main Screen'
-				size_hint: (None,None)
-				pos: (root.width-200)/2., root.height/5-100.
+                size_hint: (None,None)
+                pos: (root.width-200)/2., root.height/5-100.
                 size: 200,100
                 on_press: _screen_manager.current = 'screen1'
+<SelectPlayersPopup>:
+    size_hint: .6, .6
+    # background: 'data/popup.png'
+    # separate_color: 0x77 / 255., 0x6e / 255., 0x65 / 255., 1.
+    separator_height: 0
+    title: ''
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 1
+        spacing: '10dp'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1,.4
+            AnchorLayout:
+                size_hint: .5, 1
+                anchor_x: 'left'
+                anchor_y: 'top'
+                Button:
+                    text: root.get_players_name(0)
+                    on_press: 
+                        root.update_scores(0)
+                        root.dismiss()
+            AnchorLayout:
+                size_hint: .5,1
+                anchor_x: 'right'
+                anchor_y: 'top'
+                Button:
+                    text: root.get_players_name(1)
+                    on_press: 
+                        root.update_scores(1)
+                        root.dismiss()
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1,.4
+            AnchorLayout:
+                size_hint: .5,1
+                anchor_x: 'left'
+                anchor_y: 'bottom'
+                Button:
+                    text: root.get_players_name(2)
+                    on_press: 
+                        root.update_scores(2)
+                        root.dismiss()
+            AnchorLayout:
+                size_hint: .5,1
+                anchor_x: 'right'
+                anchor_y: 'bottom'
+                Button:
+                    text: root.get_players_name(3)
+                    on_press: 
+                        root.update_scores(3)
+                        root.dismiss()
