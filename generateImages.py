@@ -48,8 +48,8 @@ numbers = {1: [[50, 100, 50]], 2: [[40, 50, 50], [40, 150, 50]],
 deck = Deck()
 
 for card in deck:
-    im1 = Image.new('RGB', (200, 100), white)
-    im2 = Image.new('RGB', (200, 100), red)
+    im1 = Image.new('RGB', (200, 100), white) # normal state
+    im2 = Image.new('RGB', (200, 100), red) # down state
     draw1 = ImageDraw.Draw(im1)
     draw2 = ImageDraw.Draw(im2)
 
@@ -58,7 +58,7 @@ for card in deck:
     color = colors[card.colour]
     filling = fillings[card.filling]
 
-    for info in number:
+    for info in number: # create 1, 2 or 3 object
         size = 1
         infovec = list(info) # copying the data
         if card.number == 3 and card.shape == 3:
@@ -77,11 +77,11 @@ for card in deck:
             draw2.polygon(
                 shape(infovec, size), fill=red, outline=None)
 
-    if filling == 3:
+    if filling == 2:
         for info in number:
             size = 0.4
             infovec = list(info)
-            if number_number == 3 and shape_number == 3:
+            if card.number == 3 and card.shape == 3:
                 infovec[2] = 50
             draw1.polygon(
                 shape(infovec, size), fill=color, outline=None)
