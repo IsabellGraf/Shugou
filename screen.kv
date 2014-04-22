@@ -72,13 +72,13 @@
                 markup: True
                 y: 450
             Label:
+                size_hint: .1, .1
                 text: "score " + str(root.score)
-                x: cards_layout.x + 200
-                y: cards_layout.top - cards_layout.height - 400   
+                pos: root.width*3/5.5, root.height/6. 
             Label:
+                size_hint: .1, .1
                 text: "Number of sets " + str(root.numberofsets)
-                x: cards_layout.x - 200
-                y: cards_layout.top - cards_layout.height -400
+                pos: root.width*2/5.5, root.height/6.
             Button:
                 size_hint: (None, None)
                 pos: root.width-200, 0
@@ -89,8 +89,10 @@
             GridLayout:
                 id: cards_layout
                 cols: 3
+                size_hint: 0.5, 0.5
                 spacing: '10dp'
-                padding: [100,100,100,200]
+                # padding: [100,100,100,200]
+                pos: root.width/4, root.height/4
              
         Screen:
             id: gameoverpage
