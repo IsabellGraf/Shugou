@@ -1,9 +1,6 @@
-
 # I've installed the forked version of PIL know as Pillow
 # i.e. pip install Pillow
-from PIL import ImageFont
-from PIL import Image
-from PIL import ImageDraw
+from PIL import ImageFont, Image, ImageDraw
 
 from Deck import Deck
 
@@ -13,14 +10,12 @@ def make_star(infos, size):
     c = infos[2]
     a = infos[0] * size
     b = 0.5 * infos[0] * size
-    xx = [(
-        d, c - b), (
-            d - 0.5 * a, c - 0.866 * a), (
-                d - 0.866 * b, c - 0.5 * b), (
-                    d - a, c), (
-                        d - 0.866 * b, c + 0.5 * b), (
-                            d - 0.5 * a, c + 0.866 * a), (d, c + b),
-(d + 0.5 * a, c + 0.866 * a), (d + 0.866 * b, c + 0.5 * b), (d + a, c), (d + 0.866 * b, c - 0.5 * b), (d + 0.5 * a, c - 0.866 * a)]
+    xx = [(d, c - b), (d - 0.5 * a, c - 0.866 * a),
+          (d - 0.866 * b, c - 0.5 * b), (d - a, c),
+          (d - 0.866 * b, c + 0.5 * b), (d - 0.5 * a, c + 0.866 * a),
+          (d, c + b), (d + 0.5 * a, c + 0.866 * a),
+          (d + 0.866 * b, c + 0.5 * b), (d + a, c),
+          (d + 0.866 * b, c - 0.5 * b), (d + 0.5 * a, c - 0.866 * a)]
     return xx
 
 
@@ -53,8 +48,8 @@ numbers = {1: [[50, 100, 50]], 2: [[40, 50, 50], [40, 150, 50]],
 deck = Deck()
 
 for card in deck:
-    im1 = Image.new('RGB', (200, 100), white)
-    im2 = Image.new('RGB', (200, 100), red)
+    im1 = Image.new('RGB', (200, 100), white) # normal state
+    im2 = Image.new('RGB', (200, 100), red) # down state
     draw1 = ImageDraw.Draw(im1)
     draw2 = ImageDraw.Draw(im2)
 
@@ -63,32 +58,34 @@ for card in deck:
     color = colors[card.colour]
     filling = fillings[card.filling]
 
-    for info in number:
+    for info in number: # create 1, 2 or 3 object
         size = 1
-        infovec = list(info)
+        infovec = list(info) # copying the data
         if card.number == 3 and card.shape == 3:
             infovec[2] = 50
         draw1.polygon(shape(infovec, size), fill=color, outline=None)
         draw2.polygon(shape(infovec, size), fill=color, outline=None)
+
     if filling > 1:
-        for infos in number:
+        for info in number:
             size = 0.7
-            infovec = list(infos)
+            infovec = list(info)
             if card.number == 3 and card.shape == 3:
                 infovec[2] = 50
             draw1.polygon(
                 shape(infovec, size), fill=white, outline=None)
             draw2.polygon(
                 shape(infovec, size), fill=red, outline=None)
-    if filling == 3:
-        for infos in number:
+
+    if filling == 2:
+        for info in number:
             size = 0.4
-            infovec = list(infos)
-            if number_number == 3 and shape_number == 3:
+            infovec = list(info)
+            if card.number == 3 and card.shape == 3:
                 infovec[2] = 50
             draw1.polygon(
                 shape(infovec, size), fill=color, outline=None)
             draw2.polygon(
                 shape(infovec, size), fill=color, outline=None)
-    im1.save('images/' + card.index() + '.png')
-    im2.save('images/' + card.index() + '_down' + '.png')
+    im1.save(card.normalimage())
+    im2.save(card.downimage())
