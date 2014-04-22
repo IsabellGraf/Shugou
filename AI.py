@@ -81,7 +81,10 @@ class AI(object):
 
         allSets = Deck.allSets(table)
         for the_set in allSets:
-            self.ratingList[Deck.idOfSet(the_set)] += 50
+            try:
+                self.ratingList[Deck.idOfSet(the_set)] += 50
+            except:
+                self.ratingList[Deck.idOfSet(the_set)] = 1550
         self.dumpData()
 
     def updateRatingsHuman(self, table, setFound, the_time):

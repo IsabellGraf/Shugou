@@ -22,7 +22,7 @@ player_scores = dict.fromkeys(name_of_players, 0)
 
 import sys
 from os import environ
-import time
+import datetime
 from kivy.config import Config
 from kivy.logger import Logger
 
@@ -56,7 +56,7 @@ class GameLayout(FloatLayout):
         playscreen = self.children[0].get_screen('screen2')
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
-
+        self.aiInPlay = False
 
         self.ai = AI()
         for i in range(12):
@@ -64,8 +64,9 @@ class GameLayout(FloatLayout):
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
-        #self.setUpHint()
-        self.setUpAI()
+        self.setUpHint()
+        if self.aiInPlay:
+            self.setUpAI()
         self.updateGrid()
 
         # add a dropdown button for 'Set' call
@@ -97,7 +98,8 @@ class GameLayout(FloatLayout):
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
-        self.t0 = time.clock()
+        self.t0 = datetime.datetime.now()
+
 
 
     def setUpHint(self):
@@ -153,10 +155,16 @@ class GameLayout(FloatLayout):
             self.numberofsets = self.deck.numberOfSets(self.cards)
             for index, i in enumerate(down):
                 self.cards[i] = newcards[index]
-            print(time.clock()-self.t0)
+            timeDifference = datetime.datetime.now()-self.t0
+            if self.aiInPlay:
+                if self.AIplayed:
+                    self.ai.updateRatingsAI(self.cards, self.aiCards, timeDifference)
+                else:
+                    self.ai.updateRatingsHuman(self.cards, selectedcards, timeDifference)
             
             self.updateGrid()
-            self.setUpAI()
+            if self.aiInPlay:
+                self.setUpAI()
         else:
             self.unselectAll()
 
