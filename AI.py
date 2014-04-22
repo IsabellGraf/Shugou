@@ -43,7 +43,10 @@ class AI(object):
 
 
     def get_difficulties(self,the_set):
-        return self.ratingList[Deck.idOfSet(the_set)]
+        try:
+            return self.ratingList[Deck.idOfSet(the_set)]
+        except KeyError:
+            return 1500
     
     
     def get_time(self, set_difficulties):
