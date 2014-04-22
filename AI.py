@@ -39,7 +39,7 @@ class AI(object):
         time,index = self.get_time(set_difficulties)
         set_cards1, set_cards2, set_cards3 = all_sets[index]
 
-        return time, set_cards1, set_cards2, set_cards3
+        return time, (set_cards1, set_cards2, set_cards3)
 
 
     def get_difficulties(self,the_set):
