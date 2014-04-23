@@ -1,17 +1,20 @@
-SetGame
+Collections
 =======
 
-Final project for Math 701
+Organization:
 
-Tasks so far: 
-1. Front page: @ChristinaLK
+1. Front Page/ Tutorial/ Documentation: @ChristinaLK
 
-2. Pictures: William
+2. Pictures: IsabellGraf
 
-3. Game play / design: @BernhardKonrad, @cbruni,  Jerome
+3. Game play / design:  Jerome, Carmen
 
-4. AI: @IsabellGraf
+4. Multiplayer: Jia, Carmen
 
-5. Porting Android: Jia
+5. AI: Bernhard
 
-6. Porting iOS: Jerome
+6. Code Supervisor: Bernhard
+
+6. Porting Android: Jia
+
+7. Porting iOS: Jerome

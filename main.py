@@ -4,8 +4,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
-from kivy.properties import NumericProperty, ReferenceListProperty,\
-    ObjectProperty, StringProperty
+from kivy.properties import *
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
 from kivy.uix.label import Label
@@ -61,7 +60,8 @@ class GameLayout(FloatLayout):
     numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
-    
+    hintActivated = BooleanProperty(False)
+
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
         super(GameLayout, self).__init__(**kwargs)
@@ -76,7 +76,6 @@ class GameLayout(FloatLayout):
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
         self.numberofsets = self.deck.numberOfSets(self.cards)
-        self.setUpHint()
         if self.aiInPlay:
             self.setUpAI()
         self.updateGrid()
@@ -107,12 +106,20 @@ class GameLayout(FloatLayout):
 
     def updateGrid(self):
         '''Updates the cards being displayed'''
+        print(self.hintActivated)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
         self.t0 = datetime.datetime.now()
+        if self.hintActivated:
+            self.setUpHint()
 
-
+    def loadHint(self,obj):
+        if obj.state == 'down':
+            self.hintActivated = True
+            self.setUpHint()
+        else:
+            self.hintActivated = False
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint'''
