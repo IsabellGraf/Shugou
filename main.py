@@ -18,7 +18,8 @@ from kivy.uix.popup import Popup
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
-# initialize the score of players to 0
+
+'''initialize the score of players to 0'''
 player_scores = dict.fromkeys(name_of_players, 0)
 
 import sys
@@ -28,13 +29,14 @@ from kivy.config import Config
 from kivy.logger import Logger
 
 class SelectPlayersPopup(Popup):
-    current_player = StringProperty('None')
+    '''controls the values shown in the player selection popup'''
     def get_players_name(self,value):
         return name_of_players[value]
 
     def update_scores(self,value):
+        '''need to other lines to update the score display'''
         player_scores[name_of_players[value]] += 1
-        # player_scores[self.current_player] += 1
+
 from AI import AI
 
 class PlayerSection(Button):
@@ -58,6 +60,7 @@ class GameLayout(FloatLayout):
     scores = StringProperty('')
     numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
+    score_display = StringProperty('')
     
     def __init__(self, **kwargs):
         self.buttons = [None] * 12
@@ -98,9 +101,9 @@ class GameLayout(FloatLayout):
         #         text='Set', size_hint=(None, None), size=(100, 100))
         #     self.mainbutton.bind(on_release=self.on_set_callback)
         # playscreen.add_widget(self.mainbutton)
-        for name in name_of_players:
-            self.scores += name + '      ' + \
-                str(player_scores[name]) + '      '
+        # for name in name_of_players:
+        #     self.scores += name + '      ' + \
+        #         str(player_scores[name]) + '      '
 
     def updateGrid(self):
         '''Updates the cards being displayed'''
@@ -159,16 +162,21 @@ class GameLayout(FloatLayout):
 
         if len(down) == 3:
             if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-                if number_of_players>1:
-                    # Load the popup
-                    self.select_player_popup()
-                else:
-                    self.score += 1
                 selectedcards = {self.cards[i] for i in down}
                 newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                self.numberofsets = self.deck.numberOfSets(self.cards)
-                for index, i in enumerate(down):
-                    self.cards[i] = newcards[index]
+                if newcards is False:
+                    self.children[0].current = 'screen3'
+                else:
+                    if number_of_players>1:
+                        # Load the popup
+                        self.select_player_popup()
+                    else:
+                        self.score += 1
+                        self.print_scores(number_of_players)
+                    self.numberofsets = self.deck.numberOfSets(self.cards)
+                    for index, i in enumerate(down):
+                        self.cards[i] = newcards[index]
+                    self.setUpHint()
                 timeDifference = datetime.datetime.now()-self.t0
                 if self.aiInPlay:
                     if self.AIplayed:
@@ -182,52 +190,65 @@ class GameLayout(FloatLayout):
             else:
                 self.unselectAll()
 
-    def on_set_callback(self, obj, value):
-        '''Called when the player button is pressed'''
-        down = []
-        for index, button in enumerate(self.buttons):
-            if button.state == 'down':
-                down.append(index)
-        if len(down) == 3:
-            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-                selectedcards = {self.cards[i] for i in down}
-                newcards = self.deck.drawGuarantee(
-                    othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                if newcards is False:
-                    self.children[0].current = 'screen3'
-                else:
-                    if number_of_players > 1:
-                        #player_scores[value] += 1
-                        pass
-                    else:
-                        self.score += 1
-                    self.numberofsets = self.deck.numberOfSets(self.cards)
-                    for index, i in enumerate(down):
+    # def on_set_callback(self, obj, value):
+    #     '''Called when the player button is pressed'''
+    #     down = []
+    #     for index, button in enumerate(self.buttons):
+    #         if button.state == 'down':
+    #             down.append(index)
+    #     if len(down) == 3:
+    #         if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+    #             selectedcards = {self.cards[i] for i in down}
+    #             newcards = self.deck.drawGuarantee(
+    #                 othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+    #             if newcards is False:
+    #                 self.children[0].current = 'screen3'
+    #             else:
+    #                 if number_of_players > 1:
+    #                     #player_scores[value] += 1
+    #                     pass
+    #                 else:
+    #                     self.score += 1
+    #                 self.numberofsets = self.deck.numberOfSets(self.cards)
+    #                 for index, i in enumerate(down):
                         
-                        self.buttons[i].state = 'normal'
-                        self.cards[i] = newcards[index]
-                    self.setUpHint()
-            else:
-                for i in down:
-                    self.buttons[i].state = 'normal'
-        else:
-            for i in down:
-                self.buttons[i].state = 'normal'
-        if number_of_players > 1:
-            self.scores = ''
-            for name in name_of_players:
-                self.scores += name + '      '+str(player_scores[name])+ '      '
+    #                     self.buttons[i].state = 'normal'
+    #                     self.cards[i] = newcards[index]
+    #                 self.setUpHint()
+    #         else:
+    #             for i in down:
+    #                 self.buttons[i].state = 'normal'
+    #     else:
+    #         for i in down:
+    #             self.buttons[i].state = 'normal'
+    #     if number_of_players > 1:
+    #         self.scores = ''
+    #         for name in name_of_players:
+    #             self.scores += name + '      '+str(player_scores[name])+ '      '
 
 
     def state_callback(self, obj, value):
         pass
 
     def select_player_popup(self, *args):
+        '''called when three cards are selected'''
         popup = SelectPlayersPopup()
         popup.open()
+
     def set_players(self,value):
+        '''set the number of players according to user's choice on the front page'''
         global number_of_players
         number_of_players = value
+        self.print_scores(value)
+
+    def print_scores(self,value):
+        '''generate strings for scores display'''
+        if value == 1:
+            self.score_display = "score " + str(self.score)
+        else:
+            self.score_display = ''
+            for name in name_of_players:
+                self.score_display += name + '      '+str(player_scores[name])+ '      '
 
 
 # To test the screen size you can use:
