@@ -73,12 +73,14 @@
                 y: 450
             Label:
                 size_hint: .1, .1
-                text: "score " + str(root.score)
-                pos: root.width*3/5.5, root.height/6. 
+                text: root.score_display
+                pos: root.width*3.5/5.5, root.height/6.
+                halign: 'center'
             Label:
                 size_hint: .1, .1
                 text: "Number of sets " + str(root.numberofsets)
-                pos: root.width*2/5.5, root.height/6.
+                pos: root.width*1.5/5.5, root.height/6.
+                halign: 'center'
             Button:
                 size_hint: (None, None)
                 pos: root.width-200, 0
