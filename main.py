@@ -65,33 +65,37 @@ class GameLayout(FloatLayout):
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
+    aiActivated = BooleanProperty(False)
 
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
-        self.buttons = [None] * 12
-        playscreen = self.children[0].get_screen('screen2')
+
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
-        self.aiInPlay = False
 
         self.ai = AI()
+
+        playscreen = self.children[0].get_screen('screen2')
+        self.buttons = [None] * 12
         for i in range(12):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-        self.numberofsets = self.deck.numberOfSets(self.cards)
-        if self.aiInPlay:
-            self.setUpAI()
+
         self.updateGrid()
 
     def updateGrid(self):
-        '''Updates the cards being displayed'''
+        '''Updates the cards being displayed and updates hints/ai/numberofsets'''
+
+        self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
         self.t0 = datetime.datetime.now()
         if self.hintActivated:
             self.setUpHint()
+        if self.aiActivated:
+            self.setUpAI()
 
     def loadHint(self, obj):
         ''' Turns on or off the hint property base on user call'''
@@ -100,6 +104,14 @@ class GameLayout(FloatLayout):
             self.setUpHint()
         else:
             self.hintActivated = False
+
+    def loadAi(self, obj):
+        ''' Turns on or off the hint property base on user call'''
+        if obj.state == 'down':
+            self.aiActivated = True
+            self.setUpAI()
+        else:
+            self.aiActivated = False
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
@@ -159,22 +171,19 @@ class GameLayout(FloatLayout):
                     else:
                         self.score += 1
                         self.print_scores(number_of_players)
-                    self.numberofsets = self.deck.numberOfSets(self.cards)
                     for index, i in enumerate(down):
                         self.cards[i] = newcards[index]
                     self.setUpHint()
                 timeDifference = datetime.datetime.now() - self.t0
-                if self.aiInPlay:
+
+                if self.aiActivated:
                     if self.AIplayed:
                         self.ai.updateRatingsAI(
                             self.cards, self.aiCards, timeDifference)
                     else:
                         self.ai.updateRatingsHuman(
                             self.cards, selectedcards, timeDifference)
-
                 self.updateGrid()
-                if self.aiInPlay:
-                    self.setUpAI()
             else:
                 self.unselectAll()
 
