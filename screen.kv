@@ -61,8 +61,11 @@
                 text: 'Tutorial'
                 on_press:  
                     _screen_manager.current = 'screen4'
-            
-            
+            ToggleButton:
+                text: 'hint?'
+                size: 100, 100
+                size_hint: (None, None)
+                on_press: root.loadHint(self)
         Screen:
             id: mainpage
             name: 'screen2'
