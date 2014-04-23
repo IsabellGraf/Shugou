@@ -62,10 +62,18 @@
                 on_press:  
                     _screen_manager.current = 'screen4'
             ToggleButton:
+                id: hint
                 text: 'hint?'
                 size: 100, 100
                 size_hint: (None, None)
                 on_press: root.loadHint(self)
+
+            ToggleButton:
+                text: 'ai?'
+                size: 100, 100
+                x: hint.top
+                size_hint: (None, None)
+                on_press: root.loadAi(self)                
         Screen:
             id: mainpage
             name: 'screen2'
