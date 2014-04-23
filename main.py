@@ -134,11 +134,14 @@ class GameLayout(FloatLayout):
         self.AIplayed = True
 
     def displayHint(self, *arg):
-        for index, button in enumerate(self.buttons):
-            if self.cards[index] in self.hint:
-                button.state = 'down'
-            else:
-                button.state = 'normal'
+        # in case hint was turned off, after the clock element was launched
+        # so we are required to verify if we actually still want to run
+        if self.hintActivated:
+            for index, button in enumerate(self.buttons):
+                if self.cards[index] in self.hint:
+                    button.state = 'down'
+                else:
+                    button.state = 'normal'
 
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
