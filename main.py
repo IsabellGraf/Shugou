@@ -85,6 +85,7 @@ class GameLayout(FloatLayout):
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
+    displayHintTimer = NumericProperty(5)
 
     def __init__(self, **kwargs):
         global game
@@ -107,7 +108,9 @@ class GameLayout(FloatLayout):
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-
+        if self.hintActivated:
+            # remove any display of a hint since the card have changed
+            Clock.unschedule(self.displayHint)
         self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
@@ -136,9 +139,11 @@ class GameLayout(FloatLayout):
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
+        # Need to remove any previous call or else it might be activated too quickly
+        Clock.unschedule(self.displayHint)
         self.hint = Deck.hint(self.cards)
         # After some time in seconds show a hint
-        Clock.schedule_once(self.displayHint, 5)
+        Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
@@ -158,11 +163,14 @@ class GameLayout(FloatLayout):
         # in case hint was turned off, after the clock element was launched
         # so we are required to verify if we actually still want to run
         if self.hintActivated:
-            for index, button in enumerate(self.buttons):
-                if self.cards[index] in self.hint:
-                    button.state = 'down'
-                else:
-                    button.state = 'normal'
+            if self.selected() == []: # no cards have been selected
+                for index, button in enumerate(self.buttons):
+                    if self.cards[index] in self.hint:
+                        button.state = 'down'
+                    else:
+                        button.state = 'normal'
+            else: # if the player has a card selected, try calling it again later
+                self.setUpHint()
 
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
@@ -197,9 +205,11 @@ class GameLayout(FloatLayout):
                         self.print_scores(number_of_players)
                     for index, i in enumerate(down):
                         self.cards[i] = newcards[index]
-                    self.setUpHint()
-                timeDifference = datetime.datetime.now() - self.t0
 
+                self.updateGrid()
+
+                # AI updates
+                timeDifference = datetime.datetime.now() - self.t0
                 if self.aiActivated:
                     if self.AIplayed:
                         self.ai.updateRatingsAI(
@@ -207,9 +217,11 @@ class GameLayout(FloatLayout):
                     else:
                         self.ai.updateRatingsHuman(
                             self.cards, selectedcards, timeDifference)
-                self.updateGrid()
+                
             else:
                 self.unselectAll()
+        else:
+            self.setUpHint()
 
     def state_callback(self, obj, value):
         pass
