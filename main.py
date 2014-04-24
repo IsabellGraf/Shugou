@@ -118,6 +118,7 @@ class GameLayout(FloatLayout):
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
+        # Need to remove any previous call or else it might be activated too quickly
         Clock.unschedule(self.displayHint)
         self.hint = Deck.hint(self.cards)
         # After some time in seconds show a hint
