@@ -176,9 +176,11 @@ class GameLayout(FloatLayout):
                         self.print_scores(number_of_players)
                     for index, i in enumerate(down):
                         self.cards[i] = newcards[index]
-                    self.setUpHint()
-                timeDifference = datetime.datetime.now() - self.t0
 
+                self.updateGrid()
+
+                # AI updates
+                timeDifference = datetime.datetime.now() - self.t0
                 if self.aiActivated:
                     if self.AIplayed:
                         self.ai.updateRatingsAI(
@@ -186,7 +188,7 @@ class GameLayout(FloatLayout):
                     else:
                         self.ai.updateRatingsHuman(
                             self.cards, selectedcards, timeDifference)
-                self.updateGrid()
+                
             else:
                 self.unselectAll()
 
