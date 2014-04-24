@@ -15,6 +15,7 @@ from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.popup import Popup
+from kivy.uix.textinput import TextInput
 
 from Deck import Deck
 from AI import AI
@@ -22,7 +23,7 @@ from AI import AI
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
-
+game = None
 
 '''initialize the score of players to 0'''
 player_scores = dict.fromkeys(name_of_players, 0)
@@ -38,6 +39,25 @@ class SelectPlayersPopup(Popup):
     def update_scores(self, value):
         '''need to other lines to update the score display'''
         player_scores[name_of_players[value]] += 1
+        game.print_scores(len(name_of_players))
+
+class PlayerNamePopup(Popup):
+    def __init__(self,value):
+        super(PlayerNamePopup, self).__init__()
+        for i in range(value):
+            self.text_input = TextInput(multiline=False, size_hint_y = None, size_hint_x = 0.5, height = '32dp', text = name_of_players[i])
+            self.children[0].add_widget(self.text_input)
+        self.enter = Button(text = 'Start Game', size_hint_y = None, height = '40dp')
+        self.enter.bind(on_press = self.on_press_callback)
+        self.children[0].add_widget(self.enter)
+
+    def on_press_callback(self,obj):
+        self.dismiss()
+        game.children[0].current = 'screen2'
+
+
+
+
 
 
 class PlayerSection(Button):
@@ -60,7 +80,6 @@ class MyToggleButton(ToggleButton):
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
-    scores = StringProperty('')
     numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
@@ -69,6 +88,8 @@ class GameLayout(FloatLayout):
     displayHintTimer = NumericProperty(5)
 
     def __init__(self, **kwargs):
+        global game
+        game = self
         super(GameLayout, self).__init__(**kwargs)
 
         self.deck = Deck()
@@ -225,6 +246,21 @@ class GameLayout(FloatLayout):
             for name in name_of_players:
                 self.score_display += name + '      ' + \
                     str(player_scores[name]) + '      '
+
+
+    def player_name_popup(self,value):
+        '''called after selecting number of players'''
+        playername = PlayerNamePopup(value)
+        playername.open()
+
+    def restart(self):
+        '''reset the scores and everything'''
+        global player_scores
+        self.score_display = ''
+        self.score = 0
+        player_scores = dict.fromkeys(name_of_players, 0)
+        self.print_scores(len(name_of_players))
+
 
 
 # To test the screen size you can use:

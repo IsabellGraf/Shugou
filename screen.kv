@@ -15,7 +15,7 @@
     ScreenManager:
         id: _screen_manager
         Screen:
-            id: fontpage
+            id: frontpage
             name: 'screen1'
             Label: 
                 size_hint: (None, None)
@@ -31,28 +31,32 @@
                 pos: (root.width-200)/2., 4*root.height/5-100.
                 on_press:
                     root.set_players(1)
-                    _screen_manager.current = 'screen2'                    
+                    root.player_name_popup(1)
+                    # _screen_manager.current = 'screen2'                    
 
             PlayerSection:
                 value: 2
                 pos: (root.width-200)/2., 3*root.height/5-100.
                 on_press:
                     root.set_players(2)
-                    _screen_manager.current = 'screen2'     
+                    root.player_name_popup(2)
+                    # _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 3
                 pos: (root.width-200)/2., 2*root.height/5-100.
                 on_press:
                     root.set_players(3)
-                    _screen_manager.current = 'screen2'     
+                    root.player_name_popup(3)
+                    # _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 4
                 pos: (root.width-200)/2., root.height/5-100.
                 on_press:
                     root.set_players(4)
-                    _screen_manager.current = 'screen2'     
+                    root.player_name_popup(4)
+                    # _screen_manager.current = 'screen2'     
                     
             Button:
                 size_hint: (None, None)
@@ -97,7 +101,8 @@
                 pos: root.width-200, 0
                 size: 200,50
                 text: 'Back to Mainpage'
-                on_press:  
+                on_press:
+                    root.restart()  
                     _screen_manager.current = 'screen1'                                   
             GridLayout:
                 id: cards_layout
@@ -263,7 +268,7 @@
 					AnchorLayout:
 						size_hint:(.3,1)
 <SelectPlayersPopup>:
-    size_hint: .6, .6
+    size_hint: .8, .8
     # background: 'data/popup.png'
     # separate_color: 0x77 / 255., 0x6e / 255., 0x65 / 255., 1.
     separator_height: 0
@@ -315,3 +320,13 @@
                     on_press: 
                         root.update_scores(3)
                         root.dismiss()
+<PlayerNamePopup>:
+    size_hint: .5, .5
+    title: 'Enter Name of Player(s)'
+    title_size: '20sp'
+    separator_height: 5
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 0.8
+        size_hint_x: 0.5
+        spacing: '20dp'
