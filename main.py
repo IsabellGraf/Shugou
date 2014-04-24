@@ -118,6 +118,7 @@ class GameLayout(FloatLayout):
 
     def setUpHint(self):
         '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
+        Clock.unschedule(self.displayHint)
         self.hint = Deck.hint(self.cards)
         # After some time in seconds show a hint
         Clock.schedule_once(self.displayHint, self.displayHintTimer)
@@ -147,7 +148,7 @@ class GameLayout(FloatLayout):
                     else:
                         button.state = 'normal'
             else: # if the player has a card selected, try calling it again later
-                Clock.schedule_once(self.displayHint, self.displayHintTimer)
+                self.setUpHint()
 
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
@@ -198,7 +199,7 @@ class GameLayout(FloatLayout):
             else:
                 self.unselectAll()
         else:
-            Clock.schedule_once(self.displayHint, self.displayHintTimer)
+            self.setUpHint()
 
     def state_callback(self, obj, value):
         pass
