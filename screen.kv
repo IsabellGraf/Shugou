@@ -11,7 +11,7 @@
     # Maybe we'll need to include the font in the game itself?
     #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
 
-<GamePlay@Screen>:
+<GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
     Label: 
@@ -44,6 +44,49 @@
         spacing: '10dp'
         pos: root.width/4, root.height/4
 
+<TutorialScreen@Screen>
+    id: tutorial
+    name: 'screen4'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        Label: 
+            size_hint: (1, .15)
+            text: 'How To Play Set'
+            font_size:40
+            font_name: 'DroidSans'
+            markup: True
+            size: 100,100
+            #pos: (root.width-100)/2, root.height-100
+        Label: 
+            size_hint: (1, .7)
+            text: 'Welcome to Set!  \n  To get started, click on the number of players. \n You will be taken to the game screen, \n where 12 set cards have been dealt.  \n Try to find a SET.  Once you find one, \n click on the three cards and then click the SET button. \n If you have found a Set, \n you will be able to choose your name \n to receive points for your set.  \n Play continues until the deck runs out of cards. \n To learn what constitutes a set, \n go to the next tutorial screen.'
+            font_name: 'DroidSans'
+            markup: True
+            size: 100,100
+            #pos: (root.width-100)/2, root.height-200
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (1,.1)
+            spacing: 5
+            AnchorLayout:
+                size_hint:(.3,1)
+            AnchorLayout:
+                size_hint:(.3,1)
+                Button:
+                    anchor_x: 'center'
+                    anchor_y: 'top'
+                    text: 'Back to Main Screen'
+                    size_hint: .9, 1
+                    on_press: root.goBackToIntro()
+            AnchorLayout:
+                size_hint:(.3,1)
+                Button:
+                    anchor_x: 'right'
+                    anchor_y: 'top'
+                    text: 'Next: what is a SET?'
+                    size_hint: .9, 1
+                    #on_press: root._screen_manager.current = 'screen5'
 <GameLayout>:
     ScreenManager:
         id: _screen_manager
@@ -112,7 +155,7 @@
                 size_hint: (None, None)
                 on_press: root.loadAi(self)
 
-        GamePlay:
+        GamePlayScreen:
             numberofsets: root.numberofsets
             score_display: root.score_display
             goBackToIntro: root.goBackToIntro
@@ -137,49 +180,10 @@
                 pos: (root.width-200)/2., root.height/5-100.
                 size: 200,100
                 on_press: _screen_manager.current = 'screen1'
-        Screen:
-            id: tutorial
-            name: 'screen4'
-			BoxLayout:
-				orientation: 'vertical'
-				padding: 10
-				Label: 
-					size_hint: (1, .15)
-					text: 'How To Play Set'
-					font_size:40
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-100
-				Label: 
-					size_hint: (1, .7)
-					text: 'Welcome to Set!  \n  To get started, click on the number of players. \n You will be taken to the game screen, \n where 12 set cards have been dealt.  \n Try to find a SET.  Once you find one, \n click on the three cards and then click the SET button. \n If you have found a Set, \n you will be able to choose your name \n to receive points for your set.  \n Play continues until the deck runs out of cards. \n To learn what constitutes a set, \n go to the next tutorial screen.'
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-200
-				BoxLayout:
-					orientation: 'horizontal'
-					size_hint: (1,.1)
-					spacing: 5
-					AnchorLayout:
-						size_hint:(.3,1)
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to Main Screen'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen1'
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'right'
-							anchor_y: 'top'
-							text: 'Next: what is a SET?'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen5'
+
+        TutorialScreen:
+            goBackToIntro: root.goBackToIntro
+
 		Screen:
             id: tutorial2
             name: 'screen5'

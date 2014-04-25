@@ -57,12 +57,15 @@ class PlayerNamePopup(Popup):
         game.children[0].current = 'screen2'
 
 
-class GamePlay(Screen):
+class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     score_display = StringProperty('')
     restart = ObjectProperty()
     _screen_manager = ObjectProperty()
     test = ObjectProperty()
+
+class TutorialScreen(Screen):
+    _screen_manager = ObjectProperty()
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
