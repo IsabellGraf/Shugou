@@ -11,6 +11,39 @@
     # Maybe we'll need to include the font in the game itself?
     #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
 
+<GamePlay@Screen>:
+    id: mainpage
+    name: 'screen2'
+    Label: 
+        text: '[b]Collection[/b]'
+        font_size: 30
+        markup: True
+        y: 450
+    Label:
+        size_hint: .1, .1
+        text: root.score_display
+        pos: root.width*3.5/5.5, root.height/6.
+        halign: 'center'
+    Label:
+        size_hint: .1, .1
+        text: "Number of sets " + str(root.numberofsets)
+        pos: root.width*1.5/5.5, root.height/6.
+        halign: 'center'
+    Button:
+        size_hint: (None, None)
+        pos: root.width-200, 0
+        size: 200,50
+        text: 'Back to Mainpage'
+        on_press:                                
+            root.goBackToIntro()
+
+    GridLayout:
+        id: cards_layout
+        cols: 3
+        size_hint: 0.5, 0.5
+        spacing: '10dp'
+        pos: root.width/4, root.height/4
+
 <GameLayout>:
     ScreenManager:
         id: _screen_manager
@@ -77,41 +110,13 @@
                 size: 100, 100
                 x: hint.top
                 size_hint: (None, None)
-                on_press: root.loadAi(self)                
-        Screen:
-            id: mainpage
-            name: 'screen2'
-            Label: 
-                text: '[b]Collection[/b]'
-                font_size: 30
-                markup: True
-                y: 450
-            Label:
-                size_hint: .1, .1
-                text: root.score_display
-                pos: root.width*3.5/5.5, root.height/6.
-                halign: 'center'
-            Label:
-                size_hint: .1, .1
-                text: "Number of sets " + str(root.numberofsets)
-                pos: root.width*1.5/5.5, root.height/6.
-                halign: 'center'
-            Button:
-                size_hint: (None, None)
-                pos: root.width-200, 0
-                size: 200,50
-                text: 'Back to Mainpage'
-                on_press:
-                    root.restart()  
-                    _screen_manager.current = 'screen1'                                   
-            GridLayout:
-                id: cards_layout
-                cols: 3
-                size_hint: 0.5, 0.5
-                spacing: '10dp'
-                # padding: [100,100,100,200]
-                pos: root.width/4, root.height/4
-             
+                on_press: root.loadAi(self)
+
+        GamePlay:
+            numberofsets: root.numberofsets
+            score_display: root.score_display
+            goBackToIntro: root.goBackToIntro
+
         Screen:
             id: gameoverpage
             name: 'screen3'
