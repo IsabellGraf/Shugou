@@ -33,9 +33,10 @@ def make_square(infos, size):
     a = infos[0] * 0.9 * size
     d = infos[1]
     c = infos[2]
+    xx = [(d,c-a), (d+0.8*a,c),(d,c+a),(d-0.8*a,c)]
     #xx = [d - a, c - a, d - a, c + a, d + a, c + a, d + a, c - a]
-    xx = [(d - 0.6 * a, c - a), (d + a, c - 0.6 * a),
-          (d + 0.6 * a, c + a), (d - a, c + 0.6 * a)]
+    #xx = [(d - 0.6 * a, c - a), (d + a, c - 0.6 * a),
+    #      (d + 0.6 * a, c + a), (d - a, c + 0.6 * a)]
     return xx
 
 
@@ -78,8 +79,6 @@ for card in deck:
         infovec = list(info)  # copying the data
         if card.number == 3 and card.shape == 3:
             infovec[2] = double * 19
-        if card.number == 3 and card.shape == 2 and counter == 1:
-            infovec[1] = double * 32.5
         draw1.polygon(shape(infovec, size), fill=color)
         draw2.polygon(shape(infovec, size), fill=color)
 
@@ -90,8 +89,6 @@ for card in deck:
             infovec = list(infos)
             if card.number == 3 and card.shape == 3:
                 infovec[2] = double * 19
-            if card.number == 3 and card.shape == 2 and counter == 1:
-                infovec[1] = double * 32.5
             draw1.polygon(shape(infovec, size), fill=white)
             draw2.polygon(shape(infovec, size), fill=red)
 
@@ -102,8 +99,6 @@ for card in deck:
             infovec = list(info)
             if card.number == 3 and card.shape == 3:
                 infovec[2] = double * 19
-            if card.number == 3 and card.shape == 2 and counter == 1:
-                infovec[1] = double * 32.5
             draw1.polygon(shape(infovec, size), fill=color)
             draw2.polygon(shape(infovec, size), fill=color)
 
