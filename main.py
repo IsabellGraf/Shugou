@@ -14,9 +14,11 @@ from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
+
 
 from Deck import Deck
 from AI import AI
@@ -92,6 +94,7 @@ class GameLayout(FloatLayout):
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
+    soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
 
     def goBackToIntro(self,*arg):
@@ -116,7 +119,15 @@ class GameLayout(FloatLayout):
             playscreen.children[0].add_widget(self.buttons[i])
 
         self.updateGrid()
+        self.sound = SoundLoader.load('set_song.wav')
 
+    def loadSound(self,obj):
+        if obj.state == 'down':
+            self.sound.loop = True
+            self.sound.play()
+        else:
+            self.sound.stop()
+            
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
         if self.hintActivated:

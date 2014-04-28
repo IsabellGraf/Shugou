@@ -78,11 +78,19 @@
                 on_press: root.loadHint(self)
 
             ToggleButton:
+                id: ai
                 text: 'ai?'
                 size: 100, 100
                 x: hint.top
                 size_hint: (None, None)
                 on_press: root.loadAi(self)
+
+            ToggleButton:
+                text: 'sound'
+                size: 100, 100
+                y: hint.top
+                size_hint: (None, None)
+                on_press: root.loadSound(self)
 
         GamePlayScreen:
             numberofsets: root.numberofsets
