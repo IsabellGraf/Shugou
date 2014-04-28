@@ -111,6 +111,7 @@ class GameLayout(FloatLayout):
         if self.hintActivated:
             # remove any display of a hint since the card have changed
             Clock.unschedule(self.displayHint)
+            Clock.unschedule(self.displayHintSecond)
         self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
@@ -159,18 +160,30 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
         self.AIplayed = True
 
+    def selectCards(self,cards):
+        ''' selects the given cards if they are in the given cards '''
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in cards:
+                button.state = 'down'  
+
     def displayHint(self, *arg):
+        ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
         # in case hint was turned off, after the clock element was launched
         # so we are required to verify if we actually still want to run
         if self.hintActivated:
             if self.selected() == []: # no cards have been selected
-                for index, button in enumerate(self.buttons):
-                    if self.cards[index] in self.hint:
-                        button.state = 'down'
-                    else:
-                        button.state = 'normal'
+                # displays on the first card in a hint
+                self.selectCards([self.hint[0]])
+                Clock.schedule_once(self.displayHintSecond, 5)
             else: # if the player has a card selected, try calling it again later
                 self.setUpHint()
+
+    def displayHintSecond(self,*arg):
+        ''' Displays the second of two cards in a hint if the current selected card is the first card of the hint'''
+        selectedcards = self.selected()
+        # One card is selected and it is a specific card.
+        if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
+            self.selectCards([self.hint[1]])
 
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
