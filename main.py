@@ -14,8 +14,11 @@ from kivy.uix.dropdown import DropDown
 from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
+from kivy.uix.screenmanager import Screen
+
 
 from Deck import Deck
 from AI import AI
@@ -56,12 +59,18 @@ class PlayerNamePopup(Popup):
         game.children[0].current = 'screen2'
 
 
+class GamePlayScreen(Screen):
+    numberofsets = NumericProperty(0)
+    score_display = StringProperty('')
+    restart = ObjectProperty()
+    _screen_manager = ObjectProperty()
+    test = ObjectProperty()
 
-
-
+class TutorialScreen(Screen):
+    _screen_manager = ObjectProperty()
 
 class PlayerSection(Button):
-
+    myvalue = NumericProperty(4)
     def __init__(self, **kwargs):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
@@ -85,8 +94,13 @@ class GameLayout(FloatLayout):
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
+    soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
 
+    def goBackToIntro(self,*arg):
+        self.children[0].current = 'screen1'
+        self.restart()
+        
     def __init__(self, **kwargs):
         global game
         game = self
@@ -105,7 +119,15 @@ class GameLayout(FloatLayout):
             playscreen.children[0].add_widget(self.buttons[i])
 
         self.updateGrid()
+        self.sound = SoundLoader.load('set_song.wav')
 
+    def loadSound(self,obj):
+        if obj.state == 'down':
+            self.sound.loop = True
+            self.sound.play()
+        else:
+            self.sound.stop()
+            
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
         if self.hintActivated:

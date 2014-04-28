@@ -11,6 +11,11 @@
     # Maybe we'll need to include the font in the game itself?
     #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
 
+
+#:include GamePlayScreen.kv
+#:include tutorialscreen.kv
+#:include PlayersPopup.kv
+
 <GameLayout>:
     ScreenManager:
         id: _screen_manager
@@ -64,7 +69,7 @@
                 size: 200,50
                 text: 'Tutorial'
                 on_press:  
-                    _screen_manager.current = 'screen4'
+                    _screen_manager.current = 'tutorialFlow'
             ToggleButton:
                 id: hint
                 text: 'hint?'
@@ -73,45 +78,25 @@
                 on_press: root.loadHint(self)
 
             ToggleButton:
+                id: ai
                 text: 'ai?'
                 size: 100, 100
                 x: hint.top
                 size_hint: (None, None)
-                on_press: root.loadAi(self)                
-        Screen:
-            id: mainpage
-            name: 'screen2'
-            Label: 
-                text: '[b]Collection[/b]'
-                font_size: 30
-                markup: True
-                y: 450
-            Label:
-                size_hint: .1, .1
-                text: root.score_display
-                pos: root.width*3.5/5.5, root.height/6.
-                halign: 'center'
-            Label:
-                size_hint: .1, .1
-                text: "Number of sets " + str(root.numberofsets)
-                pos: root.width*1.5/5.5, root.height/6.
-                halign: 'center'
-            Button:
+                on_press: root.loadAi(self)
+
+            ToggleButton:
+                text: 'sound'
+                size: 100, 100
+                y: hint.top
                 size_hint: (None, None)
-                pos: root.width-200, 0
-                size: 200,50
-                text: 'Back to Mainpage'
-                on_press:
-                    root.restart()  
-                    _screen_manager.current = 'screen1'                                   
-            GridLayout:
-                id: cards_layout
-                cols: 3
-                size_hint: 0.5, 0.5
-                spacing: '10dp'
-                # padding: [100,100,100,200]
-                pos: root.width/4, root.height/4
-             
+                on_press: root.loadSound(self)
+
+        GamePlayScreen:
+            numberofsets: root.numberofsets
+            score_display: root.score_display
+            goBackToIntro: root.goBackToIntro
+
         Screen:
             id: gameoverpage
             name: 'screen3'
@@ -132,201 +117,10 @@
                 pos: (root.width-200)/2., root.height/5-100.
                 size: 200,100
                 on_press: _screen_manager.current = 'screen1'
-        Screen:
-            id: tutorial
-            name: 'screen4'
-			BoxLayout:
-				orientation: 'vertical'
-				padding: 10
-				Label: 
-					size_hint: (1, .15)
-					text: 'How To Play Set'
-					font_size:40
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-100
-				Label: 
-					size_hint: (1, .7)
-					text: 'Welcome to Set!  \n  To get started, click on the number of players. \n You will be taken to the game screen, \n where 12 set cards have been dealt.  \n Try to find a SET.  Once you find one, \n click on the three cards and then click the SET button. \n If you have found a Set, \n you will be able to choose your name \n to receive points for your set.  \n Play continues until the deck runs out of cards. \n To learn what constitutes a set, \n go to the next tutorial screen.'
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-200
-				BoxLayout:
-					orientation: 'horizontal'
-					size_hint: (1,.1)
-					spacing: 5
-					AnchorLayout:
-						size_hint:(.3,1)
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to Main Screen'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen1'
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'right'
-							anchor_y: 'top'
-							text: 'Next: what is a SET?'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen5'
-		Screen:
-            id: tutorial2
-            name: 'screen5'
-			BoxLayout:
-				orientation: 'vertical'
-				padding: 10
-				Label: 
-					size_hint: (1, .15)
-					text: 'Tutorial'
-					font_size:40
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-100
-				Label: 
-					size_hint: (1, .7)
-					text: 'Description here'
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-200
-				BoxLayout:
-					orientation: 'horizontal'
-					size_hint: (1,.1)
-					spacing: 5
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to instruction page'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen4'
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to Main Screen'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen1'
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'right'
-							anchor_y: 'top'
-							text: 'Next: Examples of Sets'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen6'
-		Screen:
-            id: tutorial3
-            name: 'screen6'
-			BoxLayout:
-				orientation: 'vertical'
-				padding: 10
-				Label: 
-					size_hint: (1, .15)
-					text: 'Tutorial'
-					font_size:40
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-100
-				Label: 
-					size_hint: (1, .7)
-					text: 'Examples here'
-					font_name: 'DroidSans'
-					markup: True
-					size: 100,100
-					#pos: (root.width-100)/2, root.height-200
-				BoxLayout:
-					orientation: 'horizontal'
-					size_hint: (1,.1)
-					spacing: 5
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to description page'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen5'
-					AnchorLayout:
-						size_hint:(.3,1)
-						Button:
-							anchor_x: 'center'
-							anchor_y: 'top'
-							text: 'Back to Main Screen'
-							size_hint: .9, 1
-							on_press: _screen_manager.current = 'screen1'
-					AnchorLayout:
-						size_hint:(.3,1)
-<SelectPlayersPopup>:
-    size_hint: .8, .8
-    # background: 'data/popup.png'
-    # separate_color: 0x77 / 255., 0x6e / 255., 0x65 / 255., 1.
-    separator_height: 0
-    title: ''
 
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 1
-        spacing: '10dp'
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1,.4
-            AnchorLayout:
-                size_hint: .5, 1
-                anchor_x: 'left'
-                anchor_y: 'top'
-                Button:
-                    text: root.get_players_name(0)
-                    on_press: 
-                        root.update_scores(0)
-                        root.dismiss()
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'right'
-                anchor_y: 'top'
-                Button:
-                    text: root.get_players_name(1)
-                    on_press: 
-                        root.update_scores(1)
-                        root.dismiss()
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1,.4
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'left'
-                anchor_y: 'bottom'
-                Button:
-                    text: root.get_players_name(2)
-                    on_press: 
-                        root.update_scores(2)
-                        root.dismiss()
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'right'
-                anchor_y: 'bottom'
-                Button:
-                    text: root.get_players_name(3)
-                    on_press: 
-                        root.update_scores(3)
-                        root.dismiss()
-<PlayerNamePopup>:
-    size_hint: .5, .5
-    title: 'Enter Name of Player(s)'
-    title_size: '20sp'
-    separator_height: 5
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 0.8
-        size_hint_x: 0.5
-        spacing: '20dp'
+        Screen:
+            name: 'tutorialFlow'
+            TutorialScreen:
+                goBackToIntro: root.goBackToIntro
+
+
