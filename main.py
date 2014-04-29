@@ -57,7 +57,8 @@ class PlayerNamePopup(Popup):
     def on_press_callback(self,obj):
         self.dismiss()
         game.children[0].current = 'screen2'
-        game.setUpAI()
+        if game.aiActivated:
+            game.setUpAI()
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -67,7 +68,7 @@ class GamePlayScreen(Screen):
     test = ObjectProperty()
 
 class TutorialScreen(Screen):
-    _screen_manager = ObjectProperty()
+    pass
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -116,6 +117,7 @@ class GameLayout(FloatLayout):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         self.updateGrid()
 
+    # UI
     def createGrid(self):
         playscreen = self.children[0].get_screen('screen2')
         self.buttons = [None] * 12
