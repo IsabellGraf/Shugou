@@ -74,7 +74,7 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     _screen_manager = ObjectProperty()
     test = ObjectProperty()
-    aiScore = NumericProperty(0)
+    aiScore = StringProperty(0)
 
 class TutorialScreen(Screen):
     pass
@@ -107,7 +107,7 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
     aiScore = NumericProperty(0)
-    
+
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
         self.restart()
@@ -168,8 +168,6 @@ class GameLayout(FloatLayout):
             self.setUpHint()
         else:
             self.hintActivated = False
-
-
 
     def loadAi(self, obj):
         ''' Turns on or off the hint property base on user call'''
