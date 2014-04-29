@@ -31,15 +31,25 @@
 
 <p>A fun card game!</p>
 
+This is how you, as a collaborator, can access the code.
+
+
 <pre><code>$ cd your_repo_root/Collection
 $ git fetch origin
 $ git checkout gh-pages
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+All changes you commit to this gh-pages branch will show up automatically on the webpage a few minutes later. To prepare a pull request for the webpage:
+<pre><code>$git push origin gh-pages
+</code></pre>
+
+To get back to the actual code for the game, do
+<pre><code>$git checkout master
+</code></pre>
+
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>GitHub Pages supports Jekyll</h3>
 
 <p>In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
       </section>
@@ -48,7 +58,8 @@ $ git checkout gh-pages
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Collection maintained by <a href="https://github.com/BernhardKonrad">BernhardKonrad</a></p>
+        <p class="copyright">Collection is a project by <a href="https://github.com/JeromeLefebvre">Jerome Lefebvre</a>, <a href="https://github.com/jiag">Jia Gou</a>, <a href="https://github.com/cbruni">Carmen Bruni</a>,
+        <a href="https://github.com/BernhardKonrad">BernhardKonrad</a>, <a href="https://github.com/IsabellGraf">Isabell Graf</a>, and <a href="https://github.com/ChristinaLK">Christina Koch</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
