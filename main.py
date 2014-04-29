@@ -57,7 +57,7 @@ class PlayerNamePopup(Popup):
     def on_press_callback(self,obj):
         self.dismiss()
         game.children[0].current = 'screen2'
-
+        game.setUpAI()
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -106,20 +106,23 @@ class GameLayout(FloatLayout):
         game = self
         super(GameLayout, self).__init__(**kwargs)
 
+        self.createGrid()
+        self.setupGame()        
+        self.ai = AI()
+        self.sound = SoundLoader.load('set_song.wav')
+
+    def setupGame(self):
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
+        self.updateGrid()
 
-        self.ai = AI()
-
+    def createGrid(self):
         playscreen = self.children[0].get_screen('screen2')
         self.buttons = [None] * 12
         for i in range(12):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-
-        self.updateGrid()
-        self.sound = SoundLoader.load('set_song.wav')
 
     def loadSound(self,obj):
         if obj.state == 'down':
@@ -143,6 +146,7 @@ class GameLayout(FloatLayout):
             self.setUpHint()
         if self.aiActivated:
             self.setUpAI()
+
 
     def loadHint(self, obj):
         ''' Turns on or off the hint property base on user call'''
@@ -232,9 +236,9 @@ class GameLayout(FloatLayout):
                         othercards=set(self.cards) ^ selectedcards, numberofcards=3)
                 except ValueError: # no more sets available
                     self.children[0].current = 'screen3'
-                    self.deck.fill()
                     # need to clear the selection
                     self.unselectAll() 
+                    self.setupGame()
                     return
 
                 if number_of_players > 1:
