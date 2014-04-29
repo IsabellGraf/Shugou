@@ -74,6 +74,7 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     _screen_manager = ObjectProperty()
     test = ObjectProperty()
+    aiScore = NumericProperty(0)
 
 class TutorialScreen(Screen):
     pass
@@ -105,7 +106,8 @@ class GameLayout(FloatLayout):
     aiActivated = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
-
+    aiScore = NumericProperty(0)
+    
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
         self.restart()
@@ -197,7 +199,7 @@ class GameLayout(FloatLayout):
             else:
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
-        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None, aiplayed=True), 1)
         self.AIplayed = True
 
     def selectCards(self,cards):
@@ -238,7 +240,7 @@ class GameLayout(FloatLayout):
         for button in self.buttons:
             button.state = 'normal'
 
-    def checkIfSetOnBoard(self, obj):
+    def checkIfSetOnBoard(self, obj, aiplayed = False):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
 
@@ -254,13 +256,15 @@ class GameLayout(FloatLayout):
                     self.unselectAll() 
                     self.setupGame()
                     return
-
-                if number_of_players > 1:
-                    # Load the popup
-                    self.select_player_popup()
+                if aiplayed:
+                    self.aiScore += 1
                 else:
-                    self.score += 1
-                    self.print_scores(number_of_players)
+                    if number_of_players > 1:
+                        # Load the popup
+                        self.select_player_popup()
+                    else:
+                        self.score += 1
+                        self.print_scores(number_of_players)
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
                 self.updateGrid()
