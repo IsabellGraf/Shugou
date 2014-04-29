@@ -268,8 +268,7 @@
                 pos: (root.width-200)/2., 4*root.height/5-100.
                 on_press:
                     root.set_players(1)
-                    root.player_name_popup(1)
-                    # _screen_manager.current = 'screen2'                    
+                    root.player_name_popup(1)                 
 
             PlayerSection:
                 value: 2
@@ -277,7 +276,6 @@
                 on_press:
                     root.set_players(2)
                     root.player_name_popup(2)
-                    # _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 3
@@ -285,15 +283,13 @@
                 on_press:
                     root.set_players(3)
                     root.player_name_popup(3)
-                    # _screen_manager.current = 'screen2'     
 
             PlayerSection:
                 value: 4
                 pos: (root.width-200)/2., root.height/5-100.
                 on_press:
                     root.set_players(4)
-                    root.player_name_popup(4)
-                    # _screen_manager.current = 'screen2'     
+                    root.player_name_popup(4)  
                     
             Button:
                 size_hint: (None, None)
