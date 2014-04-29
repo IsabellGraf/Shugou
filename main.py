@@ -113,12 +113,13 @@ class GameLayout(FloatLayout):
         self.sound = SoundLoader.load('set_song.wav')
 
     def setupGame(self):
+        ''' sets up a the deck and draws up some cards'''
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         self.updateGrid()
 
-    # UI
     def createGrid(self):
+        ''' Create the grid of the 12 card buttons, should only be called once'''
         playscreen = self.children[0].get_screen('screen2')
         self.buttons = [None] * 12
         for i in range(12):
@@ -127,12 +128,13 @@ class GameLayout(FloatLayout):
             playscreen.children[0].add_widget(self.buttons[i])
 
     def loadSound(self,obj):
+        ''' Turn the intro song on or off '''
         if obj.state == 'down':
             self.sound.loop = True
             self.sound.play()
         else:
             self.sound.stop()
-            
+    
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
         if self.hintActivated:
@@ -148,7 +150,6 @@ class GameLayout(FloatLayout):
             self.setUpHint()
         if self.aiActivated:
             self.setUpAI()
-
 
     def loadHint(self, obj):
         ''' Turns on or off the hint property base on user call'''
@@ -179,6 +180,7 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(self.AIplay, 1)
 
     def AIplay(self, *arg):
+        ''' The AI plays a turn '''
         for index, card in enumerate(self.cards):
             if card in self.aiCards:
                 self.buttons[index].state = 'down'
@@ -251,26 +253,22 @@ class GameLayout(FloatLayout):
                     self.print_scores(number_of_players)
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
-
                 self.updateGrid()
-
-                # AI updates
-                timeDifference = datetime.datetime.now() - self.t0
-                if self.aiActivated:
-                    if self.AIplayed:
-                        self.ai.updateRatingsAI(
-                            self.cards, self.aiCards, timeDifference)
-                    else:
-                        self.ai.updateRatingsHuman(
-                            self.cards, selectedcards, timeDifference)
-                
-            else:
+                self.aiUpdates()
+            else: # The cards were not a set
                 self.unselectAll()
         else:
             self.setUpHint()
 
-    def state_callback(self, obj, value):
-        pass
+    def ai_updates(self):
+        timeDifference = datetime.datetime.now() - self.t0
+        if self.aiActivated:
+            if self.AIplayed:
+                self.ai.updateRatingsAI(
+                    self.cards, self.aiCards, timeDifference)
+            else:
+                self.ai.updateRatingsHuman(
+                    self.cards, selectedcards, timeDifference)
 
     def select_player_popup(self, *args):
         '''called when three cards are selected'''
