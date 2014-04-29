@@ -1,6 +1,8 @@
 Collections
 =======
 
+[Link to Game Webpage](http://bernhardkonrad.github.io/Collection/)
+
 Organization:
 
 1. Front Page/ Tutorial/ Documentation: @ChristinaLK
