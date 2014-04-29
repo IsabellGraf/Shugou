@@ -50,7 +50,7 @@
         id: tutorialScreens
         Screen:
             id: tutorial
-            name: 'screen4'
+            name: 'tutorial1'
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
@@ -90,10 +90,10 @@
                             anchor_y: 'top'
                             text: 'Next: what is a SET?'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'screen5'
+                            on_press: tutorialScreens.current = 'tutorial2'
         Screen:
             id: tutorial2
-            name: 'screen5'
+            name: 'tutorial2'
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
@@ -123,7 +123,7 @@
                             anchor_y: 'top'
                             text: 'Back to instruction page'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'tutorialFlow'
+                            on_press: tutorialScreens.current = 'tutorial1'
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -139,10 +139,10 @@
                             anchor_y: 'top'
                             text: 'Next: Examples of Sets'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'screen6'
+                            on_press: tutorialScreens.current = 'tutorial3'
         Screen:
             id: tutorial3
-            name: 'screen6'
+            name: 'tutorial3'
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
@@ -172,7 +172,7 @@
                             anchor_y: 'top'
                             text: 'Back to description page'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'screen5'
+                            on_press: tutorialScreens.current = 'tutorial2'
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
