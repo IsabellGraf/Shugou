@@ -36,6 +36,14 @@ class SelectPlayersPopup(Popup):
 
     '''controls the values shown in the player selection popup'''
 
+    def __init__(self, **kwards):
+        super(SelectPlayersPopup, self).__init__()
+        test = Builder.load_string('''Button:
+    x: 50
+    y: 100
+    text: "hey"''')
+        self.children[0].add_widget(test)
+
     def get_players_name(self, value):
         return name_of_players[value]
 
@@ -158,6 +166,8 @@ class GameLayout(FloatLayout):
             self.setUpHint()
         else:
             self.hintActivated = False
+
+
 
     def loadAi(self, obj):
         ''' Turns on or off the hint property base on user call'''
