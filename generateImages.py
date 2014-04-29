@@ -34,9 +34,6 @@ def make_square(infos, size):
     d = infos[1]
     c = infos[2]
     xx = [(d,c-a), (d+0.8*a,c),(d,c+a),(d-0.8*a,c)]
-    #xx = [d - a, c - a, d - a, c + a, d + a, c + a, d + a, c - a]
-    #xx = [(d - 0.6 * a, c - a), (d + a, c - 0.6 * a),
-    #      (d + 0.6 * a, c + a), (d - a, c + 0.6 * a)]
     return xx
 
 
@@ -102,6 +99,6 @@ for card in deck:
             draw1.polygon(shape(infovec, size), fill=color)
             draw2.polygon(shape(infovec, size), fill=color)
 
-    # saves the images where normalimage() is pointing to
-    im1.save(card.normalimage())
-    im2.save(card.downimage())
+    # saves the images where normalimage and downimage is pointing to
+    im1.save(card.normalimage(), dpi=(264,264))
+    im2.save(card.downimage(), dpi=(264,264))
