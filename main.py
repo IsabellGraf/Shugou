@@ -260,7 +260,7 @@ class GameLayout(FloatLayout):
         else:
             self.setUpHint()
 
-    def ai_updates(self):
+    def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
             if self.AIplayed:
