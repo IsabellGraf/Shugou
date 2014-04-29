@@ -232,6 +232,8 @@ class GameLayout(FloatLayout):
                         othercards=set(self.cards) ^ selectedcards, numberofcards=3)
                 except ValueError: # no more sets available
                     self.children[0].current = 'screen3'
+                    self.deck.fill()
+                    self.unselectAll()
                     return
 
                 if number_of_players > 1:
