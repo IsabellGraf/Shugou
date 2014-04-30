@@ -74,6 +74,7 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     _screen_manager = ObjectProperty()
     test = ObjectProperty()
+    aiScore = StringProperty(0)
 
 class TutorialScreen(Screen):
     pass
@@ -105,7 +106,9 @@ class GameLayout(FloatLayout):
     aiActivated = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
-
+    aiScore = NumericProperty(0)
+    # A variable that keeps tracked when an AI has played
+    aiPlayed = BooleanProperty(False)
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
         self.restart()
@@ -167,8 +170,6 @@ class GameLayout(FloatLayout):
         else:
             self.hintActivated = False
 
-
-
     def loadAi(self, obj):
         ''' Turns on or off the hint property base on user call'''
         if obj.state == 'down':
@@ -198,7 +199,7 @@ class GameLayout(FloatLayout):
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
-        self.AIplayed = True
+        self.aiPlayed = True
 
     def selectCards(self,cards):
         ''' selects the given cards if they are in the given cards '''
@@ -254,17 +255,20 @@ class GameLayout(FloatLayout):
                     self.unselectAll() 
                     self.setupGame()
                     return
-
-                if number_of_players > 1:
-                    # Load the popup
-                    self.select_player_popup()
+                if self.aiPlayed:
+                    self.aiScore += 1
                 else:
-                    self.score += 1
-                    self.print_scores(number_of_players)
+                    if number_of_players > 1:
+                        # Load the popup
+                        self.select_player_popup()
+                    else:
+                        self.score += 1
+                        self.print_scores(number_of_players)
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
-                self.updateGrid()
                 self.aiUpdates()
+                self.aiPlayed = False
+                self.updateGrid()
             else: # The cards were not a set
                 self.unselectAll()
         else:
@@ -273,7 +277,7 @@ class GameLayout(FloatLayout):
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
-            if self.AIplayed:
+            if self.aiPlayed:
                 self.ai.updateRatingsAI(
                     self.cards, self.aiCards, timeDifference)
             else:

@@ -22,9 +22,14 @@
         y: 450
     Label:
         size_hint: .1, .1
+        text: str(root.aiScore)
+        pos: root.width*3.5/5.5, root.height/6. - 20
+        halign: 'center'
+    Label:
+        size_hint: .1, .1
         text: root.score_display
         pos: root.width*3.5/5.5, root.height/6.
-        halign: 'center'
+        halign: 'center'        
     Label:
         size_hint: .1, .1
         text: "Number of sets " + str(root.numberofsets)
@@ -298,6 +303,7 @@
                 text: 'Tutorial'
                 on_press:  
                     _screen_manager.current = 'tutorialFlow'
+
             ToggleButton:
                 id: hint
                 text: 'hint?'
@@ -324,6 +330,7 @@
             numberofsets: root.numberofsets
             score_display: root.score_display
             goBackToIntro: root.goBackToIntro
+            aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
 
         Screen:
             id: gameoverpage
