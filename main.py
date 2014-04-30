@@ -107,7 +107,8 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
     aiScore = NumericProperty(0)
-
+    # A variable that keeps tracked when an AI has played
+    aiPlayed = BooleanProperty(False)
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
         self.restart()
@@ -197,8 +198,8 @@ class GameLayout(FloatLayout):
             else:
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
-        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None, aiplayed=True), 1)
-        self.AIplayed = True
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
+        self.aiPlayed = True
 
     def selectCards(self,cards):
         ''' selects the given cards if they are in the given cards '''
@@ -238,7 +239,7 @@ class GameLayout(FloatLayout):
         for button in self.buttons:
             button.state = 'normal'
 
-    def checkIfSetOnBoard(self, obj, aiplayed = False):
+    def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
 
@@ -254,7 +255,7 @@ class GameLayout(FloatLayout):
                     self.unselectAll() 
                     self.setupGame()
                     return
-                if aiplayed:
+                if self.aiPlayed:
                     self.aiScore += 1
                 else:
                     if number_of_players > 1:
@@ -265,8 +266,9 @@ class GameLayout(FloatLayout):
                         self.print_scores(number_of_players)
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
-                self.updateGrid()
                 self.aiUpdates()
+                self.aiPlayed = False
+                self.updateGrid()
             else: # The cards were not a set
                 self.unselectAll()
         else:
@@ -275,7 +277,7 @@ class GameLayout(FloatLayout):
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
-            if self.AIplayed:
+            if self.aiPlayed:
                 self.ai.updateRatingsAI(
                     self.cards, self.aiCards, timeDifference)
             else:
