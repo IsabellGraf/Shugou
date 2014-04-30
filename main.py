@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import datetime
+import pickle
 
 from kivy.app import App
 from kivy.lang import Builder
@@ -122,6 +123,29 @@ class GameLayout(FloatLayout):
         self.setupGame()        
         self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
+        self.loadConfigurations()
+
+    def loadConfigurations(self):
+        try:
+            with open('config.pkl', 'rb') as config:
+                d = pickle.load(config)
+        except IOError:  # File has not been created
+            d = {'hintActivated': True, 'aiActivated':
+                 False, 'soundActivated': False}
+        
+        self.hintActivated = d['hintActivated']
+        self.aiActivated = d['aiActivated']
+        self.soundActivated = d['soundActivated']
+
+
+    def on_hintActivated(self,*arg):
+        self.setUpHint()
+        self.ids.hint.state = 'down'
+        self.saveConfigurations()
+
+    def saveConfigurations(self):
+        d = {'hintActivated': self.hintActivated, 'aiActivated': self.aiActivated, 'soundActivated': self.soundActivated}
+        pickle.dump(d, open('config.pkl', "wb"))
 
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
