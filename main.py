@@ -19,7 +19,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
-from kivy.uix.settings import SettingsWithNoMenu
+from kivy.uix.settings import SettingsWithSpinner
 
 from Deck import Deck
 from AI import AI
@@ -112,7 +112,7 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
     aiScore = NumericProperty(0)
-    # A variable that keeps tracked when an AI has played
+    # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
         
     def __init__(self, **kwargs):
@@ -124,7 +124,8 @@ class GameLayout(FloatLayout):
         self.setupGame()        
         self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
-
+        self.screens = self.children[0]
+        
     ### screen play navigation
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
@@ -322,10 +323,13 @@ def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
 
+class SettingMenu(SettingsWithSpinner):
+    pass
+
 class ScreenApp(App):
 
     def build(self):
-        self.settings_cls = SettingsWithNoMenu
+        self.settings_cls = SettingMenu
         self.gamelayout = GameLayout()
         self.loadSettings()
         return self.gamelayout
