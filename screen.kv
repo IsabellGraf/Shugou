@@ -46,7 +46,7 @@
     GridLayout:
         id: cards_layout
         cols: 3
-        size_hint: 0.5, 0.5
+        size_hint: 0.5,0.5
         spacing: '10dp'
         pos: root.width/4, root.height/4
 
@@ -273,7 +273,7 @@
                 pos: (root.width-200)/2., 4*root.height/5-100.
                 on_press:
                     root.set_players(1)
-                    root.player_name_popup(1)                 
+                    _screen_manager.current = 'screen2'                
 
             PlayerSection:
                 value: 2
