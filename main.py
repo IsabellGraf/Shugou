@@ -19,11 +19,12 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
-
+from kivy.uix.settings import SettingsWithNoMenu
 
 from Deck import Deck
 from AI import AI
 
+from json_conig import settings_json
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
@@ -106,10 +107,11 @@ class GameLayout(FloatLayout):
     hintActivated = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
-    displayHintTimer = NumericProperty(5)
+    displayHintTimer = NumericProperty(1)
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played
     aiPlayed = BooleanProperty(False)
+
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
         self.restart()
@@ -136,12 +138,6 @@ class GameLayout(FloatLayout):
         self.hintActivated = d['hintActivated']
         self.aiActivated = d['aiActivated']
         self.soundActivated = d['soundActivated']
-
-
-    def on_hintActivated(self,*arg):
-        self.setUpHint()
-        self.ids.hint.state = 'down'
-        self.saveConfigurations()
 
     def saveConfigurations(self):
         d = {'hintActivated': self.hintActivated, 'aiActivated': self.aiActivated, 'soundActivated': self.soundActivated}
@@ -206,9 +202,11 @@ class GameLayout(FloatLayout):
         '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
         # Need to remove any previous call or else it might be activated too quickly
         Clock.unschedule(self.displayHint)
-        self.hint = Deck.hint(self.cards)
         # After some time in seconds show a hint
-        Clock.schedule_once(self.displayHint, self.displayHintTimer)
+        if self.hintActivated == True:
+            print("Going to display something!")
+            self.hint = Deck.hint(self.cards)
+            Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
@@ -348,10 +346,30 @@ class GameLayout(FloatLayout):
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
 
+def translateFromKivySettings(value):
+    return True if value == '1' else False
+
 class ScreenApp(App):
 
     def build(self):
-        return GameLayout()
+        self.settings_cls = SettingsWithNoMenu
+        self.gamelayout = GameLayout()
+        self.gamelayout.hintActivated = translateFromKivySettings(self.config.get('settings', 'hint'))
+        self.gamelayout.setUpHint()
+        return self.gamelayout
+
+    def build_config(self, config):
+        config.setdefaults('settings', {'hint': True, 'music':False})
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Settings', self.config, data=settings_json)
+
+    def on_config_change(self,config, section, key,value):
+        if key == 'hint':
+            print(value)
+            self.gamelayout.hintActivated = translateFromKivySettings(value)
+            if self.gamelayout.hintActivated:
+                self.gamelayout.setUpHint()
 
 if __name__ == '__main__':
     ScreenApp().run()

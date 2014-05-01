@@ -42,6 +42,13 @@
         text: 'Back to Mainpage'
         on_press:                                
             root.goBackToIntro()
+    Button:
+        text: 'Settings'
+        size: 100, 100
+        x: 0
+        y: 0
+        size_hint: (None, None)
+        on_press: app.open_settings()
 
     GridLayout:
         id: cards_layout
@@ -49,6 +56,7 @@
         size_hint: 0.5, 0.5
         spacing: '10dp'
         pos: root.width/4, root.height/4
+
 
 <TutorialScreen@Widget>
     ScreenManager:
@@ -325,6 +333,14 @@
                 y: hint.top
                 size_hint: (None, None)
                 on_press: root.loadSound(self)
+
+            Button:
+                text: 'Settings'
+                size: 100, 100
+                y: hint.top
+                x: hint.right
+                size_hint: (None, None)
+                on_press: app.open_settings()
 
         GamePlayScreen:
             numberofsets: root.numberofsets
