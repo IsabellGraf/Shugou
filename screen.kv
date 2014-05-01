@@ -7,11 +7,7 @@
     size_hint: (None, None)
     size: 200,100
     text: str(self.value) + ' Player'
-    # How to use different fonts
-    # Maybe we'll need to include the font in the game itself?
-    #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
-
-
+ 
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
@@ -313,32 +309,24 @@
                     _screen_manager.current = 'tutorialFlow'
 
             ToggleButton:
-                id: hint
-                text: 'hint?'
-                size: 100, 100
-                size_hint: (None, None)
-                on_press: root.loadHint(self)
-
-            ToggleButton:
                 id: ai
                 text: 'ai?'
                 size: 100, 100
-                x: hint.top
                 size_hint: (None, None)
                 on_press: root.loadAi(self)
 
             ToggleButton:
                 text: 'sound'
                 size: 100, 100
-                y: hint.top
+                y: ai.top
                 size_hint: (None, None)
                 on_press: root.loadSound(self)
 
             Button:
                 text: 'Settings'
                 size: 100, 100
-                y: hint.top
-                x: hint.right
+                y: ai.top
+                x: ai.right
                 size_hint: (None, None)
                 on_press: app.open_settings()
 
