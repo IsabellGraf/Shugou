@@ -162,9 +162,9 @@ class GameLayout(FloatLayout):
             self.setUpAI()
 
     ### Dealing with Sound
-    def loadSound(self,obj):
+    def on_soundActivated(self, obj, value):
         ''' Turn the intro song on or off '''
-        if obj.state == 'down':
+        if value:
             self.sound.loop = True
             self.sound.play()
         else:
@@ -332,9 +332,10 @@ class ScreenApp(App):
 
     def loadSettings(self):
         self.gamelayout.hintActivated = boolFromJS(self.config.get('settings', 'hint'))
+        self.gamelayout.soundActivated = boolFromJS(self.config.get('settings', 'sound'))
 
     def build_config(self, config):
-        config.setdefaults('settings', {'hint': True, 'music':False, 'ai':False})
+        config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False})
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settings_json)
@@ -342,7 +343,8 @@ class ScreenApp(App):
     def on_config_change(self,config, section, key,value):
         if key == 'hint':
             self.gamelayout.hintActivated = boolFromJS(value)
-            self.gamelayout.setUpHint()
+        if key == 'sound':
+            self.gamelayout.soundActivated = boolFromJS(value)
 
 
 if __name__ == '__main__':

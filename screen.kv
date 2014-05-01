@@ -308,25 +308,12 @@
                 on_press:  
                     _screen_manager.current = 'tutorialFlow'
 
-            ToggleButton:
-                id: ai
-                text: 'ai?'
-                size: 100, 100
-                size_hint: (None, None)
-                on_press: root.loadAi(self)
-
-            ToggleButton:
-                text: 'sound'
-                size: 100, 100
-                y: ai.top
-                size_hint: (None, None)
-                on_press: root.loadSound(self)
 
             Button:
                 text: 'Settings'
                 size: 100, 100
-                y: ai.top
-                x: ai.right
+                y: 0
+                x: 0
                 size_hint: (None, None)
                 on_press: app.open_settings()
 
