@@ -114,10 +114,6 @@ class GameLayout(FloatLayout):
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played
     aiPlayed = BooleanProperty(False)
-
-    def goBackToIntro(self,*arg):
-        self.children[0].current = 'screen1'
-        self.restart()
         
     def __init__(self, **kwargs):
         global game
@@ -128,6 +124,11 @@ class GameLayout(FloatLayout):
         self.setupGame()        
         self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
+
+    ### screen play navigation
+    def goBackToIntro(self,*arg):
+        self.children[0].current = 'screen1'
+        self.restart()
 
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
@@ -143,14 +144,6 @@ class GameLayout(FloatLayout):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-
-    def loadSound(self,obj):
-        ''' Turn the intro song on or off '''
-        if obj.state == 'down':
-            self.sound.loop = True
-            self.sound.play()
-        else:
-            self.sound.stop()
     
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
@@ -168,23 +161,16 @@ class GameLayout(FloatLayout):
         if self.aiActivated:
             self.setUpAI()
 
-    def loadAi(self, obj):
-        ''' Turns on or off the ai property base on user call'''
+    ### Dealing with Sound
+    def loadSound(self,obj):
+        ''' Turn the intro song on or off '''
         if obj.state == 'down':
-            self.aiActivated = True
-            self.setUpAI()
+            self.sound.loop = True
+            self.sound.play()
         else:
-            self.aiActivated = False
+            self.sound.stop()
 
-    def setUpHint(self):
-        ''' unschedule any current hint and loads up the next one if appropriate'''
-        # Need to remove any previous call or else it might be activated too quickly
-        Clock.unschedule(self.displayHint)
-        # After some time in seconds show a hint
-        if self.hintActivated:
-            self.hint = Deck.hint(self.cards)
-            Clock.schedule_once(self.displayHint, self.displayHintTimer)
-
+    ### Functions related to the AIhint ###
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
         Clock.schedule_once(self.AIplay, 1)
@@ -200,11 +186,26 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
         self.aiPlayed = True
 
-    def selectCards(self,cards):
-        ''' selects the given cards if they are in the given cards '''
-        for index, button in enumerate(self.buttons):
-            if self.cards[index] in cards:
-                button.state = 'down'  
+    def aiUpdates(self):
+        timeDifference = datetime.datetime.now() - self.t0
+        if self.aiActivated:
+            if self.aiPlayed:
+                self.ai.updateRatingsAI(
+                    self.cards, self.aiCards, timeDifference)
+            else:
+                self.ai.updateRatingsHuman(
+                    self.cards, selectedcards, timeDifference)
+
+    ### Functions related to displaying hint ###
+    def setUpHint(self):
+        ''' unschedule any current hint and loads up the next one if appropriate'''
+        # Need to remove any previous call or else it might be activated too quickly
+        Clock.unschedule(self.displayHint)
+        Clock.unschedule(self.displayHintSecond)
+        # After some time in seconds show a hint
+        if self.hintActivated:
+            self.hint = Deck.hint(self.cards)
+            Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
@@ -222,6 +223,7 @@ class GameLayout(FloatLayout):
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
 
+    ### Functions to handling the game play screen
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
         down = []
@@ -234,6 +236,12 @@ class GameLayout(FloatLayout):
         ''' Unselect all the toggle buttons '''
         for button in self.buttons:
             button.state = 'normal'
+
+    def selectCards(self, cards):
+        ''' selects the given cards if they are in the given cards '''
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in cards:
+                button.state = 'down'  
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -270,16 +278,7 @@ class GameLayout(FloatLayout):
         else:
             self.setUpHint()
 
-    def aiUpdates(self):
-        timeDifference = datetime.datetime.now() - self.t0
-        if self.aiActivated:
-            if self.aiPlayed:
-                self.ai.updateRatingsAI(
-                    self.cards, self.aiCards, timeDifference)
-            else:
-                self.ai.updateRatingsHuman(
-                    self.cards, selectedcards, timeDifference)
-
+    ### Dealing with multiplayer ###
     def select_player_popup(self, *args):
         '''called when three cards are selected'''
         popup = SelectPlayersPopup()
