@@ -78,6 +78,9 @@ class GamePlayScreen(Screen):
     test = ObjectProperty()
     aiScore = StringProperty(0)
 
+    def on_enter(self):
+        game.setUpHint()
+
 class TutorialScreen(Screen):
     pass
 
@@ -107,7 +110,7 @@ class GameLayout(FloatLayout):
     hintActivated = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
-    displayHintTimer = NumericProperty(1)
+    displayHintTimer = NumericProperty(5)
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played
     aiPlayed = BooleanProperty(False)
@@ -313,7 +316,6 @@ class GameLayout(FloatLayout):
         self.print_scores(len(name_of_players))
 
 
-
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
 
@@ -331,7 +333,6 @@ class ScreenApp(App):
 
     def loadSettings(self):
         self.gamelayout.hintActivated = boolFromJS(self.config.get('settings', 'hint'))
-        self.gamelayout.setUpHint()
 
     def build_config(self, config):
         config.setdefaults('settings', {'hint': True, 'music':False, 'ai':False})
@@ -343,6 +344,7 @@ class ScreenApp(App):
         if key == 'hint':
             self.gamelayout.hintActivated = boolFromJS(value)
             self.gamelayout.setUpHint()
+
 
 if __name__ == '__main__':
     ScreenApp().run()
