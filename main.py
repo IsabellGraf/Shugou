@@ -334,7 +334,7 @@ class ScreenApp(App):
         self.gamelayout.setUpHint()
 
     def build_config(self, config):
-        config.setdefaults('settings hit esc to leave', {'hint': True, 'music':False, 'ai':False})
+        config.setdefaults('settings', {'hint': True, 'music':False, 'ai':False})
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settings_json)
