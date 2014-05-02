@@ -335,7 +335,7 @@ class ScreenApp(App):
         self.gamelayout.soundActivated = boolFromJS(self.config.get('settings', 'sound'))
 
     def build_config(self, config):
-        config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False})
+        config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False, 'hintspeed':'normal'})
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
@@ -345,7 +345,14 @@ class ScreenApp(App):
             self.gamelayout.hintActivated = boolFromJS(value)
         if key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
-
+        if key == 'hintspeed':
+            print(value)
+            if value == 'slow':
+                self.gamelayout.displayHintTimer = 10
+            if value == 'normal':
+                self.gamelayout.displayHintTimer = 5
+            if value == 'fast':
+                self.gamelayout.displayHintTimer = 5
 
 if __name__ == '__main__':
     ScreenApp().run()
