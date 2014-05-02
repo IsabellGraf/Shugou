@@ -318,12 +318,7 @@ def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
 
-class SettingMenu(SettingsWithSpinner):
-    def on_close(self,*arg):
-        print("closing...")    
-
 class ScreenApp(App):
-    designer_settings = ObjectProperty(None)
 
     def build(self):
         Clock.max_iteration = 50
@@ -350,13 +345,12 @@ class ScreenApp(App):
         if key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
         if key == 'hintspeed':
-            print(value)
             if value == 'slow':
                 self.gamelayout.displayHintTimer = 10
             if value == 'normal':
                 self.gamelayout.displayHintTimer = 5
             if value == 'fast':
-                self.gamelayout.displayHintTimer = 5
+                self.gamelayout.displayHintTimer = 1
 
 if __name__ == '__main__':
     ScreenApp().run()
