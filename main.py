@@ -193,6 +193,9 @@ class GameLayout(FloatLayout):
                     self.cards, selectedcards, timeDifference)
 
     ### Functions related to displaying hint ###
+    def on_displayHintTimer(self, obj, value):
+        self.setUpHint()
+
     def setUpHint(self):
         ''' unschedule any current hint and loads up the next one if appropriate'''
         # Need to remove any previous call or else it might be activated too quickly
@@ -208,7 +211,7 @@ class GameLayout(FloatLayout):
         if self.selected() == []: # no cards have been selected
             # displays on the first card in a hint
             self.selectCards([self.hint[0]])
-            Clock.schedule_once(self.displayHintSecond, 5)
+            Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else: # if the player has a card selected, try calling it again later
             self.setUpHint()
 
@@ -318,7 +321,7 @@ def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
 
-class ScreenApp(App):
+class CollectionApp(App):
 
     def build(self):
         Clock.max_iteration = 50
@@ -353,4 +356,4 @@ class ScreenApp(App):
                 self.gamelayout.displayHintTimer = 1
 
 if __name__ == '__main__':
-    ScreenApp().run()
+    CollectionApp().run()
