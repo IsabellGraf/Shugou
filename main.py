@@ -183,7 +183,6 @@ class GameLayout(FloatLayout):
         self.aiPlayed = True
 
     def aiUpdates(self):
-        print("Called")
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
             if self.aiPlayed:
@@ -325,6 +324,7 @@ class SettingMenu(SettingsWithSpinner):
 class ScreenApp(App):
 
     def build(self):
+        Clock.max_iteration = 50
         self.settings_cls = SettingMenu
         self.gamelayout = GameLayout()
         self.loadSettings()
