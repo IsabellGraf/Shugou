@@ -24,7 +24,7 @@ from kivy.uix.settings import SettingsWithSpinner
 from Deck import Deck
 from AI import AI
 
-from json_conig import settings_json
+from jsonConfig import settingsjson
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
@@ -125,7 +125,7 @@ class GameLayout(FloatLayout):
         self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
         self.screens = self.children[0]
-        
+
     ### screen play navigation
     def goBackToIntro(self,*arg):
         self.children[0].current = 'screen1'
@@ -342,7 +342,7 @@ class ScreenApp(App):
         config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False})
 
     def build_settings(self, settings):
-        settings.add_json_panel('Settings', self.config, data=settings_json)
+        settings.add_json_panel('Settings', self.config, data=settingsjson)
 
     def on_config_change(self,config, section, key,value):
         if key == 'hint':
