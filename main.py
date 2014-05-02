@@ -319,13 +319,17 @@ def boolFromJS(value):
     return True if value == '1' else False
 
 class SettingMenu(SettingsWithSpinner):
-    pass
+    def on_close(self,*arg):
+        print("closing...")    
 
 class ScreenApp(App):
+    designer_settings = ObjectProperty(None)
 
     def build(self):
         Clock.max_iteration = 50
-        self.settings_cls = SettingMenu
+        # The following line will be uncommented in the beta
+        # For now, it gives us access to various kivy settings we can play with
+        #self.use_kivy_settings = False
         self.gamelayout = GameLayout()
         self.loadSettings()
         return self.gamelayout
