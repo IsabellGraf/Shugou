@@ -148,17 +148,12 @@ class GameLayout(FloatLayout):
     
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        if self.hintActivated:
-            # remove any display of a hint since the card have changed
-            Clock.unschedule(self.displayHint)
-            Clock.unschedule(self.displayHintSecond)
         self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
         self.t0 = datetime.datetime.now()
-        if self.hintActivated:
-            self.setUpHint()
+        self.setUpHint()
         if self.aiActivated:
             self.setUpAI()
 
@@ -188,6 +183,7 @@ class GameLayout(FloatLayout):
         self.aiPlayed = True
 
     def aiUpdates(self):
+        print("Called")
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
             if self.aiPlayed:
