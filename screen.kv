@@ -7,10 +7,6 @@
     size_hint: (None, None)
     size: 200,100
     text: str(self.value) + ' Player'
-    # How to use different fonts
-    # Maybe we'll need to include the font in the game itself?
-    #font_name: '/usr/local/texlive/2011/texmf-dist/fonts/truetype/public/gnu-freefont/FreeSans.ttf' 
-
 
 <GamePlayScreen@Screen>:
     id: mainpage
@@ -42,6 +38,13 @@
         text: 'Back to Mainpage'
         on_press:                                
             root.goBackToIntro()
+    Button:
+        text: 'Settings'
+        size: 100, 100
+        x: 0
+        y: 0
+        size_hint: (None, None)
+        on_press: app.open_settings()
 
     GridLayout:
         id: cards_layout
@@ -49,6 +52,7 @@
         size_hint: 0.5,0.5
         spacing: '10dp'
         pos: root.width/4, root.height/4
+
 
 <TutorialScreen@Widget>
     ScreenManager:
@@ -304,27 +308,14 @@
                 on_press:  
                     _screen_manager.current = 'tutorialFlow'
 
-            ToggleButton:
-                id: hint
-                text: 'hint?'
-                size: 100, 100
-                size_hint: (None, None)
-                on_press: root.loadHint(self)
 
-            ToggleButton:
-                id: ai
-                text: 'ai?'
+            Button:
+                text: 'Settings'
                 size: 100, 100
-                x: hint.top
+                y: 0
+                x: 0
                 size_hint: (None, None)
-                on_press: root.loadAi(self)
-
-            ToggleButton:
-                text: 'sound'
-                size: 100, 100
-                y: hint.top
-                size_hint: (None, None)
-                on_press: root.loadSound(self)
+                on_press: app.open_settings()
 
         GamePlayScreen:
             numberofsets: root.numberofsets

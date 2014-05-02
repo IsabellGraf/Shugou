@@ -19,11 +19,12 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
-
+from kivy.uix.settings import SettingsWithSpinner
 
 from Deck import Deck
 from AI import AI
 
+from jsonConfig import settingsjson
 
 number_of_players = 4
 name_of_players = ['John', 'Sally', 'Sam', 'Joey']
@@ -77,6 +78,9 @@ class GamePlayScreen(Screen):
     test = ObjectProperty()
     aiScore = StringProperty(0)
 
+    def on_enter(self):
+        game.setUpHint()
+
 class TutorialScreen(Screen):
     pass
 
@@ -108,11 +112,8 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
     aiScore = NumericProperty(0)
-    # A variable that keeps tracked when an AI has played
+    # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
-    def goBackToIntro(self,*arg):
-        self.children[0].current = 'screen1'
-        self.restart()
         
     def __init__(self, **kwargs):
         global game
@@ -123,29 +124,12 @@ class GameLayout(FloatLayout):
         self.setupGame()        
         self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
-        self.loadConfigurations()
+        self.screens = self.children[0]
 
-    def loadConfigurations(self):
-        try:
-            with open('config.pkl', 'rb') as config:
-                d = pickle.load(config)
-        except IOError:  # File has not been created
-            d = {'hintActivated': True, 'aiActivated':
-                 False, 'soundActivated': False}
-        
-        self.hintActivated = d['hintActivated']
-        self.aiActivated = d['aiActivated']
-        self.soundActivated = d['soundActivated']
-
-
-    def on_hintActivated(self,*arg):
-        self.setUpHint()
-        self.ids.hint.state = 'down'
-        self.saveConfigurations()
-
-    def saveConfigurations(self):
-        d = {'hintActivated': self.hintActivated, 'aiActivated': self.aiActivated, 'soundActivated': self.soundActivated}
-        pickle.dump(d, open('config.pkl', "wb"))
+    ### screen play navigation
+    def goBackToIntro(self,*arg):
+        self.children[0].current = 'screen1'
+        self.restart()
 
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
@@ -161,55 +145,28 @@ class GameLayout(FloatLayout):
             self.buttons[i] = MyToggleButton()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-
-    def loadSound(self,obj):
-        ''' Turn the intro song on or off '''
-        if obj.state == 'down':
-            self.sound.loop = True
-            self.sound.play()
-        else:
-            self.sound.stop()
     
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        if self.hintActivated:
-            # remove any display of a hint since the card have changed
-            Clock.unschedule(self.displayHint)
-            Clock.unschedule(self.displayHintSecond)
         self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
         self.t0 = datetime.datetime.now()
-        if self.hintActivated:
-            self.setUpHint()
+        self.setUpHint()
         if self.aiActivated:
             self.setUpAI()
 
-    def loadHint(self, obj):
-        ''' Turns on or off the hint property base on user call'''
-        if obj.state == 'down':
-            self.hintActivated = True
-            self.setUpHint()
+    ### Dealing with Sound
+    def on_soundActivated(self, obj, value):
+        ''' Turn the intro song on or off '''
+        if value:
+            self.sound.loop = True
+            self.sound.play()
         else:
-            self.hintActivated = False
+            self.sound.stop()
 
-    def loadAi(self, obj):
-        ''' Turns on or off the hint property base on user call'''
-        if obj.state == 'down':
-            self.aiActivated = True
-            self.setUpAI()
-        else:
-            self.aiActivated = False
-
-    def setUpHint(self):
-        '''Set-up which cards will be part of the hint and a timer for when they will be displayed'''
-        # Need to remove any previous call or else it might be activated too quickly
-        Clock.unschedule(self.displayHint)
-        self.hint = Deck.hint(self.cards)
-        # After some time in seconds show a hint
-        Clock.schedule_once(self.displayHint, self.displayHintTimer)
-
+    ### Functions related to the AIhint ###
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
         Clock.schedule_once(self.AIplay, 1)
@@ -225,23 +182,35 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
         self.aiPlayed = True
 
-    def selectCards(self,cards):
-        ''' selects the given cards if they are in the given cards '''
-        for index, button in enumerate(self.buttons):
-            if self.cards[index] in cards:
-                button.state = 'down'  
+    def aiUpdates(self):
+        timeDifference = datetime.datetime.now() - self.t0
+        if self.aiActivated:
+            if self.aiPlayed:
+                self.ai.updateRatingsAI(
+                    self.cards, self.aiCards, timeDifference)
+            else:
+                self.ai.updateRatingsHuman(
+                    self.cards, selectedcards, timeDifference)
+
+    ### Functions related to displaying hint ###
+    def setUpHint(self):
+        ''' unschedule any current hint and loads up the next one if appropriate'''
+        # Need to remove any previous call or else it might be activated too quickly
+        Clock.unschedule(self.displayHint)
+        Clock.unschedule(self.displayHintSecond)
+        # After some time in seconds show a hint
+        if self.hintActivated:
+            self.hint = Deck.hint(self.cards)
+            Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
-        # in case hint was turned off, after the clock element was launched
-        # so we are required to verify if we actually still want to run
-        if self.hintActivated:
-            if self.selected() == []: # no cards have been selected
-                # displays on the first card in a hint
-                self.selectCards([self.hint[0]])
-                Clock.schedule_once(self.displayHintSecond, 5)
-            else: # if the player has a card selected, try calling it again later
-                self.setUpHint()
+        if self.selected() == []: # no cards have been selected
+            # displays on the first card in a hint
+            self.selectCards([self.hint[0]])
+            Clock.schedule_once(self.displayHintSecond, 5)
+        else: # if the player has a card selected, try calling it again later
+            self.setUpHint()
 
     def displayHintSecond(self,*arg):
         ''' Displays the second of two cards in a hint if the current selected card is the first card of the hint'''
@@ -250,6 +219,7 @@ class GameLayout(FloatLayout):
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
 
+    ### Functions to handling the game play screen
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
         down = []
@@ -262,6 +232,12 @@ class GameLayout(FloatLayout):
         ''' Unselect all the toggle buttons '''
         for button in self.buttons:
             button.state = 'normal'
+
+    def selectCards(self, cards):
+        ''' selects the given cards if they are in the given cards '''
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in cards:
+                button.state = 'down'  
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -298,16 +274,7 @@ class GameLayout(FloatLayout):
         else:
             self.setUpHint()
 
-    def aiUpdates(self):
-        timeDifference = datetime.datetime.now() - self.t0
-        if self.aiActivated:
-            if self.aiPlayed:
-                self.ai.updateRatingsAI(
-                    self.cards, self.aiCards, timeDifference)
-            else:
-                self.ai.updateRatingsHuman(
-                    self.cards, selectedcards, timeDifference)
-
+    ### Dealing with multiplayer ###
     def select_player_popup(self, *args):
         '''called when three cards are selected'''
         popup = SelectPlayersPopup()
@@ -344,14 +311,46 @@ class GameLayout(FloatLayout):
         self.print_scores(len(name_of_players))
 
 
-
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
+
+def boolFromJS(value):
+    ''' JSON config returns '1' and '0' for True and False'''
+    return True if value == '1' else False
 
 class ScreenApp(App):
 
     def build(self):
-        return GameLayout()
+        Clock.max_iteration = 50
+        # The following line will be uncommented in the beta
+        # For now, it gives us access to various kivy settings we can play with
+        #self.use_kivy_settings = False
+        self.gamelayout = GameLayout()
+        self.loadSettings()
+        return self.gamelayout
+
+    def loadSettings(self):
+        self.gamelayout.hintActivated = boolFromJS(self.config.get('settings', 'hint'))
+        self.gamelayout.soundActivated = boolFromJS(self.config.get('settings', 'sound'))
+
+    def build_config(self, config):
+        config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False, 'hintspeed':'normal'})
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Settings', self.config, data=settingsjson)
+
+    def on_config_change(self,config, section, key,value):
+        if key == 'hint':
+            self.gamelayout.hintActivated = boolFromJS(value)
+        if key == 'sound':
+            self.gamelayout.soundActivated = boolFromJS(value)
+        if key == 'hintspeed':
+            if value == 'slow':
+                self.gamelayout.displayHintTimer = 10
+            if value == 'normal':
+                self.gamelayout.displayHintTimer = 5
+            if value == 'fast':
+                self.gamelayout.displayHintTimer = 1
 
 if __name__ == '__main__':
     ScreenApp().run()
