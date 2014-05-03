@@ -20,6 +20,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
+from kivy.uix.settings import SettingsWithSidebar
 
 from Deck import Deck
 from AI import AI
@@ -325,7 +326,9 @@ class GameLayout(FloatLayout):
         player_scores = dict.fromkeys(name_of_players, 0)
         self.print_scores(len(name_of_players))
 
-
+    def quit(self):
+        print("Trying to quit...")
+        
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
@@ -339,6 +342,7 @@ class CollectionApp(App):
         # For now, it gives us access to various kivy settings we can play with
         #self.use_kivy_settings = False
         self.gamelayout = GameLayout()
+        self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         return self.gamelayout
 
@@ -360,6 +364,17 @@ class CollectionApp(App):
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
+        print(dir(settings.interface.ids.menu)) #.add_widget(Button(text="click", size_hint = (None, None)))
+
+        settings.interface.ids.menu.add_widget(Button(text="Quit", size_hint = (None, None), x=0, y = 100, on_press= self.quit))
+
+        settings.on_close = self.quit
+
+    def quit(self, *arg):
+        self.gamelayout.quit()
+
+    def on_release(self, *arg):
+        print("Released!")
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
