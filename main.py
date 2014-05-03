@@ -328,7 +328,7 @@ class GameLayout(FloatLayout):
 
     def quit(self):
         print("Trying to quit...")
-        
+
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
@@ -364,8 +364,7 @@ class CollectionApp(App):
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
-        print(dir(settings.interface.ids.menu)) #.add_widget(Button(text="click", size_hint = (None, None)))
-
+        settings.interface.ids.menu.ids.button.on_press = self.leaveSettingsPanel
         settings.interface.ids.menu.add_widget(Button(text="Quit", size_hint = (None, None), x=0, y = 100, on_press= self.quit))
 
         settings.on_close = self.quit
@@ -373,8 +372,8 @@ class CollectionApp(App):
     def quit(self, *arg):
         self.gamelayout.quit()
 
-    def on_release(self, *arg):
-        print("Released!")
+    def leaveSettingsPanel(self, *arg):
+        print("leaving the setting panel")
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
