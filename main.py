@@ -139,7 +139,7 @@ class GameLayout(FloatLayout):
         self.sound = SoundLoader.load('set_song.wav')
     
     # screen play navigation
-    def goBackToIntro(self, *arg):
+    def goToIntro(self, *arg):
         self.screens.current = 'screen1'
         self.restart()
 
@@ -327,7 +327,11 @@ class GameLayout(FloatLayout):
         self.print_scores(len(name_of_players))
 
     def quit(self):
-        print("Trying to quit...")
+        ''' You are quiting the current game '''
+        self.unselectAll()
+        self.setupGame()
+        self.restart()
+        self.goToIntro()
 
     def goToTutorial(self):
         self.screens.current = 'tutorialFlow'
@@ -388,12 +392,12 @@ class CollectionApp(App):
         settings.on_close = self.quit
 
     def quit(self, *arg):
-        print("Trying to quit")
         self.gamelayout.quit()
+        self.interfaceButton.trigger_action()
 
     def moveToTutorial(self, buttonInstance):
-        self.interfaceButton.trigger_action()
         self.gamelayout.goToTutorial()
+        self.interfaceButton.trigger_action()
 
     def leaveSettingsPanel(self, *arg):
         print("leaving the setting panel")

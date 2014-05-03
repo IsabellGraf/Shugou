@@ -37,7 +37,7 @@
         size: 200,50
         text: 'Back to Mainpage'
         on_press:                                
-            root.goBackToIntro()
+            root.goToIntro()
     Button:
         text: 'Settings'
         size: 100, 100
@@ -91,7 +91,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -140,7 +140,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -189,7 +189,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
 
@@ -265,7 +265,7 @@
         GamePlayScreen:
             numberofsets: Deck.numberOfSets(root.cards)
             score_display: root.score_display
-            goBackToIntro: root.goBackToIntro
+            goToIntro: root.goToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
 
         Screen:
@@ -292,4 +292,4 @@
         Screen:
             name: 'tutorialFlow'
             TutorialScreen:
-                goBackToIntro: root.goBackToIntro
+                goToIntro: root.goToIntro
