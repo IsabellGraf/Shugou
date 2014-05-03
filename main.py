@@ -120,7 +120,7 @@ class GameLayout(FloatLayout):
         global game
         game = self
 
-        self.screens = self.children[0]
+        self.screens = self.ids._screen_manager
         # The UI element we were not able to add to collections.kv
         self.createGrid()
         self.setupGame()
@@ -129,7 +129,7 @@ class GameLayout(FloatLayout):
 
     # screen play navigation
     def goBackToIntro(self, *arg):
-        self.children[0].current = 'screen1'
+        self.screens.current = 'screen1'
         self.restart()
 
     def setupGame(self):
@@ -256,7 +256,7 @@ class GameLayout(FloatLayout):
                     newcards = self.deck.drawGuarantee(
                         othercards=set(self.cards) ^ selectedcards, numberofcards=3)
                 except ValueError:  # no more sets available
-                    self.children[0].current = 'screen3'
+                    self.screens.current = 'screen3'
                     # need to clear the selection
                     self.unselectAll()
                     self.setupGame()
