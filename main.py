@@ -19,7 +19,6 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
-from kivy.uix.settings import SettingsWithSpinner
 
 from Deck import Deck
 from AI import AI
@@ -54,57 +53,56 @@ class SelectPlayersPopup(Popup):
         player_scores[name_of_players[value]] += 1
         game.print_scores(len(name_of_players))
 
+
 class PlayerNamePopup(Popup):
-    def __init__(self,value):
+
+    def __init__(self, value):
         super(PlayerNamePopup, self).__init__()
         for i in range(value):
-            self.text_input = TextInput(multiline=False, size_hint_y = None, size_hint_x = 0.5, height = '32dp', text = name_of_players[i])
+            self.text_input = TextInput(
+                multiline=False, size_hint_y=None, size_hint_x=0.5, height='32dp', text=name_of_players[i])
             self.children[0].add_widget(self.text_input)
-        self.enter = Button(text = 'Start Game', size_hint_y = None, height = '40dp')
-        self.enter.bind(on_press = self.on_press_callback)
+        self.enter = Button(
+            text='Start Game', size_hint_y=None, height='40dp')
+        self.enter.bind(on_press=self.on_press_callback)
         self.children[0].add_widget(self.enter)
 
-    def on_press_callback(self,obj):
+    def on_press_callback(self, obj):
         self.dismiss()
         game.children[0].current = 'screen2'
         if game.aiActivated:
             game.setUpAI()
+
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     score_display = StringProperty('')
     restart = ObjectProperty()
     _screen_manager = ObjectProperty()
-    test = ObjectProperty()
     aiScore = StringProperty(0)
 
     def on_enter(self):
         game.setUpHint()
 
+
 class TutorialScreen(Screen):
     pass
 
+
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
+
     def __init__(self, **kwargs):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
 
-class MyToggleButton(ToggleButton):
-    normalimage = StringProperty('')
-    downimage = StringProperty('')
+class CardToggle(ToggleButton):
     card = ObjectProperty()
-
-    def on_card(self, instance, value):
-        self.card = value
-        self.normalimage = self.card.normalimage()
-        self.downimage = self.card.downimage()
 
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
-    numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
@@ -114,20 +112,23 @@ class GameLayout(FloatLayout):
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
-        
+    deck = ObjectProperty()
+    cards = ListProperty([])
+
     def __init__(self, **kwargs):
+        super(GameLayout, self).__init__(**kwargs)
         global game
         game = self
-        super(GameLayout, self).__init__(**kwargs)
 
-        self.createGrid()
-        self.setupGame()        
-        self.ai = AI()
-        self.sound = SoundLoader.load('set_song.wav')
         self.screens = self.children[0]
+        # The UI element we were not able to add to collections.kv
+        self.createGrid()
+        self.setupGame()
+        self.sound = SoundLoader.load('set_song.wav')
+        
 
-    ### screen play navigation
-    def goBackToIntro(self,*arg):
+    # screen play navigation
+    def goBackToIntro(self, *arg):
         self.children[0].current = 'screen1'
         self.restart()
 
@@ -136,19 +137,19 @@ class GameLayout(FloatLayout):
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         self.updateGrid()
+        self.ai = AI()
 
     def createGrid(self):
         ''' Create the grid of the 12 card buttons, should only be called once'''
-        playscreen = self.children[0].get_screen('screen2')
+        playscreen = self.screens.get_screen('screen2')
         self.buttons = [None] * 12
         for i in range(12):
-            self.buttons[i] = MyToggleButton()
+            self.buttons[i] = CardToggle()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-    
+
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
@@ -157,7 +158,7 @@ class GameLayout(FloatLayout):
         if self.aiActivated:
             self.setUpAI()
 
-    ### Dealing with Sound
+    # Dealing with Sound
     def on_soundActivated(self, obj, value):
         ''' Turn the intro song on or off '''
         if value:
@@ -166,7 +167,7 @@ class GameLayout(FloatLayout):
         else:
             self.sound.stop()
 
-    ### Functions related to the AIhint ###
+    # Functions related to the AIhint ###
     def setUpAI(self):
         (time, self.aiCards) = self.ai.suggestion(self.cards)
         Clock.schedule_once(self.AIplay, 1)
@@ -192,10 +193,15 @@ class GameLayout(FloatLayout):
                 self.ai.updateRatingsHuman(
                     self.cards, selectedcards, timeDifference)
 
-    ### Functions related to displaying hint ###
+    # Functions related to displaying hint ###
+    def on_displayHintTimer(self, obj, value):
+        if self.screens.current == 'screen2':
+            self.setUpHint()
+
     def setUpHint(self):
         ''' unschedule any current hint and loads up the next one if appropriate'''
-        # Need to remove any previous call or else it might be activated too quickly
+        # Need to remove any previous call or else it might be activated too
+        # quickly
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
         # After some time in seconds show a hint
@@ -205,21 +211,21 @@ class GameLayout(FloatLayout):
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
-        if self.selected() == []: # no cards have been selected
+        if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
             self.selectCards([self.hint[0]])
-            Clock.schedule_once(self.displayHintSecond, 5)
-        else: # if the player has a card selected, try calling it again later
+            Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
+        else:  # if the player has a card selected, try calling it again later
             self.setUpHint()
 
-    def displayHintSecond(self,*arg):
+    def displayHintSecond(self, *arg):
         ''' Displays the second of two cards in a hint if the current selected card is the first card of the hint'''
         selectedcards = self.selected()
         # One card is selected and it is a specific card.
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
 
-    ### Functions to handling the game play screen
+    # Functions to handling the game play screen
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
         down = []
@@ -237,7 +243,7 @@ class GameLayout(FloatLayout):
         ''' selects the given cards if they are in the given cards '''
         for index, button in enumerate(self.buttons):
             if self.cards[index] in cards:
-                button.state = 'down'  
+                button.state = 'down'
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -249,10 +255,10 @@ class GameLayout(FloatLayout):
                 try:
                     newcards = self.deck.drawGuarantee(
                         othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                except ValueError: # no more sets available
+                except ValueError:  # no more sets available
                     self.children[0].current = 'screen3'
                     # need to clear the selection
-                    self.unselectAll() 
+                    self.unselectAll()
                     self.setupGame()
                     return
                 if self.aiPlayed:
@@ -269,12 +275,12 @@ class GameLayout(FloatLayout):
                 self.aiUpdates()
                 self.aiPlayed = False
                 self.updateGrid()
-            else: # The cards were not a set
+            else:  # The cards were not a set
                 self.unselectAll()
         else:
             self.setUpHint()
 
-    ### Dealing with multiplayer ###
+    # Dealing with multiplayer ###
     def select_player_popup(self, *args):
         '''called when three cards are selected'''
         popup = SelectPlayersPopup()
@@ -296,8 +302,7 @@ class GameLayout(FloatLayout):
                 self.score_display += name + '      ' + \
                     str(player_scores[name]) + '      '
 
-
-    def player_name_popup(self,value):
+    def player_name_popup(self, value):
         '''called after selecting number of players'''
         playername = PlayerNamePopup(value)
         playername.open()
@@ -311,14 +316,12 @@ class GameLayout(FloatLayout):
         self.print_scores(len(name_of_players))
 
 
-# To test the screen size you can use:
-# kivy main.py -m screen:ipad3
-
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
 
-class ScreenApp(App):
+
+class CollectionApp(App):
 
     def build(self):
         Clock.max_iteration = 50
@@ -330,27 +333,36 @@ class ScreenApp(App):
         return self.gamelayout
 
     def loadSettings(self):
-        self.gamelayout.hintActivated = boolFromJS(self.config.get('settings', 'hint'))
-        self.gamelayout.soundActivated = boolFromJS(self.config.get('settings', 'sound'))
+        # Load the values already stored into the file
+        self.gamelayout.hintActivated = boolFromJS(
+            self.config.get('settings', 'hint'))
+        speedSettings = {'slow':10, 'normal':5, 'fast':1}
+        self.gamelayout.displayHintTimer = speedSettings[
+            self.config.get('settings', 'hintspeed')]
+        self.gamelayout.soundActivated = boolFromJS(
+            self.config.get('settings', 'sound'))
 
     def build_config(self, config):
-        config.setdefaults('settings', {'hint': True, 'sound':False, 'ai':False, 'hintspeed':'normal'})
+        config.setdefaults('settings', {'hint': True, 
+                                        'sound': False,
+                                        'ai': False, 
+                                        'hintspeed': 'fast'})
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
 
-    def on_config_change(self,config, section, key,value):
+    def on_config_change(self, config, section, key, value):
         if key == 'hint':
             self.gamelayout.hintActivated = boolFromJS(value)
         if key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
         if key == 'hintspeed':
-            if value == 'slow':
-                self.gamelayout.displayHintTimer = 10
-            if value == 'normal':
-                self.gamelayout.displayHintTimer = 5
-            if value == 'fast':
-                self.gamelayout.displayHintTimer = 1
+            speedSettings = {'slow':10, 'normal':5, 'fast':1}
+            self.gamelayout.displayHintTimer = speedSettings[value]
+
+
+# To test the screen size you can use:
+# kivy main.py -m screen:ipad3
 
 if __name__ == '__main__':
-    ScreenApp().run()
+    CollectionApp().run()
