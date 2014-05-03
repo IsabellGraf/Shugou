@@ -1,6 +1,9 @@
 <MyToggleButton>:
     background_normal: root.normalimage          
     background_down: root.downimage
+    on_card:
+        root.background_normal = root.card.normalimage()
+        root.background_down = root.card.downimage()
 
 <PlayerSection@Button>:
     value: 0
@@ -318,7 +321,7 @@
                 on_press: app.open_settings()
 
         GamePlayScreen:
-            numberofsets: root.numberofsets
+            numberofsets: root.deck.numberOfSets(root.cards) if root.deck else 0
             score_display: root.score_display
             goBackToIntro: root.goBackToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""

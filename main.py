@@ -19,7 +19,6 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
-from kivy.uix.settings import SettingsWithSpinner
 
 from Deck import Deck
 from AI import AI
@@ -103,11 +102,6 @@ class MyToggleButton(ToggleButton):
     downimage = StringProperty('')
     card = ObjectProperty()
 
-    def on_card(self, instance, value):
-        self.card = value
-        self.normalimage = self.card.normalimage()
-        self.downimage = self.card.downimage()
-
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -121,6 +115,8 @@ class GameLayout(FloatLayout):
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
+    deck = ObjectProperty()
+    cards = ListProperty([])
 
     def __init__(self, **kwargs):
         global game
@@ -155,7 +151,6 @@ class GameLayout(FloatLayout):
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        self.numberofsets = self.deck.numberOfSets(self.cards)
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
@@ -325,6 +320,7 @@ class GameLayout(FloatLayout):
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
+
 
 class CollectionApp(App):
 
