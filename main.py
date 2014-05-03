@@ -329,8 +329,8 @@ class GameLayout(FloatLayout):
     def quit(self):
         print("Trying to quit...")
 
-    def moveToTutorial(self, buttonInstance):
-        print("Trying to move to tutorial")
+    def goToTutorial(self):
+        self.screens.current = 'tutorialFlow'
 
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
@@ -393,7 +393,7 @@ class CollectionApp(App):
 
     def moveToTutorial(self, buttonInstance):
         self.interfaceButton.trigger_action()
-        print("want to go to the tutorial")
+        self.gamelayout.goToTutorial()
 
     def leaveSettingsPanel(self, *arg):
         print("leaving the setting panel")

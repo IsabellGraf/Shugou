@@ -253,15 +253,6 @@
                 on_press:
                     root.set_players(4)
                     root.player_name_popup(4)  
-                    
-            Button:
-                size_hint: (None, None)
-                pos: (root.width-200)/8., 4*root.height/5-100.
-                size: 200,50
-                text: 'Tutorial'
-                on_press:  
-                    screenManager.current = 'tutorialFlow'
-
 
             Button:
                 text: 'Settings'
