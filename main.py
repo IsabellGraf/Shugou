@@ -103,7 +103,6 @@ class CardToggle(ToggleButton):
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
-    numberofsets = NumericProperty(0)
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
     hintActivated = BooleanProperty(False)
@@ -113,7 +112,6 @@ class GameLayout(FloatLayout):
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
-    deck = ObjectProperty()
     cards = ListProperty([])
 
     def __init__(self, **kwargs):

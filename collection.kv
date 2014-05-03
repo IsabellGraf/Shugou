@@ -8,6 +8,8 @@
     size: 200,100
     text: str(self.value) + ' Player'
 
+#: import Deck Deck
+
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
@@ -318,7 +320,7 @@
                 on_press: app.open_settings()
 
         GamePlayScreen:
-            numberofsets: root.deck.numberOfSets(root.cards) if root.deck else 0
+            numberofsets: Deck.Deck.numberOfSets(root.cards)
             score_display: root.score_display
             goBackToIntro: root.goBackToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
