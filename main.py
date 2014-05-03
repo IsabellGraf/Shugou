@@ -366,6 +366,7 @@ class CollectionApp(App):
                                         'hintspeed': 'fast'})
 
     def build_settings(self, settings):
+        self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         interfaceButton = settings.interface.ids.menu.ids.button
         interfaceButton.on_press = self.leaveSettingsPanel
@@ -374,7 +375,7 @@ class CollectionApp(App):
                                                       x= interfaceButton.x,
                                                       y = interfaceButton.top + 10,
                                                       size = interfaceButton.size, 
-                                                      on_press= self.gamelayout.moveToTutorial))
+                                                      on_press= self.moveToTutorial))
 
         settings.interface.ids.menu.add_widget(Button(text="Quit Current Game",
                                                       background_color = [1,0,0,1],
@@ -388,6 +389,9 @@ class CollectionApp(App):
     def quit(self, *arg):
         self.gamelayout.quit()
 
+    def moveToTutorial(self, buttonInstance):
+        self.settings.dismiss()
+        
     def leaveSettingsPanel(self, *arg):
         print("leaving the setting panel")
 
