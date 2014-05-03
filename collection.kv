@@ -1,8 +1,9 @@
 <MyToggleButton>:
+    id: mycard
     background_normal: root.normalimage          
     background_down: root.downimage
     on_card:
-        root.background_normal = root.card.normalimage()
+        mycard.background_normal = root.card.normalimage()
         root.background_down = root.card.downimage()
 
 <PlayerSection@Button>:
