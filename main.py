@@ -112,18 +112,20 @@ class GameLayout(FloatLayout):
     aiScore = NumericProperty(0)
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
+    deck = ObjectProperty()
     cards = ListProperty([])
 
     def __init__(self, **kwargs):
+        super(GameLayout, self).__init__(**kwargs)
         global game
         game = self
-        super(GameLayout, self).__init__(**kwargs)
 
+        self.screens = self.children[0]
+        # The UI element we were not able to add to collections.kv
         self.createGrid()
         self.setupGame()
-        self.ai = AI()
         self.sound = SoundLoader.load('set_song.wav')
-        self.screens = self.children[0]
+        
 
     # screen play navigation
     def goBackToIntro(self, *arg):
@@ -135,10 +137,11 @@ class GameLayout(FloatLayout):
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         self.updateGrid()
+        self.ai = AI()
 
     def createGrid(self):
         ''' Create the grid of the 12 card buttons, should only be called once'''
-        playscreen = self.children[0].get_screen('screen2')
+        playscreen = self.screens.get_screen('screen2')
         self.buttons = [None] * 12
         for i in range(12):
             self.buttons[i] = CardToggle()
