@@ -369,6 +369,7 @@ class CollectionApp(App):
         self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         interfaceButton = settings.interface.ids.menu.ids.button
+        self.interfaceButton = interfaceButton
         interfaceButton.on_press = self.leaveSettingsPanel
         settings.interface.ids.menu.add_widget(Button(text="Tutorial",
                                                       size_hint = (None, None),
@@ -387,11 +388,13 @@ class CollectionApp(App):
         settings.on_close = self.quit
 
     def quit(self, *arg):
+        print("Trying to quit")
         self.gamelayout.quit()
 
     def moveToTutorial(self, buttonInstance):
-        self.settings.dismiss()
-        
+        self.interfaceButton.trigger_action()
+        print("want to go to the tutorial")
+
     def leaveSettingsPanel(self, *arg):
         print("leaving the setting panel")
 
