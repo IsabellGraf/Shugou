@@ -329,6 +329,9 @@ class GameLayout(FloatLayout):
     def quit(self):
         print("Trying to quit...")
 
+    def moveToTutorial(self, buttonInstance):
+        print("Trying to move to tutorial")
+
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
@@ -364,9 +367,22 @@ class CollectionApp(App):
 
     def build_settings(self, settings):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
-        settings.interface.ids.menu.ids.button.on_press = self.leaveSettingsPanel
-        settings.interface.ids.menu.add_widget(Button(text="Quit", size_hint = (None, None), x=0, y = 100, on_press= self.quit))
+        interfaceButton = settings.interface.ids.menu.ids.button
+        interfaceButton.on_press = self.leaveSettingsPanel
+        settings.interface.ids.menu.add_widget(Button(text="Tutorial",
+                                                      size_hint = (None, None),
+                                                      x= interfaceButton.x,
+                                                      y = interfaceButton.top + 10,
+                                                      size = interfaceButton.size, 
+                                                      on_press= self.gamelayout.moveToTutorial))
 
+        settings.interface.ids.menu.add_widget(Button(text="Quit Current Game",
+                                                      background_color = [1,0,0,1],
+                                                      size_hint = (None, None),
+                                                      x= interfaceButton.x,
+                                                      y = interfaceButton.top + interfaceButton.height + 20,
+                                                      size = interfaceButton.size, 
+                                                      on_press= self.quit))
         settings.on_close = self.quit
 
     def quit(self, *arg):
