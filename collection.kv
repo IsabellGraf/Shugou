@@ -194,58 +194,10 @@
                         size_hint:(.3,1)
 
 <SelectPlayersPopup@Popup>:
-    size_hint: .8, .8
-    # background: 'data/popup.png'
-    # separate_color: 0x77 / 255., 0x6e / 255., 0x65 / 255., 1.
+    size_hint: 1, 1
     separator_height: 0
-    title: ''
-
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint_y: 1
-        spacing: '10dp'
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1,.4
-            AnchorLayout:
-                size_hint: .5, 1
-                anchor_x: 'left'
-                anchor_y: 'top'
-                Button:
-                    text: root.get_players_name(0)
-                    on_press: 
-                        root.update_scores(0)
-                        root.dismiss()
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'right'
-                anchor_y: 'top'
-                Button:
-                    text: root.get_players_name(1)
-                    on_press: 
-                        root.update_scores(1)
-                        root.dismiss()
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1,.4
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'left'
-                anchor_y: 'bottom'
-                Button:
-                    text: root.get_players_name(2)
-                    on_press: 
-                        root.update_scores(2)
-                        root.dismiss()
-            AnchorLayout:
-                size_hint: .5,1
-                anchor_x: 'right'
-                anchor_y: 'bottom'
-                Button:
-                    text: root.get_players_name(3)
-                    on_press: 
-                        root.update_scores(3)
-                        root.dismiss()
+    title: 'Who found the collection?'
+    
 <PlayerNamePopup>:
     size_hint: .5, .5
     title: 'Enter Name of Player(s)'
@@ -261,7 +213,7 @@
 
 <GameLayout>:
     ScreenManager:
-        id: _screen_manager
+        id: screenManager
         Screen:
             id: frontpage
             name: 'screen1'
@@ -279,7 +231,7 @@
                 pos: (root.width-200)/2., 4*root.height/5-100.
                 on_press:
                     root.set_players(1)
-                    _screen_manager.current = 'screen2'                
+                    screenManager.current = 'screen2'                
 
             PlayerSection:
                 value: 2
@@ -308,7 +260,7 @@
                 size: 200,50
                 text: 'Tutorial'
                 on_press:  
-                    _screen_manager.current = 'tutorialFlow'
+                    screenManager.current = 'tutorialFlow'
 
 
             Button:
@@ -344,7 +296,7 @@
                 size_hint: (None,None)
                 pos: (root.width-200)/2., root.height/5-100.
                 size: 200,100
-                on_press: _screen_manager.current = 'screen1'
+                on_press: screenManager.current = 'screen1'
 
         Screen:
             name: 'tutorialFlow'

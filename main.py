@@ -12,6 +12,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
 from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -22,7 +23,6 @@ from kivy.uix.screenmanager import Screen
 
 from Deck import Deck
 from AI import AI
-
 from jsonConfig import settingsjson
 
 number_of_players = 4
@@ -39,11 +39,19 @@ class SelectPlayersPopup(Popup):
 
     def __init__(self, **kwards):
         super(SelectPlayersPopup, self).__init__()
-        test = Builder.load_string('''Button:
-    x: 50
-    y: 100
-    text: "hey"''')
-        self.children[0].add_widget(test)
+        # More UI that I can't quite put in the kv file
+        self.content = GridLayout(cols=2, spacing='10dp')
+        self.buttons = [None] * number_of_players
+        for i in range(number_of_players):
+            self.buttons[i] = Button()
+            self.buttons[i].text = name_of_players[i]
+            self.buttons[i].value = i
+            self.buttons[i].bind(on_press=self.click)
+            self.content.add_widget(self.buttons[i])
+
+    def click(self,button):
+        self.update_scores(button.value)
+        self.dismiss()
 
     def get_players_name(self, value):
         return name_of_players[value]
@@ -52,7 +60,6 @@ class SelectPlayersPopup(Popup):
         '''need to other lines to update the score display'''
         player_scores[name_of_players[value]] += 1
         game.print_scores(len(name_of_players))
-
 
 class PlayerNamePopup(Popup):
 
@@ -78,7 +85,7 @@ class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     score_display = StringProperty('')
     restart = ObjectProperty()
-    _screen_manager = ObjectProperty()
+    screenManager = ObjectProperty()
     aiScore = StringProperty(0)
 
     def on_enter(self):
@@ -105,13 +112,17 @@ class GameLayout(FloatLayout):
     score = NumericProperty(0)
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
-    hintActivated = BooleanProperty(False)
-    aiActivated = BooleanProperty(False)
+    playersScores = ListProperty([0,0,0,0])
     soundActivated = BooleanProperty(False)
+
+    hintActivated = BooleanProperty(False)
     displayHintTimer = NumericProperty(5)
-    aiScore = NumericProperty(0)
+    
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
+    aiActivated = BooleanProperty(False)
+    aiScore = NumericProperty(0)
+
     deck = ObjectProperty()
     cards = ListProperty([])
 
@@ -120,13 +131,12 @@ class GameLayout(FloatLayout):
         global game
         game = self
 
-        self.screens = self.ids._screen_manager
+        self.screens = self.ids.screenManager
         # The UI element we were not able to add to collections.kv
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
-        
-
+    
     # screen play navigation
     def goBackToIntro(self, *arg):
         self.screens.current = 'screen1'
@@ -153,8 +163,8 @@ class GameLayout(FloatLayout):
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
-        self.t0 = datetime.datetime.now()
         self.setUpHint()
+        self.t0 = datetime.datetime.now()
         if self.aiActivated:
             self.setUpAI()
 
