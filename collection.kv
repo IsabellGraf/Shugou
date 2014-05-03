@@ -1,10 +1,6 @@
-<MyToggleButton>:
-    id: mycard
-    background_normal: root.normalimage          
-    background_down: root.downimage
-    on_card:
-        mycard.background_normal = root.card.normalimage()
-        root.background_down = root.card.downimage()
+<CardToggle>:
+    background_normal: root.card.normalimage() if root.card else ''   
+    background_down: root.card.downimage() if root.card else ''   
 
 <PlayerSection@Button>:
     value: 0

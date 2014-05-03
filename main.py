@@ -97,9 +97,7 @@ class PlayerSection(Button):
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
 
-class MyToggleButton(ToggleButton):
-    normalimage = StringProperty('')
-    downimage = StringProperty('')
+class CardToggle(ToggleButton):
     card = ObjectProperty()
 
 
@@ -145,7 +143,7 @@ class GameLayout(FloatLayout):
         playscreen = self.children[0].get_screen('screen2')
         self.buttons = [None] * 12
         for i in range(12):
-            self.buttons[i] = MyToggleButton()
+            self.buttons[i] = CardToggle()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
 
