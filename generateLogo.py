@@ -107,7 +107,6 @@ drawI.polygon(shape(info, size), fill=color)
 ## save ##
 
 imI.save("images/LogoI.png", dpi=(600,600))
-imA.save("images/LogoA2.png", dpi=(600,600))
-imA.save("images/LogoA1.png", dpi=(512,512))
-imI.save("images/LogoA3.png", dpi=(512,512))
+imA.save("images/LogoA.png", dpi=(600,600))
+
   
