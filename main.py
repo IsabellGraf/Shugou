@@ -131,6 +131,7 @@ class CardToggle(ToggleButton):
     def endRotate(self):
         Clock.unschedule(self.left_rotate)
         Clock.unschedule(self.right_rotate)
+        self.angle = 0
 
     def left_rotate(self,dt,*args):
         self.angle += 2
@@ -201,7 +202,6 @@ class GameLayout(FloatLayout):
             self.buttons[i] = CardToggle()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
-        self.buttons[0].rotate()
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
@@ -270,6 +270,7 @@ class GameLayout(FloatLayout):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
+            self.rotateCards([self.hint[0]])
             self.selectCards([self.hint[0]])
             Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else:  # if the player has a card selected, try calling it again later
@@ -281,6 +282,7 @@ class GameLayout(FloatLayout):
         # One card is selected and it is a specific card.
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
+            self.rotateCards([self.hint[1]])
 
     # Functions to handling the game play screen
     def selected(self):
@@ -302,6 +304,15 @@ class GameLayout(FloatLayout):
             if self.cards[index] in cards:
                 button.state = 'down'
 
+    def rotateCards(self, cards):
+        ''' selects the given cards if they are in the given cards '''
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in cards:
+                button.rotate()
+    def stopRotation(self):
+        for button in self.buttons:
+            button.endRotate()
+            
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
@@ -331,9 +342,11 @@ class GameLayout(FloatLayout):
                 self.aiUpdates()
                 self.aiPlayed = False
                 self.updateGrid()
+                self.stopRotation()
             else:  # The cards were not a set
                 self.unselectAll()
         else:
+            self.stopRotation()
             self.setUpHint()
 
     # Dealing with multiplayer ###
