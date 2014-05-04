@@ -186,8 +186,10 @@ class GameLayout(FloatLayout):
 
     # Functions related to the AIhint ###
     def setUpAI(self):
-        (time, self.aiCards) = self.ai.suggestion(self.cards)
-        Clock.schedule_once(self.AIplay, 1)
+        Clock.unschedule(self.AIplay)
+        if self.aiActivated and self.screens.current == 'screen2':
+            (time, self.aiCards) = self.ai.suggestion(self.cards)
+            Clock.schedule_once(self.AIplay, 1)
 
     def AIplay(self, *arg):
         ''' The AI plays a turn '''
@@ -343,6 +345,11 @@ class GameLayout(FloatLayout):
     def goToTutorial(self):
         self.screens.current = 'tutorialFlow'
 
+    def stopClocks(self):
+        Clock.unschedule(self.AIplay)
+        Clock.unschedule(self.displayHint)
+        Clock.unschedule(self.displayHintSecond)
+
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
@@ -369,6 +376,8 @@ class CollectionApp(App):
             self.config.get('settings', 'hintspeed')]
         self.gamelayout.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))
+        self.gamelayout.aiActivated = boolFromJS(
+            self.config.get('settings', 'ai'))
 
     def build_config(self, config):
         config.setdefaults('settings', {'hint': True, 
@@ -409,6 +418,7 @@ class CollectionApp(App):
     def leaveSettingsPanel(self, *arg):
         ''' activated when you exit the setting panels'''
         self.gamelayout.setUpHint()
+        self.gamelayout.setUpAI()
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
@@ -418,7 +428,8 @@ class CollectionApp(App):
         if key == 'hintspeed':
             speedSettings = {'slow':10, 'normal':5, 'fast':1}
             self.gamelayout.displayHintTimer = speedSettings[value]
-
+        if key == 'ai':
+            self.gamelayout.aiActivated = boolFromJS(value)
 
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3

@@ -37,7 +37,9 @@
         x: 0
         y: 0
         size_hint: (None, None)
-        on_press: app.open_settings()
+        on_press:
+            root.stopClocks()
+            app.open_settings()
 
     GridLayout:
         id: cards_layout
@@ -260,7 +262,8 @@
             score_display: root.score_display
             goToIntro: root.goToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
-
+            stopClocks: root.stopClocks
+            
         Screen:
             id: gameoverpage
             name: 'screen3'
