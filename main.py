@@ -27,13 +27,9 @@ from Deck import Deck
 from AI import AI
 from jsonConfig import settingsjson
 
-number_of_players = 4
-name_of_players = ['John', 'Sally', 'Sam', 'Joey']
 game = None
 
 '''initialize the score of players to 0'''
-player_scores = dict.fromkeys(name_of_players, 0)
-
 
 class SelectPlayersPopup(Popup):
 
@@ -46,7 +42,7 @@ class SelectPlayersPopup(Popup):
         self.buttons = [None] * number_of_players
         for i in range(number_of_players):
             self.buttons[i] = Button()
-            self.buttons[i].text = name_of_players[i]
+            self.buttons[i].text = game.name_of_players[i]
             self.buttons[i].value = i
             self.buttons[i].bind(on_press=self.click)
             self.content.add_widget(self.buttons[i])
@@ -60,28 +56,42 @@ class SelectPlayersPopup(Popup):
 
     def update_scores(self, value):
         '''need to other lines to update the score display'''
-        player_scores[name_of_players[value]] += 1
-        game.print_scores(len(name_of_players))
+        print(value)
+        game.scores_of_players[int(value)] += 1
 
 class PlayerNamePopup(Popup):
 
     def __init__(self, value):
         super(PlayerNamePopup, self).__init__()
+        self.text_inputs = [0]*value
+        self.number_of_players = value
+        game.number_of_players = value
+        name_of_players = ['John', 'Sally', 'Sam', 'Joey']
         for i in range(value):
-            self.text_input = TextInput(
-                multiline=False, size_hint_y=None, size_hint_x=0.5, height='32dp', text=name_of_players[i])
-            self.children[0].add_widget(self.text_input)
-        self.enter = Button(
-            text='Start Game', size_hint_y=None, height='40dp')
+            self.text_inputs[i] = TextInput(multiline=False,
+                                            size_hint_y=None, 
+                                            size_hint_x=0.5, 
+                                            height='32dp', 
+                                            text=name_of_players[i])
+            game.name_of_players[i] = name_of_players[i]
+            self.text_inputs[i].bind(text= self.namedEntered)
+
+            self.children[0].add_widget(self.text_inputs[i])
+
+        self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
+
         self.enter.bind(on_press=self.on_press_callback)
         self.children[0].add_widget(self.enter)
+
+    def namedEntered(self,ins, value):
+        for i in range(len(self.text_inputs)):
+            if ins == self.text_inputs[i]:
+                break
+        game.name_of_players[i] = value
 
     def on_press_callback(self, obj):
         self.dismiss()
         game.children[0].current = 'screen2'
-        if game.aiActivated:
-            game.setUpAI()
-
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -89,11 +99,15 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     screenManager = ObjectProperty()
     aiScore = StringProperty(0)
+    
+    number_of_players = NumericProperty(1)
+    name_of_players = ListProperty(['','','',''])
+    scores_of_players = ListProperty([0, 0, 0, 0])
 
     def on_enter(self):
         game.active = True
         game.setUpHint()
-
+        game.setUpAI()
 
 class TutorialScreen(Screen):
     active = BooleanProperty(False)
@@ -108,9 +122,43 @@ class PlayerSection(Button):
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
 
+global current_angle
+current_angle = 0
+
 class CardToggle(ToggleButton):
     card = ObjectProperty()
+    angle = NumericProperty(0)
+    def rotate(self):
+        if current_angle < 0:
+            for i in range(-current_angle + 1):
+                self.angle += 1
+            Clock.schedule_interval(self.left_rotate,0.1)
+        else:
+            for i in range(current_angle + 1):
+                self.angle -= 1            
+            Clock.schedule_interval(self.right_rotate,0.1)
 
+    def endRotate(self):
+        Clock.unschedule(self.left_rotate)
+        Clock.unschedule(self.right_rotate)
+        self.angle = 0
+        current_angle = 0
+
+    def left_rotate(self,dt,*args):
+        global current_angle
+        current_angle += 1
+        self.angle = current_angle
+        if self.angle >= 10:
+            Clock.unschedule(self.left_rotate)
+            Clock.schedule_interval(self.right_rotate,0.1)
+
+    def right_rotate(self,dt,*args):
+        global current_angle
+        current_angle -= 1
+        self.angle = current_angle
+        if self.angle <= -10:
+            Clock.unschedule(self.right_rotate)
+            Clock.schedule_interval(self.left_rotate,0.1)
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -130,6 +178,10 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
+    name_of_players = ListProperty(['Player', '', '', ''])
+    number_of_players = NumericProperty(1)
+    scores_of_players = ListProperty([0, 0, 0, 0])
+
     # True if there is a game going on
     active = BooleanProperty(False)
     def __init__(self, **kwargs):
@@ -142,8 +194,6 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
-        
-        introscreen = self.screens.get_screen('screen1')
 
     # screen play navigation
     def goToIntro(self, *arg):
@@ -235,6 +285,7 @@ class GameLayout(FloatLayout):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
+            self.rotateCards([self.hint[0]])
             self.selectCards([self.hint[0]])
             Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else:  # if the player has a card selected, try calling it again later
@@ -246,6 +297,7 @@ class GameLayout(FloatLayout):
         # One card is selected and it is a specific card.
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
+            self.rotateCards([self.hint[1]])
 
     # Functions to handling the game play screen
     def selected(self):
@@ -266,6 +318,16 @@ class GameLayout(FloatLayout):
         for index, button in enumerate(self.buttons):
             if self.cards[index] in cards:
                 button.state = 'down'
+
+    def rotateCards(self, cards):
+        ''' selects the given cards if they are in the given cards '''
+        for index, button in enumerate(self.buttons):
+            if self.cards[index] in cards:
+                button.rotate()
+
+    def stopRotation(self):
+        for button in self.buttons:
+            button.endRotate()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -290,16 +352,17 @@ class GameLayout(FloatLayout):
                         # Load the popup
                         self.select_player_popup()
                     else:
-                        self.score += 1
-                        self.print_scores(number_of_players)
+                        self.scores_of_players[0] += 1
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
                 self.aiUpdates()
                 self.aiPlayed = False
                 self.updateGrid()
+                self.stopRotation()
             else:  # The cards were not a set
                 self.unselectAll()
         else:
+            self.stopRotation()
             self.setUpHint()
 
     # Dealing with multiplayer ###
@@ -312,17 +375,6 @@ class GameLayout(FloatLayout):
         '''set the number of players according to user's choice on the front page'''
         global number_of_players
         number_of_players = value
-        self.print_scores(value)
-
-    def print_scores(self, value):
-        '''generate strings for scores display'''
-        if value == 1:
-            self.score_display = "score " + str(self.score)
-        else:
-            self.score_display = ''
-            for name in name_of_players:
-                self.score_display += name + '      ' + \
-                    str(player_scores[name]) + '      '
 
     def player_name_popup(self, value):
         '''called after selecting number of players'''
@@ -334,8 +386,7 @@ class GameLayout(FloatLayout):
         global player_scores
         self.score_display = ''
         self.score = 0
-        player_scores = dict.fromkeys(name_of_players, 0)
-        self.print_scores(len(name_of_players))
+        self.scores_of_players = [0,0,0,0]
 
     def quit(self):
         ''' You are quiting the current game '''
@@ -370,11 +421,13 @@ class CollectionApp(App):
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
-
         return self.gamelayout
 
     def changeActive(self,instance,value):
-        self.quitButton.disabled = not self.gamelayout.active
+        # This doesn't work.. crashes if the build_settings wasn't launched first
+        #self.quitButton.disabled = not self.gamelayout.active
+        pass
+
 
     def loadSettings(self):
         # Load the values already stored into the file
@@ -395,6 +448,7 @@ class CollectionApp(App):
                                         'hintspeed': 'fast'})
 
     def build_settings(self, settings):
+        print(settings)
         self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
@@ -413,8 +467,8 @@ class CollectionApp(App):
                               x= settingsCloseButton.x,
                               y = settingsCloseButton.top + settingsCloseButton.height + 20,
                               size = settingsCloseButton.size,
-                              disabled = True,
-                              on_press= self.quit)        
+                              disabled = False,
+                              on_press= self.quit)   
 
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
