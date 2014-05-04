@@ -102,7 +102,8 @@ class GamePlayScreen(Screen):
     
     number_of_players = NumericProperty(1)
     name_of_players = ListProperty(['','','',''])
-
+    scores_of_players = ListProperty([0, 0, 0, 0])
+    
     def on_enter(self):
         game.active = True
         game.setUpHint()
@@ -148,6 +149,7 @@ class GameLayout(FloatLayout):
 
     name_of_players = ListProperty(['Player', '', '', ''])
     number_of_players = NumericProperty(1)
+    scores_of_players = ListProperty([0, 0, 0, 0])
 
     # True if there is a game going on
     active = BooleanProperty(False)
