@@ -21,6 +21,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
 from kivy.uix.settings import SettingsWithSidebar
+from kivy.uix.boxlayout import BoxLayout
 
 from Deck import Deck
 from AI import AI
@@ -141,7 +142,9 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
-    
+        
+        introscreen = self.screens.get_screen('screen1')
+
     # screen play navigation
     def goToIntro(self, *arg):
         self.screens.current = 'screen1'
@@ -356,6 +359,7 @@ def boolFromJS(value):
 
 
 class CollectionApp(App):
+    active = BooleanProperty(False)
 
     def build(self):
         Clock.max_iteration = 50
@@ -365,7 +369,12 @@ class CollectionApp(App):
         self.gamelayout = GameLayout()
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
+        self.gamelayout.bind(active=self.changeActive)
+
         return self.gamelayout
+
+    def changeActive(self,instance,value):
+        self.quitButton.disabled = not self.gamelayout.active
 
     def loadSettings(self):
         # Load the values already stored into the file
@@ -388,34 +397,37 @@ class CollectionApp(App):
     def build_settings(self, settings):
         self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
-        interfaceButton = settings.interface.ids.menu.ids.button
-        self.interfaceButton = interfaceButton
-        interfaceButton.on_press = self.leaveSettingsPanel
+        settingsCloseButton = settings.interface.ids.menu.ids.button
+        self.settingsCloseButton = settingsCloseButton
+        settingsCloseButton.on_press = self.leaveSettingsPanel
         settings.interface.ids.menu.add_widget(Button(text="Tutorial",
                                                       size_hint = (None, None),
-                                                      x= interfaceButton.x,
-                                                      y = interfaceButton.top + 10,
-                                                      size = interfaceButton.size, 
+                                                      x= settingsCloseButton.x,
+                                                      y = settingsCloseButton.top + 10,
+                                                      size = settingsCloseButton.size, 
                                                       on_press= self.moveToTutorial))
 
-        settings.interface.ids.menu.add_widget(Button(text="Quit Current Game",
-                                                      background_color = [1,0,0,1],
-                                                      size_hint = (None, None),
-                                                      x= interfaceButton.x,
-                                                      y = interfaceButton.top + interfaceButton.height + 20,
-                                                      size = interfaceButton.size, 
-                                                      on_press= self.quit))
+        self.quitButton = Button(text="Quit Current Game",
+                              background_color = [1,0,0,1],
+                              size_hint = (None, None),
+                              x= settingsCloseButton.x,
+                              y = settingsCloseButton.top + settingsCloseButton.height + 20,
+                              size = settingsCloseButton.size,
+                              disabled = True,
+                              on_press= self.quit)        
+
+        settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
 
     def quit(self, *arg):
         self.gamelayout.quit()
-        self.interfaceButton.trigger_action()
+        self.settingsCloseButton.trigger_action()
 
     def moveToTutorial(self, buttonInstance):
         self.gamelayout.goToTutorial()
-        self.interfaceButton.trigger_action()
+        self.settingsCloseButton.trigger_action()
 
-    def leaveSettingsPanel(self, *arg):
+    def leaveSettingsPanel(self, *arg):       
         ''' activated when you exit the setting panels'''
         self.gamelayout.setUpHint()
         self.gamelayout.setUpAI()
