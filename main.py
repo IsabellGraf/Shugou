@@ -42,7 +42,7 @@ class SelectPlayersPopup(Popup):
         self.buttons = [None] * number_of_players
         for i in range(number_of_players):
             self.buttons[i] = Button()
-            self.buttons[i].text = name_of_players[i]
+            self.buttons[i].text = game.name_of_players[i]
             self.buttons[i].value = i
             self.buttons[i].bind(on_press=self.click)
             self.content.add_widget(self.buttons[i])
@@ -56,8 +56,8 @@ class SelectPlayersPopup(Popup):
 
     def update_scores(self, value):
         '''need to other lines to update the score display'''
-        player_scores[name_of_players[value]] += 1
-        game.print_scores(len(name_of_players))
+        print(value)
+        game.scores_of_players[int(value)] += 1
 
 class PlayerNamePopup(Popup):
 
@@ -103,14 +103,11 @@ class GamePlayScreen(Screen):
     number_of_players = NumericProperty(1)
     name_of_players = ListProperty(['','','',''])
     scores_of_players = ListProperty([0, 0, 0, 0])
-    
+
     def on_enter(self):
         game.active = True
         game.setUpHint()
         game.setUpAI()
-        print(self.number_of_players)
-        print(self.name_of_players)
-
 
 class TutorialScreen(Screen):
     active = BooleanProperty(False)
@@ -309,8 +306,7 @@ class GameLayout(FloatLayout):
                         # Load the popup
                         self.select_player_popup()
                     else:
-                        self.score += 1
-                        self.print_scores(number_of_players)
+                        self.scores_of_players[0] += 1
                 for index, i in enumerate(down):
                     self.cards[i] = newcards[index]
                 self.aiUpdates()
@@ -331,18 +327,6 @@ class GameLayout(FloatLayout):
         '''set the number of players according to user's choice on the front page'''
         global number_of_players
         number_of_players = value
-        self.print_scores(value)
-
-    def print_scores(self, value):
-        '''generate strings for scores display'''
-        pass
-        # if value == 1:
-        #     self.score_display = "score " + str(self.score)
-        # else:
-        #     self.score_display = ''
-        #     for name in sel.fname_of_players:
-        #         self.score_display += name + '      ' + \
-        #             str(player_scores[name]) + '      '
 
     def player_name_popup(self, value):
         '''called after selecting number of players'''
@@ -354,8 +338,7 @@ class GameLayout(FloatLayout):
         global player_scores
         self.score_display = ''
         self.score = 0
-        player_scores = dict.fromkeys(name_of_players, 0)
-        self.print_scores(len(name_of_players))
+        self.scores_of_players = [0,0,0,0]
 
     def quit(self):
         ''' You are quiting the current game '''
