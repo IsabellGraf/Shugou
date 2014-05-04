@@ -124,7 +124,25 @@ class PlayerSection(Button):
 
 class CardToggle(ToggleButton):
     card = ObjectProperty()
+    angle = NumericProperty(0)
+    def rotate(self):
+        Clock.schedule_interval(self.left_rotate,0.1)
 
+    def endRotate(self):
+        Clock.unschedule(self.left_rotate)
+        Clock.unschedule(self.right_rotate)
+
+    def left_rotate(self,dt,*args):
+        self.angle += 2
+        if self.angle >= 20:
+            Clock.unschedule(self.left_rotate)
+            Clock.schedule_interval(self.right_rotate,0.1)
+
+    def right_rotate(self,dt,*args):
+        self.angle -= 2
+        if self.angle <= -20:
+            Clock.unschedule(self.right_rotate)
+            Clock.schedule_interval(self.left_rotate,0.1)
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -183,6 +201,7 @@ class GameLayout(FloatLayout):
             self.buttons[i] = CardToggle()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             playscreen.children[0].add_widget(self.buttons[i])
+        self.buttons[0].rotate()
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''

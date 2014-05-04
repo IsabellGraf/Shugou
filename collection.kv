@@ -1,6 +1,13 @@
 <CardToggle>:
     background_normal: root.card.normalimage() if root.card else ''   
     background_down: root.card.downimage() if root.card else ''   
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: self.angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
 
 <PlayerSection@Button>:
     value: 0
