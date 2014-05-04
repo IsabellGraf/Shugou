@@ -90,10 +90,12 @@ class GamePlayScreen(Screen):
     aiScore = StringProperty(0)
 
     def on_enter(self):
+        game.active = True
         game.setUpHint()
 
 
 class TutorialScreen(Screen):
+    active = BooleanProperty(False)
     pass
 
 
@@ -127,6 +129,8 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
+    # True if there is a game going on
+    active = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         global game
@@ -141,7 +145,9 @@ class GameLayout(FloatLayout):
     # screen play navigation
     def goToIntro(self, *arg):
         self.screens.current = 'screen1'
-        self.restart()
+
+    def goToGameScreen(self):
+        self.screens.current = 'screen2'
 
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
@@ -332,6 +338,7 @@ class GameLayout(FloatLayout):
         self.setupGame()
         self.restart()
         self.goToIntro()
+        self.active = False
 
     def goToTutorial(self):
         self.screens.current = 'tutorialFlow'
@@ -400,8 +407,8 @@ class CollectionApp(App):
         self.interfaceButton.trigger_action()
 
     def leaveSettingsPanel(self, *arg):
-        print("leaving the setting panel")
-
+        ''' activated when you exit the setting panels'''
+        pass
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
             self.gamelayout.hintActivated = boolFromJS(value)

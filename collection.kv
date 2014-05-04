@@ -32,13 +32,6 @@
         pos: root.width*1.5/5.5, root.height/6.
         halign: 'center'
     Button:
-        size_hint: (None, None)
-        pos: root.width-200, 0
-        size: 200,50
-        text: 'Back to Mainpage'
-        on_press:                                
-            root.goToIntro()
-    Button:
         text: 'Settings'
         size: 100, 100
         x: 0
@@ -91,7 +84,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -140,7 +133,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -189,7 +182,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
 
@@ -293,3 +286,5 @@
             name: 'tutorialFlow'
             TutorialScreen:
                 goToIntro: root.goToIntro
+                active: root.active
+                goToGameScreen: root.goToGameScreen
