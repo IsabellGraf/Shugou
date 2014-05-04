@@ -32,19 +32,14 @@
         pos: root.width*1.5/5.5, root.height/6.
         halign: 'center'
     Button:
-        size_hint: (None, None)
-        pos: root.width-200, 0
-        size: 200,50
-        text: 'Back to Mainpage'
-        on_press:                                
-            root.goBackToIntro()
-    Button:
         text: 'Settings'
         size: 100, 100
         x: 0
         y: 0
         size_hint: (None, None)
-        on_press: app.open_settings()
+        on_press:
+            root.stopClocks()
+            app.open_settings()
 
     GridLayout:
         id: cards_layout
@@ -91,7 +86,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -140,7 +135,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -189,7 +184,7 @@
                             anchor_y: 'top'
                             text: 'Back to Main Screen'
                             size_hint: .9, 1
-                            on_press: root.goBackToIntro()
+                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
                     AnchorLayout:
                         size_hint:(.3,1)
 
@@ -253,15 +248,6 @@
                 on_press:
                     root.set_players(4)
                     root.player_name_popup(4)  
-                    
-            Button:
-                size_hint: (None, None)
-                pos: (root.width-200)/8., 4*root.height/5-100.
-                size: 200,50
-                text: 'Tutorial'
-                on_press:  
-                    screenManager.current = 'tutorialFlow'
-
 
             Button:
                 text: 'Settings'
@@ -274,9 +260,10 @@
         GamePlayScreen:
             numberofsets: Deck.numberOfSets(root.cards)
             score_display: root.score_display
-            goBackToIntro: root.goBackToIntro
+            goToIntro: root.goToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
-
+            stopClocks: root.stopClocks
+            
         Screen:
             id: gameoverpage
             name: 'screen3'
@@ -301,4 +288,6 @@
         Screen:
             name: 'tutorialFlow'
             TutorialScreen:
-                goBackToIntro: root.goBackToIntro
+                goToIntro: root.goToIntro
+                active: root.active
+                goToGameScreen: root.goToGameScreen

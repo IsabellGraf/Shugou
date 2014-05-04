@@ -20,6 +20,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
+from kivy.uix.settings import SettingsWithSidebar
 
 from Deck import Deck
 from AI import AI
@@ -89,10 +90,12 @@ class GamePlayScreen(Screen):
     aiScore = StringProperty(0)
 
     def on_enter(self):
+        game.active = True
         game.setUpHint()
 
 
 class TutorialScreen(Screen):
+    active = BooleanProperty(False)
     pass
 
 
@@ -126,6 +129,8 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
+    # True if there is a game going on
+    active = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         global game
@@ -138,9 +143,11 @@ class GameLayout(FloatLayout):
         self.sound = SoundLoader.load('set_song.wav')
     
     # screen play navigation
-    def goBackToIntro(self, *arg):
+    def goToIntro(self, *arg):
         self.screens.current = 'screen1'
-        self.restart()
+
+    def goToGameScreen(self):
+        self.screens.current = 'screen2'
 
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
@@ -179,8 +186,10 @@ class GameLayout(FloatLayout):
 
     # Functions related to the AIhint ###
     def setUpAI(self):
-        (time, self.aiCards) = self.ai.suggestion(self.cards)
-        Clock.schedule_once(self.AIplay, 1)
+        Clock.unschedule(self.AIplay)
+        if self.aiActivated and self.screens.current == 'screen2':
+            (time, self.aiCards) = self.ai.suggestion(self.cards)
+            Clock.schedule_once(self.AIplay, 1)
 
     def AIplay(self, *arg):
         ''' The AI plays a turn '''
@@ -215,7 +224,7 @@ class GameLayout(FloatLayout):
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
         # After some time in seconds show a hint
-        if self.hintActivated:
+        if self.hintActivated and self.screens.current == 'screen2':
             self.hint = Deck.hint(self.cards)
             Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
@@ -325,6 +334,21 @@ class GameLayout(FloatLayout):
         player_scores = dict.fromkeys(name_of_players, 0)
         self.print_scores(len(name_of_players))
 
+    def quit(self):
+        ''' You are quiting the current game '''
+        self.unselectAll()
+        self.setupGame()
+        self.restart()
+        self.goToIntro()
+        self.active = False
+
+    def goToTutorial(self):
+        self.screens.current = 'tutorialFlow'
+
+    def stopClocks(self):
+        Clock.unschedule(self.AIplay)
+        Clock.unschedule(self.displayHint)
+        Clock.unschedule(self.displayHintSecond)
 
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
@@ -339,6 +363,7 @@ class CollectionApp(App):
         # For now, it gives us access to various kivy settings we can play with
         #self.use_kivy_settings = False
         self.gamelayout = GameLayout()
+        self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         return self.gamelayout
 
@@ -351,6 +376,8 @@ class CollectionApp(App):
             self.config.get('settings', 'hintspeed')]
         self.gamelayout.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))
+        self.gamelayout.aiActivated = boolFromJS(
+            self.config.get('settings', 'ai'))
 
     def build_config(self, config):
         config.setdefaults('settings', {'hint': True, 
@@ -359,7 +386,39 @@ class CollectionApp(App):
                                         'hintspeed': 'fast'})
 
     def build_settings(self, settings):
+        self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
+        interfaceButton = settings.interface.ids.menu.ids.button
+        self.interfaceButton = interfaceButton
+        interfaceButton.on_press = self.leaveSettingsPanel
+        settings.interface.ids.menu.add_widget(Button(text="Tutorial",
+                                                      size_hint = (None, None),
+                                                      x= interfaceButton.x,
+                                                      y = interfaceButton.top + 10,
+                                                      size = interfaceButton.size, 
+                                                      on_press= self.moveToTutorial))
+
+        settings.interface.ids.menu.add_widget(Button(text="Quit Current Game",
+                                                      background_color = [1,0,0,1],
+                                                      size_hint = (None, None),
+                                                      x= interfaceButton.x,
+                                                      y = interfaceButton.top + interfaceButton.height + 20,
+                                                      size = interfaceButton.size, 
+                                                      on_press= self.quit))
+        settings.on_close = self.quit
+
+    def quit(self, *arg):
+        self.gamelayout.quit()
+        self.interfaceButton.trigger_action()
+
+    def moveToTutorial(self, buttonInstance):
+        self.gamelayout.goToTutorial()
+        self.interfaceButton.trigger_action()
+
+    def leaveSettingsPanel(self, *arg):
+        ''' activated when you exit the setting panels'''
+        self.gamelayout.setUpHint()
+        self.gamelayout.setUpAI()
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
@@ -369,7 +428,8 @@ class CollectionApp(App):
         if key == 'hintspeed':
             speedSettings = {'slow':10, 'normal':5, 'fast':1}
             self.gamelayout.displayHintTimer = speedSettings[value]
-
+        if key == 'ai':
+            self.gamelayout.aiActivated = boolFromJS(value)
 
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
