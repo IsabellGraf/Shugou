@@ -222,7 +222,7 @@ class GameLayout(FloatLayout):
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
         # After some time in seconds show a hint
-        if self.hintActivated:
+        if self.hintActivated and self.screens.current == 'screen2':
             self.hint = Deck.hint(self.cards)
             Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
@@ -408,7 +408,8 @@ class CollectionApp(App):
 
     def leaveSettingsPanel(self, *arg):
         ''' activated when you exit the setting panels'''
-        pass
+        self.gamelayout.setUpHint()
+
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
             self.gamelayout.hintActivated = boolFromJS(value)
