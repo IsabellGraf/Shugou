@@ -122,26 +122,41 @@ class PlayerSection(Button):
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
 
+global current_angle
+current_angle = 0
+
 class CardToggle(ToggleButton):
     card = ObjectProperty()
     angle = NumericProperty(0)
     def rotate(self):
-        Clock.schedule_interval(self.left_rotate,0.1)
+        if current_angle < 0:
+            for i in range(-current_angle + 1):
+                self.angle += 1
+            Clock.schedule_interval(self.left_rotate,0.1)
+        else:
+            for i in range(current_angle + 1):
+                self.angle -= 1            
+            Clock.schedule_interval(self.right_rotate,0.1)
 
     def endRotate(self):
         Clock.unschedule(self.left_rotate)
         Clock.unschedule(self.right_rotate)
         self.angle = 0
+        current_angle = 0
 
     def left_rotate(self,dt,*args):
-        self.angle += 2
-        if self.angle >= 20:
+        global current_angle
+        current_angle += 1
+        self.angle = current_angle
+        if self.angle >= 10:
             Clock.unschedule(self.left_rotate)
             Clock.schedule_interval(self.right_rotate,0.1)
 
     def right_rotate(self,dt,*args):
-        self.angle -= 2
-        if self.angle <= -20:
+        global current_angle
+        current_angle -= 1
+        self.angle = current_angle
+        if self.angle <= -10:
             Clock.unschedule(self.right_rotate)
             Clock.schedule_interval(self.left_rotate,0.1)
 
@@ -309,10 +324,11 @@ class GameLayout(FloatLayout):
         for index, button in enumerate(self.buttons):
             if self.cards[index] in cards:
                 button.rotate()
+
     def stopRotation(self):
         for button in self.buttons:
             button.endRotate()
-            
+
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
