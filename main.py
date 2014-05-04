@@ -27,13 +27,9 @@ from Deck import Deck
 from AI import AI
 from jsonConfig import settingsjson
 
-number_of_players = 4
-name_of_players = ['John', 'Sally', 'Sam', 'Joey']
 game = None
 
 '''initialize the score of players to 0'''
-player_scores = dict.fromkeys(name_of_players, 0)
-
 
 class SelectPlayersPopup(Popup):
 
@@ -67,21 +63,35 @@ class PlayerNamePopup(Popup):
 
     def __init__(self, value):
         super(PlayerNamePopup, self).__init__()
+        self.text_inputs = [0]*value
+        self.number_of_players = value
+        game.number_of_players = value
+        name_of_players = ['John', 'Sally', 'Sam', 'Joey']
         for i in range(value):
-            self.text_input = TextInput(
-                multiline=False, size_hint_y=None, size_hint_x=0.5, height='32dp', text=name_of_players[i])
-            self.children[0].add_widget(self.text_input)
-        self.enter = Button(
-            text='Start Game', size_hint_y=None, height='40dp')
+            self.text_inputs[i] = TextInput(multiline=False,
+                                            size_hint_y=None, 
+                                            size_hint_x=0.5, 
+                                            height='32dp', 
+                                            text=name_of_players[i])
+            game.name_of_players[i] = name_of_players[i]
+            self.text_inputs[i].bind(text= self.namedEntered)
+
+            self.children[0].add_widget(self.text_inputs[i])
+
+        self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
+
         self.enter.bind(on_press=self.on_press_callback)
         self.children[0].add_widget(self.enter)
+
+    def namedEntered(self,ins, value):
+        for i in range(len(self.text_inputs)):
+            if ins == self.text_inputs[i]:
+                break
+        game.name_of_players[i] = value
 
     def on_press_callback(self, obj):
         self.dismiss()
         game.children[0].current = 'screen2'
-        if game.aiActivated:
-            game.setUpAI()
-
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -89,10 +99,16 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     screenManager = ObjectProperty()
     aiScore = StringProperty(0)
+    
+    number_of_players = NumericProperty(1)
+    name_of_players = ListProperty(['','','',''])
 
     def on_enter(self):
         game.active = True
         game.setUpHint()
+        game.setUpAI()
+        print(self.number_of_players)
+        print(self.name_of_players)
 
 
 class TutorialScreen(Screen):
@@ -130,6 +146,9 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
+    name_of_players = ListProperty(['Player', '', '', ''])
+    number_of_players = NumericProperty(1)
+
     # True if there is a game going on
     active = BooleanProperty(False)
     def __init__(self, **kwargs):
@@ -142,8 +161,6 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
-        
-        introscreen = self.screens.get_screen('screen1')
 
     # screen play navigation
     def goToIntro(self, *arg):
@@ -316,13 +333,14 @@ class GameLayout(FloatLayout):
 
     def print_scores(self, value):
         '''generate strings for scores display'''
-        if value == 1:
-            self.score_display = "score " + str(self.score)
-        else:
-            self.score_display = ''
-            for name in name_of_players:
-                self.score_display += name + '      ' + \
-                    str(player_scores[name]) + '      '
+        pass
+        # if value == 1:
+        #     self.score_display = "score " + str(self.score)
+        # else:
+        #     self.score_display = ''
+        #     for name in sel.fname_of_players:
+        #         self.score_display += name + '      ' + \
+        #             str(player_scores[name]) + '      '
 
     def player_name_popup(self, value):
         '''called after selecting number of players'''
@@ -370,11 +388,13 @@ class CollectionApp(App):
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
-
         return self.gamelayout
 
     def changeActive(self,instance,value):
-        self.quitButton.disabled = not self.gamelayout.active
+        # This doesn't work.. crashes if the build_settings wasn't launched first
+        #self.quitButton.disabled = not self.gamelayout.active
+        pass
+
 
     def loadSettings(self):
         # Load the values already stored into the file
@@ -395,6 +415,7 @@ class CollectionApp(App):
                                         'hintspeed': 'fast'})
 
     def build_settings(self, settings):
+        print(settings)
         self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
@@ -413,8 +434,8 @@ class CollectionApp(App):
                               x= settingsCloseButton.x,
                               y = settingsCloseButton.top + settingsCloseButton.height + 20,
                               size = settingsCloseButton.size,
-                              disabled = True,
-                              on_press= self.quit)        
+                              disabled = False,
+                              on_press= self.quit)   
 
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
