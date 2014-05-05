@@ -1,0 +1,60 @@
+How to build Android Playstore distributable APK
+
+
+1. Navigate to buildozer directory
+
+
+
+2. Copy buildozer.spec to the buildozer directory
+
+
+
+3. (if you are not Bernhard) Change
+
+source.dir = /home/berny/Desktop/Collection
+
+to the directory where main.py lives
+
+
+
+4. Update version number
+
+version = 1.0
+
+
+
+5. Build unsigned apk
+
+$sudo buildozer android release
+
+an unsigned apk should appear in the 'bin' subdirectory
+
+
+
+6. Create a keystore
+
+$keytool –genkey –v –keystore collection.game.keystore –alias collection.game –keyalg RSA –validity 10000
+
+or use the one provided in Collection/build
+
+
+
+7. Sign the apk using jarsigner
+
+$jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore collection.game.keystore Collection-1.0-release-unsigned.apk collection.game
+
+where you replace 'Collection-1.0-release-unsigned.apk' with the location of the unsigned apk
+
+
+
+8. Use zipalign to align the signed apk with the google play store standards
+
+$./zipalign -v 4 before_alignment.apk after_alignment.apk
+
+where you replace 'before_alignment.apk' and 'after_alignement.apk' with the corresponding path to the signed (input) and aligned (output) apk file.
+
+zipalign is in your SDK tools folder. For me (Bernhard) this is '/home/berny/android-studio/sdk/tools'.
+
+
+
+
