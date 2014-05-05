@@ -13,7 +13,10 @@
     value: 0
     size_hint: (None, None)
     size: 200,100
-    text: str(self.value) + ' Player'
+    font_size: '30sp'
+    size_hint_y: None
+    height: self.texture_size[1] + dp(10)
+    text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
 
 <GamePlayScreen@Screen>:
     id: mainpage
@@ -251,7 +254,7 @@
             GridLayout:
                 cols: 2
                 col_force_default: True
-                col_default_height: 10
+                row_default_height: root.width/6
                 col_default_width: root.width/3
                 spacing: 30
                 pos_hint: {'center_x':.5, 'center_y':.5}
@@ -284,7 +287,7 @@
 
             Button:
                 text: 'Settings'
-                size: 100, 100
+                size: '100sp', '100sp'
                 y: 0
                 x: 0
                 size_hint: (None, None)
