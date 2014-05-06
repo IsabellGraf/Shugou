@@ -21,11 +21,8 @@
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
-    Label: 
-        text: '[b]Collection[/b]'
-        font_size: 30
-        markup: True
-        y: 450
+    CollectionTitle:
+        pos: (root.width-100)/2, root.height-100   
     Label:
         size_hint: .1, .1
         text: str(root.aiScore)
@@ -41,6 +38,10 @@
         text: "Number of sets " + str(root.numberofsets)
         pos: root.width*1.5/5.5, root.height/6.
         halign: 'center'
+        size: 100,100
+        font_size: '20sp'
+        size_hint_y: None
+        height: self.texture_size[1] + dp(10)           
     Label:
         size_hint: .1, .1
         text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
@@ -236,21 +237,23 @@
 
 #: import Deck Deck.Deck
 
+<CollectionTitle@Label>:
+    size_hint: (None, None)
+    text: 'Collection'
+    markup: True
+    size: 100,100
+    font_size: '40sp'
+    size_hint_y: None
+    height: self.texture_size[1] + dp(10) 
+
 <GameLayout>:
     ScreenManager:
         id: screenManager
         Screen:
             id: frontpage
             name: 'screen1'
-            Label: 
-                size_hint: (None, None)
-                text: 'Collection'
-                markup: True
-                size: 100,100
-                pos: (root.width-100)/2, root.height-100
-                font_size: '40sp'
-                size_hint_y: None
-                height: self.texture_size[1] + dp(10)                
+            CollectionTitle:
+                pos: (root.width-100)/2, root.height-100              
             GridLayout:
                 cols: 2
                 col_force_default: True
