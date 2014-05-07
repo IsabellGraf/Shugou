@@ -128,6 +128,20 @@ class TutorialScreen(Screen):
     active = BooleanProperty(False)
     pass
 
+class EndGameScreen(Screen):
+    name_of_players = ListProperty(['','','',''])
+    scores_of_players = ListProperty([0, 0, 0, 0])
+    screenManager = ObjectProperty()
+    number_of_players = NumericProperty(1)
+
+    def on_enter(self,*args):
+        print('gameover')
+        self.name_of_players = [x for y,x in sorted(zip(game.scores_of_players,game.name_of_players))][::-1]
+        self.scores_of_players = sorted(game.scores_of_players)[::-1]
+
+
+class Scores(Label):
+    pass
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -193,7 +207,7 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
-    name_of_players = ListProperty(['Player', '', '', ''])
+    name_of_players = ListProperty(['Collections found', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
 
@@ -358,6 +372,7 @@ class GameLayout(FloatLayout):
                     self.screens.current = 'screen3'
                     # need to clear the selection
                     self.unselectAll()
+                    self.stopRotation()
                     self.setupGame()
                     return
                 if self.aiPlayed:
@@ -402,6 +417,7 @@ class GameLayout(FloatLayout):
         self.score_display = ''
         self.score = 0
         self.scores_of_players = [0,0,0,0]
+        self.aiScore = 0
 
     def quit(self):
         ''' You are quiting the current game '''
@@ -409,6 +425,7 @@ class GameLayout(FloatLayout):
         self.setupGame()
         self.restart()
         self.goToIntro()
+        self.stopRotation()
         self.active = False
 
     def goToTutorial(self):
@@ -431,7 +448,7 @@ class CollectionApp(App):
         Clock.max_iteration = 50
         # The following line will be uncommented in the beta
         # For now, it gives us access to various kivy settings we can play with
-        #self.use_kivy_settings = False
+        self.use_kivy_settings = False
         self.gamelayout = GameLayout()
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
