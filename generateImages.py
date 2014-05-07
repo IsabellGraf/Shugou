@@ -21,7 +21,7 @@ def make_star(infos, size):
 
 
 def make_triangle(infos, size):
-    a = infos[0] * 0.98 * size
+    a = infos[0] * size
     d = infos[1]
     c = infos[2]
     xx = [(d - 0.75 * a, c - 0.3 * a),
@@ -30,10 +30,18 @@ def make_triangle(infos, size):
 
 
 def make_square(infos, size):
-    a = infos[0] * 0.98 * size
+    a = infos[0] * size
     d = infos[1]
     c = infos[2]
     xx = [(d,c-0.75*a), (d+a,c),(d,c+0.75*a),(d-a,c)]
+    return xx
+
+
+def make_ellipse(infos, size):
+    a = infos[0] * size * 0.85
+    d = infos[1]
+    c = infos[2]
+    xx = [(d-a,c-a), (d+a,c+a)]
     return xx
 
 
@@ -45,15 +53,16 @@ red = (255, 200, 200)
 double = 9
 # How the scalling occurs
 smaller = 0.8
-colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (255, 187, 0)}
-shapes = {1: make_star, 2: make_square, 3: make_triangle}
+large, medium, small = 1, 0.7, 0.4
+colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (255, 100, 0)}
+shapes = {1: make_star, 2: make_ellipse, 3: make_triangle}
 # [size, x, y]
-numbers = {1: [[double * 19, double * 31, double * 19]],
-           2: [[double * 14, double * 16.5, double * 19],
-              [double * 14, double * 43.5, double * 19]],
-           3: [[double * 12.5, double * 13, double * 23], 
-              [double * 12.5, double * 31, double * 15],
-              [double * 12.5, double * 48, double * 23]]}
+numbers = {1: [[double * 20, double * 31, double * 19]],
+           2: [[double * 15, double * 16.5, double * 19],
+              [double * 15, double * 43.5, double * 19]],
+           3: [[double * 13, double * 13, double * 23], 
+              [double * 13, double * 30.5, double * 15],
+              [double * 13, double * 48, double * 23]]}
 
 
 deck = Deck()
@@ -72,32 +81,44 @@ for card in deck:
     # a number of time
     # First a complete filling
     for counter, info in enumerate(number):  # create 1, 2 or 3 object
-        size = smaller
+        size = large*smaller
         infovec = list(info)  # copying the data
         if card.number == 3 and card.shape == 3:
             infovec[2] = double * 19
-        draw1.polygon(shape(infovec, size), fill=color)
-        draw2.polygon(shape(infovec, size), fill=color)
+        if card.shape == 2:
+            draw1.ellipse(shape(infovec, size), fill=color)
+            draw2.ellipse(shape(infovec, size), fill=color)
+        else:
+            draw1.polygon(shape(infovec, size), fill=color)
+            draw2.polygon(shape(infovec, size), fill=color)
 
     # Cutting out a center
     if card.filling > 1:
         for counter, infos in enumerate(number):
-            size = 0.7 * smaller
+            size = medium * smaller
             infovec = list(infos)
             if card.number == 3 and card.shape == 3:
                 infovec[2] = double * 19
-            draw1.polygon(shape(infovec, size), fill=white)
-            draw2.polygon(shape(infovec, size), fill=red)
+            if card.shape == 2:
+                draw1.ellipse(shape(infovec, size), fill=white)
+                draw2.ellipse(shape(infovec, size), fill=red)
+            else:
+                draw1.polygon(shape(infovec, size), fill=white)
+                draw2.polygon(shape(infovec, size), fill=red)
 
     # adding something back in
     if card.filling > 2:
         for counter, info in enumerate(number):
-            size = 0.4 * smaller
+            size = small * smaller
             infovec = list(info)
             if card.number == 3 and card.shape == 3:
                 infovec[2] = double * 19
-            draw1.polygon(shape(infovec, size), fill=color)
-            draw2.polygon(shape(infovec, size), fill=color)
+            if card.shape == 2:
+                draw1.ellipse(shape(infovec, size), fill=color)
+                draw2.ellipse(shape(infovec, size), fill=color)
+            else:
+                draw1.polygon(shape(infovec, size), fill=color)
+                draw2.polygon(shape(infovec, size), fill=color)
 
     # saves the images where normalimage and downimage is pointing to
     im1.save(card.normalimage(), dpi=(264,264))
