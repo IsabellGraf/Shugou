@@ -66,14 +66,14 @@ class PlayerNamePopup(Popup):
         self.text_inputs = [0]*value
         self.number_of_players = value
         game.number_of_players = value
-        name_of_players = ['John', 'Sally', 'Sam', 'Joey']
+        game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
 
         #Create the screen which allows a user to change names.
         self.content = GridLayout(cols=2, spacing='10dp')
         self.buttons = [None] * number_of_players
         for i in range(number_of_players):
             self.buttons[i] = Button()
-            self.buttons[i].text = name_of_players[i]
+            self.buttons[i].text = game.name_of_players[i]
             self.buttons[i].value = i
             self.buttons[i].bind(on_press=self.click)
             self.content.add_widget(self.buttons[i])
