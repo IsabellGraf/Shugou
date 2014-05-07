@@ -66,28 +66,43 @@ class PlayerNamePopup(Popup):
         self.text_inputs = [0]*value
         self.number_of_players = value
         game.number_of_players = value
-        name_of_players = ['John', 'Sally', 'Sam', 'Joey']
-        for i in range(value):
-            self.text_inputs[i] = TextInput(multiline=False,
-                                            size_hint_y=None, 
-                                            size_hint_x=0.5, 
-                                            height='32dp', 
-                                            text=name_of_players[i])
-            game.name_of_players[i] = name_of_players[i]
-            self.text_inputs[i].bind(text= self.namedEntered)
+        game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
 
-            self.children[0].add_widget(self.text_inputs[i])
-
+        #Create the screen which allows a user to change names.
+        self.content = GridLayout(cols=2, spacing='10dp')
+        self.buttons = [None] * number_of_players
+        for i in range(number_of_players):
+            self.buttons[i] = Button()
+            self.buttons[i].text = game.name_of_players[i]
+            self.buttons[i].value = i
+            self.buttons[i].bind(on_press=self.click)
+            self.content.add_widget(self.buttons[i])
+            
         self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
 
         self.enter.bind(on_press=self.on_press_callback)
         self.children[0].add_widget(self.enter)
 
-    def namedEntered(self,ins, value):
-        for i in range(len(self.text_inputs)):
-            if ins == self.text_inputs[i]:
-                break
-        game.name_of_players[i] = value
+    def click(self,button):
+        #In here, we create the popup where we request the user's names.
+        #On click of the name we want to change, the user can enter a new name.
+        i = button.value
+        popup = Popup(title="Enter text here",
+              size_hint=(0.25, 0.25),
+              on_dismiss=lambda x: self.set_caption(x,i,button))
+        box = GridLayout(cols=1)
+        box.add_widget(TextInput(focus=True,text=button.text))
+        box.children[0].select_all()
+        box.add_widget(Button(text="Enter Name",on_press = popup.dismiss) )
+        popup.content = box
+        popup.open()
+
+
+    def set_caption(self, popup,i,button):
+        #Set the name in the name_of_players array.
+        game.name_of_players[i] = popup.content.children[1].text
+        button.text = game.name_of_players[i]
+        
 
     def on_press_callback(self, obj):
         self.dismiss()
@@ -391,9 +406,9 @@ class GameLayout(FloatLayout):
         global number_of_players
         number_of_players = value
 
-    def player_name_popup(self, value):
+    def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
-        playername = PlayerNamePopup(value)
+        playername = PlayerNamePopup(numPlayers)
         playername.open()
 
     def restart(self):
