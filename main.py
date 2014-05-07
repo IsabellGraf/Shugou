@@ -394,6 +394,7 @@ class GameLayout(FloatLayout):
         self.setupGame()
         self.restart()
         self.goToIntro()
+        self.stopRotation()
         self.active = False
 
     def goToTutorial(self):
@@ -416,7 +417,7 @@ class CollectionApp(App):
         Clock.max_iteration = 50
         # The following line will be uncommented in the beta
         # For now, it gives us access to various kivy settings we can play with
-        #self.use_kivy_settings = False
+        self.use_kivy_settings = False
         self.gamelayout = GameLayout()
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
