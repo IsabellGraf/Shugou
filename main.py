@@ -402,6 +402,7 @@ class GameLayout(FloatLayout):
         self.score_display = ''
         self.score = 0
         self.scores_of_players = [0,0,0,0]
+        self.aiScore = 0
 
     def quit(self):
         ''' You are quiting the current game '''
