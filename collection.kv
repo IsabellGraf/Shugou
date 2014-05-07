@@ -21,11 +21,8 @@
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
-    Label: 
-        text: '[b]Collection[/b]'
-        font_size: 30
-        markup: True
-        y: 450
+    CollectionTitle:
+        pos: (root.width-100)/2, root.height-100   
     Label:
         size_hint: .1, .1
         text: str(root.aiScore)
@@ -41,6 +38,10 @@
         text: "Number of sets " + str(root.numberofsets)
         pos: root.width*1.5/5.5, root.height/6.
         halign: 'center'
+        size: 100,100
+        font_size: '20sp'
+        size_hint_y: None
+        height: self.texture_size[1] + dp(10)           
     Label:
         size_hint: .1, .1
         text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
@@ -236,62 +237,65 @@
 
 #: import Deck Deck.Deck
 
+<CollectionTitle@Label>:
+    size_hint: (None, None)
+    text: 'Collection'
+    markup: True
+    size: 100,100
+    font_size: '40sp'
+    size_hint_y: None
+    height: self.texture_size[1] + dp(10) 
+
 <GameLayout>:
     ScreenManager:
         id: screenManager
         Screen:
             id: frontpage
             name: 'screen1'
-            Label: 
-                size_hint: (None, None)
-                text: 'Collection'
-                markup: True
-                size: 100,100
-                pos: (root.width-100)/2, root.height-100
-                font_size: '40sp'
-                size_hint_y: None
-                height: self.texture_size[1] + dp(10)                
-            GridLayout:
-                cols: 2
-                col_force_default: True
-                row_default_height: root.width/6
-                col_default_width: root.width/3
-                spacing: 30
-                pos_hint: {'center_x':.5, 'center_y':.5}
-                size_hint: (None, None)
-                size: self.minimum_size
-                top: self.height
-                PlayerSection:
-                    value: 1
-                    on_press:
-                        root.set_players(1)
-                        screenManager.current = 'screen2'                
+            RelativeLayout:
+                CollectionTitle:
+                    pos: (root.width-100)/2, root.height-100              
+                GridLayout:
+                    cols: 2
+                    col_force_default: True
+                    row_default_height: root.width/6
+                    col_default_width: root.width/3
+                    spacing: 30
+                    pos_hint: {'center_x':.5, 'center_y':.5}
+                    size_hint: (None, None)
+                    size: self.minimum_size
+                    top: self.height
+                    PlayerSection:
+                        value: 1
+                        on_press:
+                            root.set_players(1)
+                            screenManager.current = 'screen2'                
 
-                PlayerSection:
-                    value: 2
-                    on_press:
-                        root.set_players(2)
-                        root.player_name_popup(2)
+                    PlayerSection:
+                        value: 2
+                        on_press:
+                            root.set_players(2)
+                            root.player_name_popup(2)
 
-                PlayerSection:
-                    value: 3
-                    on_press:
-                        root.set_players(3)
-                        root.player_name_popup(3)
+                    PlayerSection:
+                        value: 3
+                        on_press:
+                            root.set_players(3)
+                            root.player_name_popup(3)
 
-                PlayerSection:
-                    value: 4
-                    on_press:
-                        root.set_players(4)
-                        root.player_name_popup(4)  
+                    PlayerSection:
+                        value: 4
+                        on_press:
+                            root.set_players(4)
+                            root.player_name_popup(4)  
 
-            Button:
-                text: 'Settings'
-                size: '100sp', '100sp'
-                y: 0
-                x: 0
-                size_hint: (None, None)
-                on_press: app.open_settings()
+                Button:
+                    text: 'Settings'
+                    size: '100sp', '100sp'
+                    y: 0
+                    x: 0
+                    size_hint: (None, None)
+                    on_press: app.open_settings()
 
         GamePlayScreen:
             numberofsets: Deck.numberOfSets(root.cards)
