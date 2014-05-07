@@ -1,13 +1,11 @@
-<CardToggle>:
-    background_normal: root.card.normalimage() if root.card else ''   
-    background_down: root.card.downimage() if root.card else ''   
-    canvas.before:
-        PushMatrix
-        Rotate:
-            angle: self.angle
-            origin: self.center
-    canvas.after:
-        PopMatrix
+
+#: import Deck Deck.Deck
+
+#:include tutorialscreen.kv
+#:include gameplayscreen.kv
+#:include endgamescreen.kv
+
+# All classes related to the intro screen
 
 <PlayerSection@Button>:
     value: 0
@@ -17,89 +15,6 @@
     size_hint_y: None
     height: self.texture_size[1] + dp(10)
     text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
-
-<GamePlayScreen@Screen>:
-    id: mainpage
-    name: 'screen2'
-
-    canvas.before:
-        Color:
-            rgba: 173/255. , 255/255., 47/255., 0.8
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-    Label:
-        id: label_ai
-        size_hint: .1, .1
-        color: 0, 0, 0, 1        
-        text: str(root.aiScore)
-        pos: (root.width-self.width)/2., root.height-self.height
-        halign: 'center'
-    Label:
-        id: label_numCollections
-        size_hint: .1, .1
-        color: 0, 0, 0, 1        
-        text: str(root.numberofsets) + " collections on the board" 
-        halign: 'center'
-        size: 100,100
-        size_hint_y: None
-        height: self.texture_size[1] + dp(10)           
-        pos: label_ai.pos[0], label_ai.pos[1]-self.height/6.
-    Label:
-        id: label_p1
-        size_hint: .1, .1
-        color: 0, 0, 0, 1
-        text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
-        pos: [root.width-label_p2.x-label_p2.width, root.height-self.height] if root.number_of_players > 1 else [self.width/2., root.height-self.height]
-        halign: 'center'
-    Label:
-        id: label_p2
-        size_hint: .1, .1
-        color: 0, 0, 0, 1        
-        text: root.name_of_players[1] + ': '+ str(root.scores_of_players[1]) if root.number_of_players >= 2 else ''
-        pos: root.width-self.width, label_p1.y
-        halign: 'center'   
-    Label:
-        id: label_p3
-        size_hint: .1, .1
-        color: 0, 0, 0, 1        
-        text: root.name_of_players[2] + ': '+ str(root.scores_of_players[2]) if root.number_of_players >= 3 else ''
-        pos: label_p1.x, self.height/2.
-        halign: 'center'   
-    Label:
-        id: label_p4    
-        size_hint: .1, .1
-        color: 0, 0, 0, 1
-        text: root.name_of_players[3] + ': '+ str(root.scores_of_players[3]) if root.number_of_players >= 4 else ''
-        pos: label_p2.x, label_p3.y
-        halign: 'center'
-
-    Button:
-        id: settingsButton
-        text: 'Settings'
-        background_color: 102/255., 102/255., 0/255., 0.8
-        size: 200, 80
-        pos: (root.width-self.width)/2., 0
-        size_hint: (None, None)
-        on_press:
-            root.stopClocks()
-            app.open_settings()
-
-    GridLayout:
-        id: cards_layout
-        cols: 3
-        size_hint: 0.95, 0.7
-        spacing: '10dp'
-        pos: (root.width-self.width)/2., settingsButton.size[1]+10
-        halign: 'center'
-
-#:include tutorialscreen.kv
-
-<SelectPlayersPopup@Popup>:
-    size_hint: 1, 1
-    separator_height: 0
-    title: 'Who found the collection?'
     
 <PlayerNamePopup>:
     size_hint: .5, .5
@@ -111,8 +26,6 @@
         size_hint_y: 0.8
         size_hint_x: 0.5
         spacing: '20dp'
-
-#: import Deck Deck.Deck
 
 <CollectionTitle@Label>:
     size_hint: (None, None)
@@ -146,7 +59,7 @@
                         value: 1
                         on_press:
                             root.set_players(1)
-                            screenManager.current = 'screen2'                
+                            screenManager.current = 'screen2'
 
                     PlayerSection:
                         value: 2
@@ -200,42 +113,5 @@
                 active: root.active
                 goToGameScreen: root.goToGameScreen
 
-
-<Scores@Label>:
-    size_hint: (None, None)
-    markup: True
-    size: 100,100
-    x: 350
-    font_size: '30sp'
-    size_hint_y: None
-    height: self.texture_size[1] + dp(10) 
-    spacing: '5dp'
-
-
-<EndGameScreen>:
-    Label:
-        size_hint: (None, None)
-        text: 'Game Over'
-        font_size:40
-        font_name: 'DroidSans'
-        pos: (root.width-100)/2, root.height-100
-    Button:
-        text: 'Back to Main Screen'
-        size_hint: (None,None)
-        pos: (root.width-200)/2., root.height/5-100.
-        size: 200,100
-        on_press: root.screenManager.current = 'screen1'
-    Scores:
-        text: root.name_of_players[0]+ ':      ' + str(root.scores_of_players[0]) if root.number_of_players>=1 else ''
-        y: root.height-300
-    Scores:
-        text: root.name_of_players[1]+ ':      ' + str(root.scores_of_players[1]) if root.number_of_players >= 2 else ''
-        y: root.height-350
-    Scores:
-        text: root.name_of_players[2]+ ':      ' + str(root.scores_of_players[2]) if root.number_of_players>=3 else ''
-        y: root.height-400
-    Scores:
-        text: root.name_of_players[3]+ ':      ' + str(root.scores_of_players[3]) if root.number_of_players==4 else ''
-        y: root.height-450
 
 
