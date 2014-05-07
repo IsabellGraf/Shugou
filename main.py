@@ -141,51 +141,7 @@ class PlayerSection(Button):
 global current_angle
 current_angle = 0
 
-class Rotator(object):
-    ''' A class that handles the rotation of buttons '''
-    def __init__(self):
-        self.angle = 0
-        self.buttons = []
 
-    def rotateThisButton(self, button):
-        ''' Starts rotating the given button '''
-
-        self.buttons.append(button)
-        # It is already rotating
-        if len(self.buttons) > 1:
-            self.buttons[-1].angle = self.angle
-        else:
-            Clock.schedule_interval(self.rotateLeft,0.05)
-
-    def rotateLeft(self, dt):
-        if self.angle < 8:
-            self.angle += 0.5
-        for button in self.buttons:
-            button.angle = self.angle
-        if self.angle == 8:
-            Clock.unschedule(self.rotateLeft)
-            Clock.schedule_interval(self.rotateRight,0.05)
-
-    def rotateRight(self, dt):
-        if self.angle > -8:
-            self.angle -= 0.5
-        for button in self.buttons:
-            button.angle = self.angle
-        if self.angle == -8:
-            Clock.unschedule(self.rotateRight)
-            Clock.schedule_interval(self.rotateLeft,0.05)
-
-    def endRotate(self):
-        Clock.unschedule(self.rotateRight)
-        Clock.unschedule(self.rotateLeft)
-        for button in self.buttons:
-            # The bizarre way to get the angles back to 0
-            while button.angle != 0:
-                if button.angle > 0:
-                    button.angle -= 0.5
-                else:
-                    button.angle += 0.5
-        self.buttons = []
 
 class CardToggle(ToggleButton):
     card = ObjectProperty()
@@ -199,7 +155,6 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
 
     hintActivated = BooleanProperty(False)
-    displayHintTimer = NumericProperty(5)
     
     # A variable that keeps tracked when an AI has played or not
     aiPlayed = BooleanProperty(False)
@@ -225,8 +180,8 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
-        self.rotator = Rotator()
-
+        
+        self.t0 = datetime.datetime.now()
     # screen play navigation
     def goToIntro(self, *arg):
         self.screens.current = 'screen1'
@@ -238,23 +193,20 @@ class GameLayout(FloatLayout):
         ''' sets up a the deck and draws up some cards'''
         self.deck = Deck()
         self.cards = self.deck.drawGuarantee(numberofcards=12)
-        self.updateGrid()
+        #self.updateGrid()
         self.ai = AI()
 
     def createGrid(self):
         ''' Create the grid of the 12 card buttons, should only be called once'''
-        playscreen = self.screens.get_screen('screen2')
-        self.buttons = playscreen.ids.cards_layout.children
+        self.playscreen = self.screens.get_screen('screen2')
+        self.buttons = self.playscreen.ids.cards_layout.children
         # couldn't pass this on_press to the kv file.. no idea why
         for i in range(12):
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        for i, card in enumerate(self.cards):
-            self.buttons[i].card = card
-            self.buttons[i].state = 'normal'
-        self.setUpHint()
+        self.playscreen.updateGrid()
         self.t0 = datetime.datetime.now()
         if self.aiActivated:
             self.setUpAI()
@@ -299,38 +251,7 @@ class GameLayout(FloatLayout):
     # Functions related to displaying hint ###
     def on_displayHintTimer(self, obj, value):
         if self.screens.current == 'screen2':
-            self.setUpHint()
-
-    def setUpHint(self):
-        ''' unschedule any current hint and loads up the next one if appropriate'''
-        # Need to remove any previous call or else it might be activated too
-        # quickly
-        Clock.unschedule(self.displayHint)
-        Clock.unschedule(self.displayHintSecond)
-        # After some time in seconds show a hint
-        if self.hintActivated and self.screens.current == 'screen2':
-            self.hint = Deck.hint(self.cards)
-            Clock.schedule_once(self.displayHint, self.displayHintTimer)
-
-    def displayHint(self, *arg):
-        ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
-        if self.selected() == []:  # no cards have been selected
-            # displays on the first card in a hint
-            buttonToRotate = self.buttonFromCard(self.hint[0])
-            self.rotator.rotateThisButton(buttonToRotate)
-            self.selectCards([self.hint[0]])
-            Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
-        else:  # if the player has a card selected, try calling it again later
-            self.setUpHint()
-
-    def displayHintSecond(self, *arg):
-        ''' Displays the second of two cards in a hint if the current selected card is the first card of the hint'''
-        selectedcards = self.selected()
-        # One card is selected and it is a specific card.
-        if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
-            self.selectCards([self.hint[1]])
-            buttonToRotate = self.buttonFromCard(self.hint[1])
-            self.rotator.rotateThisButton(buttonToRotate)
+            self.playscreen.setUpHint()
 
     # Functions to handling the game play screen
     def selected(self):
@@ -341,22 +262,13 @@ class GameLayout(FloatLayout):
                 down.append(index)
         return down
 
-    def buttonFromCard(self, card):
-        ''' Returns the instance of the button that contains the given card'''
-        for button in self.buttons:
-            if button.card == card:
-                return button
 
     def unselectAll(self):
         ''' Unselect all the toggle buttons '''
         for button in self.buttons:
             button.state = 'normal'
 
-    def selectCards(self, cards):
-        ''' selects the given cards if they are in the given cards '''
-        for index, button in enumerate(self.buttons):
-            if self.cards[index] in cards:
-                button.state = 'down'
+
 
     def rotateCards(self, cards):
         ''' selects the given cards if they are in the given cards '''
@@ -364,8 +276,6 @@ class GameLayout(FloatLayout):
             if self.cards[index] in cards:
                 button.rotate()
 
-    def stopRotation(self):
-        self.rotator.endRotate()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -381,7 +291,7 @@ class GameLayout(FloatLayout):
                     self.screens.current = 'screen3'
                     # need to clear the selection
                     self.unselectAll()
-                    self.stopRotation()
+                    self.playscreen.stopRotation()
                     self.setupGame()
                     return
                 if self.aiPlayed:
@@ -397,12 +307,12 @@ class GameLayout(FloatLayout):
                 self.aiUpdates()
                 self.aiPlayed = False
                 self.updateGrid()
-                self.stopRotation()
+                self.playscreen.stopRotation()
             else:  # The cards were not a set
                 self.unselectAll()
         else:
-            self.stopRotation()
-            self.setUpHint()
+            self.playscreen.stopRotation()
+            self.playscreen.setUpHint()
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -442,8 +352,8 @@ class GameLayout(FloatLayout):
 
     def stopClocks(self):
         Clock.unschedule(self.AIplay)
-        Clock.unschedule(self.displayHint)
-        Clock.unschedule(self.displayHintSecond)
+        Clock.unschedule(self.playscreen.displayHint)
+        Clock.unschedule(self.playscreen.displayHintSecond)
 
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
