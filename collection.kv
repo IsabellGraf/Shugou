@@ -21,71 +21,79 @@
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
-    CollectionTitle:
-        pos: (root.width-100)/2, root.height-100   
+
+    canvas.before:
+        Color:
+            rgba: 173/255. , 255/255., 47/255., 0.8
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     Label:
+        id: label_ai
         size_hint: .1, .1
+        color: 0, 0, 0, 1        
         text: str(root.aiScore)
-        pos: root.width*3.5/5.5, root.height/6. - 20
+        pos: (root.width-self.width)/2., root.height-self.height
         halign: 'center'
     Label:
+        id: label_numCollections
         size_hint: .1, .1
-        text: root.score_display
-        pos: root.width*3.5/5.5, root.height/6.
-        halign: 'center'        
-    Label:
-        size_hint: .1, .1
-        text: "Number of sets " + str(root.numberofsets)
-        pos: root.width/2, root.height/6.
+        color: 0, 0, 0, 1        
+        text: str(root.numberofsets) + " collections on the board" 
         halign: 'center'
         size: 100,100
-        font_size: '20sp'
         size_hint_y: None
         height: self.texture_size[1] + dp(10)           
+        pos: label_ai.pos[0], label_ai.pos[1]-self.height/6.
     Label:
+        id: label_p1
         size_hint: .1, .1
+        color: 0, 0, 0, 1
         text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 20
-        halign: 'center' 
+        pos: [root.width-label_p2.x-label_p2.width, root.height-self.height] if root.number_of_players > 1 else [self.width/2., root.height-self.height]
+        halign: 'center'
     Label:
+        id: label_p2
         size_hint: .1, .1
+        color: 0, 0, 0, 1        
         text: root.name_of_players[1] + ': '+ str(root.scores_of_players[1]) if root.number_of_players >= 2 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 40
+        pos: root.width-self.width, label_p1.y
         halign: 'center'   
     Label:
+        id: label_p3
         size_hint: .1, .1
+        color: 0, 0, 0, 1        
         text: root.name_of_players[2] + ': '+ str(root.scores_of_players[2]) if root.number_of_players >= 3 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 60
+        pos: label_p1.x, self.height/2.
         halign: 'center'   
     Label:
+        id: label_p4    
         size_hint: .1, .1
+        color: 0, 0, 0, 1
         text: root.name_of_players[3] + ': '+ str(root.scores_of_players[3]) if root.number_of_players >= 4 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 80
-        halign: 'center'  
+        pos: label_p2.x, label_p3.y
+        halign: 'center'
 
     Button:
+        id: settingsButton
         text: 'Settings'
-        size: 100, 100
-        x: 0
-        y: 0
+        background_color: 102/255., 102/255., 0/255., 0.8
+        size: 200, 80
+        pos: (root.width-self.width)/2., 0
         size_hint: (None, None)
         on_press:
             root.stopClocks()
             app.open_settings()
 
-    Button:
-        text: 'GoToGameOverPage'
-        size: 100, 100
-        pos: root.width-100, root.y
-        on_press: root.screenManager.current = 'screen3'
-
-
     GridLayout:
         id: cards_layout
         cols: 3
-        size_hint: 0.5,0.5
+        size_hint: 0.95, 0.7
         spacing: '10dp'
-        pos: root.width/4, root.height/4
+        pos: (root.width-self.width)/2., settingsButton.size[1]+10
+        halign: 'center'
+
 
 <TutorialScreen@Widget>
     ScreenManager:
@@ -106,7 +114,7 @@
                     #pos: (root.width-100)/2, root.height-100
                 Label: 
                     size_hint: (1, .7)
-		    text: 'Welcome to Collection! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a COLLECTION.  Once you find one, \n click on the three cards one by one. \n If you have found a Collection, \n you will be able to choose your name \n to receive points for your Collection.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Collections, is the winner. \n To learn what constitutes a Collection, \n go to the next tutorial screen.'
+                    text: 'Welcome to Collection! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a COLLECTION.  Once you find one, \n click on the three cards one by one. \n If you have found a Collection, \n you will be able to choose your name \n to receive points for your Collection.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Collections, is the winner. \n To learn what constitutes a Collection, \n go to the next tutorial screen.'
                     font_name: 'DroidSans'
                     markup: True
                     size: 100,100
@@ -149,15 +157,7 @@
                     #pos: (root.width-100)/2, root.height-100
                 Label: 
                     size_hint: (1, .7)
-                    text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, which properties are all equal or all different. In the following, you see some examples for Collections.\n
- In the first example the quantity, the color and the shape are equal, the filling is all different:
-includegraphic{images/2311.png} \ includegraphics{images/2321.png}\ \includegraphics{2331.png} \n
-In the second example the color and the filling are equal, the quantity and the shape are all different:
-includegraphic{images/1221.png} \ includegraphics{images/3223.png}\ \includegraphics{2222.png} \n
-Next, the color is equal and all other properties are different:
-includegraphic{images/2333.png} \ includegraphics{images/1321.png}\ \includegraphics{3312.png} \n
-Last all properties are different:
-includegraphic{images/3122.png} \ includegraphics{images/1313.png}\ \includegraphics{2231.png}'
+                    text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different: includegraphic{images/2311.png} \ includegraphics{images/2321.png}\ \includegraphics{2331.png} \n In the second example the color and the filling are equal, the quantity and the shape are all different: includegraphic{images/1221.png} \ includegraphics{images/3223.png}\ \includegraphics{2222.png} \n Next, the color is equal and all other properties are different: includegraphic{images/2333.png} \ includegraphics{images/1321.png}\ \includegraphics{3312.png} \n Last all properties are different: includegraphic{images/3122.png} \ includegraphics{images/1313.png}\ \includegraphics{2231.png}'
                     font_name: 'DroidSans'
                     markup: True
                     size: 100,100
