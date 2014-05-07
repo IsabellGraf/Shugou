@@ -32,7 +32,7 @@ drawA.polygon(shape(info, large), fill=color)
 drawA.polygon(shape(info, medium), fill=white)
 
 info = [scale*275, scale*280, scale*750]
-color = (253, 236, 0)
+color = (255, 187, 0)
 shape = make_triangle
 drawA.polygon(shape(info, large), fill=color)
 
@@ -53,7 +53,7 @@ drawI.polygon(shape(info, large), fill=color)
 drawI.polygon(shape(info, medium), fill=white)
 
 info = [275, 280, 750]
-color = (253, 236, 0)
+color = (255, 187, 0)
 shape = make_triangle
 drawI.polygon(shape(info, large), fill=color)
 
