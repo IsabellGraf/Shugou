@@ -123,7 +123,7 @@ class EndGameScreen(Screen):
         print('gameover')
         self.name_of_players = [x for y,x in sorted(zip(game.scores_of_players,game.name_of_players))][::-1]
         self.scores_of_players = sorted(game.scores_of_players)[::-1]
-        
+
 
 class Scores(Label):
     pass
@@ -192,7 +192,7 @@ class GameLayout(FloatLayout):
     deck = ObjectProperty()
     cards = ListProperty([])
 
-    name_of_players = ListProperty(['Player', '', '', ''])
+    name_of_players = ListProperty(['Collections found', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
 
