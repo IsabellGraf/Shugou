@@ -1,7 +1,7 @@
 
 from PIL import ImageFont, Image, ImageDraw
 from Deck import Deck
-from generateImages import make_star, make_triangle, make_square
+from generateImages import make_star, make_triangle, make_square, make_ellipse
 
 white = (255, 255, 255)
 large, medium, small = 1, 0.7, 0.4
@@ -27,12 +27,12 @@ drawA.polygon(shape(info, small), fill=color)
 
 info = [scale*275, scale*740, scale*600]
 color = (0, 200, 0)
-shape = make_square
-drawA.polygon(shape(info, large), fill=color)
-drawA.polygon(shape(info, medium), fill=white)
+shape = make_ellipse
+drawA.ellipse(shape(info, large), fill=color)
+drawA.ellipse(shape(info, medium), fill=white)
 
 info = [scale*275, scale*280, scale*750]
-color = (255, 187, 0)
+color = (255, 100, 0)
 shape = make_triangle
 drawA.polygon(shape(info, large), fill=color)
 
@@ -48,12 +48,12 @@ drawI.polygon(shape(info, small), fill=color)
 
 info = [275, 740, 600]
 color = (0, 200, 0)
-shape = make_square
-drawI.polygon(shape(info, large), fill=color)
-drawI.polygon(shape(info, medium), fill=white)
+shape = make_ellipse
+drawI.ellipse(shape(info, large), fill=color)
+drawI.ellipse(shape(info, medium), fill=white)
 
 info = [275, 280, 750]
-color = (255, 187, 0)
+color = (255, 100, 0)
 shape = make_triangle
 drawI.polygon(shape(info, large), fill=color)
 
