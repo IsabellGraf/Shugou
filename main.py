@@ -113,6 +113,20 @@ class TutorialScreen(Screen):
     active = BooleanProperty(False)
     pass
 
+class EndGameScreen(Screen):
+    name_of_players = ListProperty(['','','',''])
+    scores_of_players = ListProperty([0, 0, 0, 0])
+    screenManager = ObjectProperty()
+    number_of_players = NumericProperty(1)
+
+    def on_enter(self,*args):
+        print('gameover')
+        self.name_of_players = [x for y,x in sorted(zip(game.scores_of_players,game.name_of_players))][::-1]
+        self.scores_of_players = sorted(game.scores_of_players)[::-1]
+        
+
+class Scores(Label):
+    pass
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -343,6 +357,7 @@ class GameLayout(FloatLayout):
                     self.screens.current = 'screen3'
                     # need to clear the selection
                     self.unselectAll()
+                    self.stopRotation()
                     self.setupGame()
                     return
                 if self.aiPlayed:
