@@ -21,53 +21,47 @@
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
-    CollectionTitle:
-        pos: (root.width-100)/2, root.height-100   
+
     Label:
         size_hint: .1, .1
         text: str(root.aiScore)
-        pos: root.width*3.5/5.5, root.height/6. - 20
+        pos: root.width/2.-self.width, root.height-self.height
         halign: 'center'
     Label:
         size_hint: .1, .1
-        text: root.score_display
-        pos: root.width*3.5/5.5, root.height/6.
-        halign: 'center'        
-    Label:
-        size_hint: .1, .1
-        text: "Number of sets " + str(root.numberofsets)
-        pos: root.width*1.5/5.5, root.height/6.
+        text: str(root.numberofsets) + " collections on the board" 
         halign: 'center'
         size: 100,100
         font_size: '20sp'
         size_hint_y: None
         height: self.texture_size[1] + dp(10)           
+        pos: root.width/2.-self.width, root.height-self.height-40
     Label:
         size_hint: .1, .1
         text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 20
+        pos: 25, root.height-self.height
         halign: 'center' 
     Label:
         size_hint: .1, .1
         text: root.name_of_players[1] + ': '+ str(root.scores_of_players[1]) if root.number_of_players >= 2 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 40
+        pos: root.width-self.width-100, root.height-self.height
         halign: 'center'   
     Label:
         size_hint: .1, .1
         text: root.name_of_players[2] + ': '+ str(root.scores_of_players[2]) if root.number_of_players >= 3 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 60
+        pos: 25, 20
         halign: 'center'   
     Label:
         size_hint: .1, .1
         text: root.name_of_players[3] + ': '+ str(root.scores_of_players[3]) if root.number_of_players >= 4 else ''
-        pos: root.width*1.5/5.5, root.height/6. - 80
+        pos: root.width-self.width-100, 20
         halign: 'center'  
 
     Button:
+        id: settingsButton
         text: 'Settings'
-        size: 100, 100
-        x: 0
-        y: 0
+        size: 200, 80
+        pos: (root.width-self.width)/2.-50, 0
         size_hint: (None, None)
         on_press:
             root.stopClocks()
@@ -79,13 +73,14 @@
         pos: root.width-100, root.y
         on_press: root.screenManager.current = 'screen3'
 
-
     GridLayout:
         id: cards_layout
         cols: 3
-        size_hint: 0.5,0.5
+        size_hint: 0.80, 0.75
         spacing: '10dp'
-        pos: root.width/4, root.height/4
+        pos: (root.width-self.width)/2.-50, settingsButton.size[1]+10
+        halign: 'center'
+
 
 <TutorialScreen@Widget>
     ScreenManager:
