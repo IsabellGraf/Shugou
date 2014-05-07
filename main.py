@@ -257,11 +257,10 @@ class GameLayout(FloatLayout):
     def createGrid(self):
         ''' Create the grid of the 12 card buttons, should only be called once'''
         playscreen = self.screens.get_screen('screen2')
-        self.buttons = [None] * 12
+        self.buttons = playscreen.ids.cards_layout.children
+        # couldn't pass this on_press to the kv file.. no idea why
         for i in range(12):
-            self.buttons[i] = CardToggle()
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
-            playscreen.children[0].add_widget(self.buttons[i])
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
