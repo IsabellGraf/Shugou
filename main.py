@@ -27,7 +27,9 @@ from Deck import Deck
 from AI import AI
 from jsonConfig import settingsjson
 
+from gameplay import GamePlayScreen
 game = None
+
 
 '''initialize the score of players to 0'''
 
@@ -108,21 +110,6 @@ class PlayerNamePopup(Popup):
         self.dismiss()
         game.children[0].current = 'screen2'
 
-class GamePlayScreen(Screen):
-    numberofsets = NumericProperty(0)
-    score_display = StringProperty('')
-    restart = ObjectProperty()
-    screenManager = ObjectProperty()
-    aiScore = StringProperty(0)
-    
-    number_of_players = NumericProperty(1)
-    name_of_players = ListProperty(['','','',''])
-    scores_of_players = ListProperty([0, 0, 0, 0])
-
-    def on_enter(self):
-        game.active = True
-        game.setUpHint()
-        game.setUpAI()
 
 class TutorialScreen(Screen):
     active = BooleanProperty(False)
