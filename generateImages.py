@@ -21,7 +21,7 @@ def make_star(infos, size):
 
 
 def make_triangle(infos, size):
-    a = infos[0] * 0.95 * size
+    a = infos[0] * 0.98 * size
     d = infos[1]
     c = infos[2]
     xx = [(d - 0.75 * a, c - 0.3 * a),
@@ -30,10 +30,10 @@ def make_triangle(infos, size):
 
 
 def make_square(infos, size):
-    a = infos[0] * 0.9 * size
+    a = infos[0] * 0.98 * size
     d = infos[1]
     c = infos[2]
-    xx = [(d,c-a), (d+0.8*a,c),(d,c+a),(d-0.8*a,c)]
+    xx = [(d,c-0.75*a), (d+a,c),(d,c+0.75*a),(d-a,c)]
     return xx
 
 
@@ -45,7 +45,7 @@ red = (255, 200, 200)
 double = 9
 # How the scalling occurs
 smaller = 0.8
-colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (253, 236, 0)}
+colors = {1: (51, 153, 250), 2: (0, 200, 0), 3: (255, 187, 0)}
 shapes = {1: make_star, 2: make_square, 3: make_triangle}
 # [size, x, y]
 numbers = {1: [[double * 19, double * 31, double * 19]],
