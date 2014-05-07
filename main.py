@@ -154,40 +154,55 @@ class PlayerSection(Button):
 global current_angle
 current_angle = 0
 
+class Rotator(object):
+    ''' A class that handles the rotation of buttons '''
+    def __init__(self):
+        self.angle = 0
+        self.buttons = []
+
+    def rotateThisButton(self, button):
+        ''' Starts rotating the given button '''
+
+        self.buttons.append(button)
+        # It is already rotating
+        if len(self.buttons) > 1:
+            self.buttons[-1].angle = self.angle
+        else:
+            Clock.schedule_interval(self.rotateLeft,0.05)
+
+    def rotateLeft(self, dt):
+        if self.angle < 8:
+            self.angle += 0.5
+        for button in self.buttons:
+            button.angle = self.angle
+        if self.angle == 8:
+            Clock.unschedule(self.rotateLeft)
+            Clock.schedule_interval(self.rotateRight,0.05)
+
+    def rotateRight(self, dt):
+        if self.angle > -8:
+            self.angle -= 0.5
+        for button in self.buttons:
+            button.angle = self.angle
+        if self.angle == -8:
+            Clock.unschedule(self.rotateRight)
+            Clock.schedule_interval(self.rotateLeft,0.05)
+
+    def endRotate(self):
+        Clock.unschedule(self.rotateRight)
+        Clock.unschedule(self.rotateLeft)
+        for button in self.buttons:
+            # The bizarre way to get the angles back to 0
+            while button.angle != 0:
+                if button.angle > 0:
+                    button.angle -= 0.5
+                else:
+                    button.angle += 0.5
+        self.buttons = []
+
 class CardToggle(ToggleButton):
     card = ObjectProperty()
     angle = NumericProperty(0)
-    def rotate(self):
-        if current_angle < 0:
-            for i in range(-current_angle + 1):
-                self.angle += 1
-            Clock.schedule_interval(self.left_rotate,0.1)
-        else:
-            for i in range(current_angle + 1):
-                self.angle -= 1            
-            Clock.schedule_interval(self.right_rotate,0.1)
-
-    def endRotate(self):
-        Clock.unschedule(self.left_rotate)
-        Clock.unschedule(self.right_rotate)
-        self.angle = 0
-        current_angle = 0
-
-    def left_rotate(self,dt,*args):
-        global current_angle
-        current_angle += 1
-        self.angle = current_angle
-        if self.angle >= 10:
-            Clock.unschedule(self.left_rotate)
-            Clock.schedule_interval(self.right_rotate,0.1)
-
-    def right_rotate(self,dt,*args):
-        global current_angle
-        current_angle -= 1
-        self.angle = current_angle
-        if self.angle <= -10:
-            Clock.unschedule(self.right_rotate)
-            Clock.schedule_interval(self.left_rotate,0.1)
 
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
@@ -223,6 +238,7 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
+        self.rotator = Rotator()
 
     # screen play navigation
     def goToIntro(self, *arg):
@@ -314,7 +330,8 @@ class GameLayout(FloatLayout):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
-            self.rotateCards([self.hint[0]])
+            buttonToRotate = self.buttonFromCard(self.hint[0])
+            self.rotator.rotateThisButton(buttonToRotate)
             self.selectCards([self.hint[0]])
             Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else:  # if the player has a card selected, try calling it again later
@@ -326,7 +343,8 @@ class GameLayout(FloatLayout):
         # One card is selected and it is a specific card.
         if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
             self.selectCards([self.hint[1]])
-            self.rotateCards([self.hint[1]])
+            buttonToRotate = self.buttonFromCard(self.hint[1])
+            self.rotator.rotateThisButton(buttonToRotate)
 
     # Functions to handling the game play screen
     def selected(self):
@@ -336,6 +354,12 @@ class GameLayout(FloatLayout):
             if button.state == 'down':
                 down.append(index)
         return down
+
+    def buttonFromCard(self, card):
+        ''' Returns the instance of the button that contains the given card'''
+        for button in self.buttons:
+            if button.card == card:
+                return button
 
     def unselectAll(self):
         ''' Unselect all the toggle buttons '''
@@ -355,8 +379,7 @@ class GameLayout(FloatLayout):
                 button.rotate()
 
     def stopRotation(self):
-        for button in self.buttons:
-            button.endRotate()
+        self.rotator.endRotate()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
