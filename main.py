@@ -8,7 +8,6 @@ from kivy.lang import Builder
 from kivy.properties import *
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
-from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown

@@ -4,6 +4,7 @@ from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+from kivy.uix.togglebutton import ToggleButton
 
 from Deck import Deck
 from AI import AI
@@ -15,35 +16,27 @@ import datetime
 class SelectPlayersPopup(Popup):
 
     '''controls the values shown in the player selection popup'''
-    playscreen = ObjectProperty()
+
     def __init__(self, playscreen, **kwards):
         super(SelectPlayersPopup, self).__init__()
         # More UI that I can't quite put in the kv file
         self.playscreen = playscreen
         self.content = GridLayout(cols=2, spacing='10dp')
-        self.buttons = [None] * self.playscreen.number_of_players
         for i in range(self.playscreen.number_of_players):
-            self.buttons[i] = Button()
-            self.buttons[i].text = self.playscreen.name_of_players[i]
-            self.buttons[i].value = i
-            self.buttons[i].bind(on_press=self.click)
-            self.content.add_widget(self.buttons[i])
+            button = Button()
+            button.text = self.playscreen.name_of_players[i]
+            button.value = i
+            button.bind(on_press=self.click)
+            self.content.add_widget(button)
 
     def click(self,button):
-        self.update_scores(button.value)
+        self.playscreen.scores_of_players[int(button.value)] += 1
         self.dismiss()
-
-    def get_players_name(self, value):
-        return self.playscreen.name_of_players[value]
-
-    def update_scores(self, value):
-        '''need to other lines to update the score display'''
-        self.playscreen.scores_of_players[int(value)] += 1
 
 class CardToggle(ToggleButton):
     card = ObjectProperty()
     angle = NumericProperty(0)
-    
+
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
@@ -65,7 +58,6 @@ class GamePlayScreen(Screen):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
         #self.buttons = self.ids.cards_layout.children
-        #print(self.buttons)
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -184,7 +176,6 @@ class GamePlayScreen(Screen):
         # quickly    
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
-        print("setUpHint called")
         # After some time in seconds show a hint
         if self.hintActivated:
             self.hint = Deck.hint(self.cards)
@@ -192,8 +183,6 @@ class GamePlayScreen(Screen):
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
-
-        print("displayHint called")
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
             buttonToRotate = self.buttonFromCard(self.hint[0])
