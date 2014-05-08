@@ -14,8 +14,7 @@ class PlayerNamePopup(Popup):
         self.namesOfPlayers = namesOfPlayers
         # Create the screen which allows to select which user's name to change
         for i, name in enumerate(self.namesOfPlayers):
-            button = Button()
-            button.text = name
+            button = Button(text=name)
             button.value = i
             button.bind(on_press=self.click)
             self.ids.content.add_widget(button)
