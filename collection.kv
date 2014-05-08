@@ -18,14 +18,18 @@
     
 <PlayerNamePopup>:
     size_hint: .5, .5
-    title: 'Enter Name of Player(s)'
+    title: 'Enter Name of the Players'
     title_size: '20sp'
     separator_height: 5
-    BoxLayout:
+    content: content
+    GridLayout:
+        id: content
         orientation: 'vertical'
         size_hint_y: 0.8
         size_hint_x: 0.5
-        spacing: '20dp'
+        spacing: '20dp'        
+        cols: 2
+        spacing:'10dp'
 
 <CollectionTitle@Label>:
     size_hint: (None, None)

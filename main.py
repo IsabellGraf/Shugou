@@ -35,7 +35,6 @@ class PlayerNamePopup(Popup):
         self.game.number_of_players = value
         self.game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
         #Create the screen which allows a user to change names.
-        self.content = GridLayout(cols=2, spacing='10dp')
         for i in range(self.game.number_of_players):
             button = Button()
             button.text = self.game.name_of_players[i]
@@ -44,7 +43,6 @@ class PlayerNamePopup(Popup):
             self.content.add_widget(button)
             
         self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
-
         self.enter.bind(on_press=self.on_press_callback)
         self.children[0].add_widget(self.enter)
 
@@ -62,13 +60,11 @@ class PlayerNamePopup(Popup):
         popup.content = box
         popup.open()
 
-
     def set_caption(self, popup,i,button):
         #Set the name in the name_of_players array.
         self.game.name_of_players[i] = popup.content.children[1].text
         button.text = self.game.name_of_players[i]
         
-
     def on_press_callback(self, obj):
         self.dismiss()
         self.game.children[0].current = 'screen2'
@@ -76,7 +72,6 @@ class PlayerNamePopup(Popup):
 
 class TutorialScreen(Screen):
     active = BooleanProperty(False)
-    pass
 
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
@@ -178,7 +173,6 @@ class CollectionApp(App):
         # This doesn't work.. crashes if the build_settings wasn't launched first
         #self.quitButton.disabled = not self.gamelayout.active
         pass
-
 
     def loadSettings(self):
         # Load the values already stored into the file
