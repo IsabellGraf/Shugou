@@ -41,7 +41,7 @@ class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
     screenManager = ObjectProperty()
-    aiScore = StringProperty(0)
+    aiScore = NumericProperty(0)
     
     hintActivated = BooleanProperty(False)
     number_of_players = NumericProperty(1)
@@ -59,7 +59,7 @@ class GamePlayScreen(Screen):
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
-        #self.buttons = self.ids.cards_layout.children
+        self.ai = AI()
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -175,9 +175,11 @@ class GamePlayScreen(Screen):
     # Functions related to the AIhint ###
     def setUpAI(self):
         Clock.unschedule(self.AIplay)
-        if self.aiActivated and self.screens.current == 'screen2':
-            (time, self.aiCards) = self.ai.suggestion(self.cards)
-            Clock.schedule_once(self.AIplay, 1)
+        if self.aiActivated:
+            pass
+            # Broken..?
+            #(time, self.aiCards) = self.ai.suggestion(self.cards)
+            #Clock.schedule_once(self.AIplay, 1)
 
     def AIplay(self, *arg):
         ''' The AI plays a turn '''

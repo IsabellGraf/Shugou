@@ -88,7 +88,6 @@
                     on_press: app.open_settings()
 
         GamePlayScreen:
-            numberofsets: Deck.numberOfSets(root.cards)
             score_display: root.score_display
             goToIntro: root.goToIntro
             aiScore: "AI: " + str(root.aiScore) if root.aiActivated else ""
@@ -98,7 +97,6 @@
             scores_of_players: root.scores_of_players
             screenManager: root.children[0]
             game: root
-            cards: root.cards
             hintActivated: root.hintActivated
             active: root.active
 

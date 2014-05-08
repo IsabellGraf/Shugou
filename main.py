@@ -22,8 +22,6 @@ from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
-from Deck import Deck
-
 from jsonConfig import settingsjson
 
 from gameplay import GamePlayScreen
@@ -114,10 +112,6 @@ class GameLayout(FloatLayout):
     # A variable that keeps tracked when an AI has played or not
     
     aiActivated = BooleanProperty(False)
-    aiScore = NumericProperty(0)
-
-    deck = ObjectProperty()
-    cards = ListProperty([])
 
     name_of_players = ListProperty(['Collections found', '', '', ''])
     number_of_players = NumericProperty(1)
@@ -129,10 +123,7 @@ class GameLayout(FloatLayout):
         super(GameLayout, self).__init__(**kwargs)
         self.screens = self.ids.screenManager
         self.playscreen = self.screens.get_screen('screen2')
-        # The UI element we were not able to add to collections.kv
-        self.createGrid()
         self.sound = SoundLoader.load('set_song.wav')
-        
         
     # screen play navigation
     def goToIntro(self, *arg):
@@ -140,19 +131,6 @@ class GameLayout(FloatLayout):
 
     def goToGameScreen(self):
         self.screens.current = 'screen2'
-
-    def createGrid(self):
-        ''' Create the grid of the 12 card buttons, should only be called once'''
-        
-        self.buttons = self.playscreen.ids.cards_layout.children
-        # couldn't pass this on_press to the kv file.. no idea why
-
-    def updateGrid(self):
-        '''Updates the cards being displayed and updates hints/ai/numberofsets'''
-        self.playscreen.updateGrid()
-        self.t0 = datetime.datetime.now()
-        if self.aiActivated:
-            self.setUpAI()
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
@@ -162,7 +140,6 @@ class GameLayout(FloatLayout):
             self.sound.play()
         else:
             self.sound.stop()
-
 
     def set_players(self, value):
         '''set the number of players according to user's choice on the front page'''

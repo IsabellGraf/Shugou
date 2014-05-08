@@ -16,7 +16,7 @@
     separator_height: 0
     title: 'Who found the collection?'
 
-    
+
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
@@ -32,14 +32,14 @@
         id: label_ai
         size_hint: .1, .1
         color: 0, 0, 0, 1        
-        text: str(root.aiScore)
+        text: "AI: " + str(root.aiScore) if root.aiActivated else ""
         pos: (root.width-self.width)/2., root.height-self.height
         halign: 'center'
     Label:
         id: label_numCollections
         size_hint: .1, .1
         color: 0, 0, 0, 1        
-        text: str(root.numberofsets) + " collections on the board" 
+        text: str(Deck.numberOfSets(root.cards)) + " collections on the board" 
         halign: 'center'
         size: 100,100
         size_hint_y: None
