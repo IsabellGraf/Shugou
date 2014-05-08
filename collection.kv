@@ -58,37 +58,30 @@
                     PlayerSection:
                         value: 1
                         on_press:
-                            root.set_players(1)
                             screenManager.current = 'screen2'
 
                     PlayerSection:
                         value: 2
                         on_press:
-                            root.set_players(2)
                             root.player_name_popup(2)
 
                     PlayerSection:
                         value: 3
                         on_press:
-                            root.set_players(3)
                             root.player_name_popup(3)
 
                     PlayerSection:
                         value: 4
                         on_press:
-                            root.set_players(4)
                             root.player_name_popup(4)  
 
                 Button:
                     text: 'Settings'
                     size: '100sp', '100sp'
-                    y: 0
-                    x: 0
                     size_hint: (None, None)
                     on_press: app.open_settings()
 
         GamePlayScreen:
-            score_display: root.score_display
             goToIntro: root.goToIntro
             stopClocks: root.stopClocks
             number_of_players: root.number_of_players
@@ -96,7 +89,6 @@
             scores_of_players: root.scores_of_players
             screenManager: root.children[0]
             game: root
-            hintActivated: root.hintActivated
             active: root.active
 
         EndGameScreen:
@@ -113,6 +105,3 @@
                 goToIntro: root.goToIntro
                 active: root.active
                 goToGameScreen: root.goToGameScreen
-
-
-

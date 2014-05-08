@@ -32,20 +32,16 @@ class PlayerNamePopup(Popup):
     def __init__(self, value, game):
         super(PlayerNamePopup, self).__init__()
         self.game = game
-        self.text_inputs = [0]*value
-        self.number_of_players = value
         self.game.number_of_players = value
         self.game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
-
         #Create the screen which allows a user to change names.
         self.content = GridLayout(cols=2, spacing='10dp')
-        self.buttons = [None] * number_of_players
-        for i in range(number_of_players):
-            self.buttons[i] = Button()
-            self.buttons[i].text = self.game.name_of_players[i]
-            self.buttons[i].value = i
-            self.buttons[i].bind(on_press=self.click)
-            self.content.add_widget(self.buttons[i])
+        for i in range(self.game.number_of_players):
+            button = Button()
+            button.text = self.game.name_of_players[i]
+            button.value = i
+            button.bind(on_press=self.click)
+            self.content.add_widget(button)
             
         self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
 
@@ -56,7 +52,7 @@ class PlayerNamePopup(Popup):
         #In here, we create the popup where we request the user's names.
         #On click of the name we want to change, the user can enter a new name.
         i = button.value
-        popup = Popup(title="Enter text here",
+        popup = Popup(title="Enter Name here",
               size_hint=(0.25, 0.25),
               on_dismiss=lambda x: self.set_caption(x,i,button))
         box = GridLayout(cols=1)
