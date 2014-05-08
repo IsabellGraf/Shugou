@@ -17,11 +17,11 @@ from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
-from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 
 from Deck import Deck
 
@@ -29,37 +29,6 @@ from jsonConfig import settingsjson
 
 from gameplay import GamePlayScreen
 game = None
-
-
-'''initialize the score of players to 0'''
-
-class SelectPlayersPopup(Popup):
-
-    '''controls the values shown in the player selection popup'''
-
-    def __init__(self, **kwards):
-        super(SelectPlayersPopup, self).__init__()
-        # More UI that I can't quite put in the kv file
-        self.content = GridLayout(cols=2, spacing='10dp')
-        self.buttons = [None] * number_of_players
-        for i in range(number_of_players):
-            self.buttons[i] = Button()
-            self.buttons[i].text = game.name_of_players[i]
-            self.buttons[i].value = i
-            self.buttons[i].bind(on_press=self.click)
-            self.content.add_widget(self.buttons[i])
-
-    def click(self,button):
-        self.update_scores(button.value)
-        self.dismiss()
-
-    def get_players_name(self, value):
-        return name_of_players[value]
-
-    def update_scores(self, value):
-        '''need to other lines to update the score display'''
-        print(value)
-        game.scores_of_players[int(value)] += 1
 
 class PlayerNamePopup(Popup):
 
@@ -133,12 +102,6 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
-
-global current_angle
-current_angle = 0
-
-
-
 class CardToggle(ToggleButton):
     card = ObjectProperty()
     angle = NumericProperty(0)
@@ -177,7 +140,7 @@ class GameLayout(FloatLayout):
         self.createGrid()
         self.sound = SoundLoader.load('set_song.wav')
         
-        self.t0 = datetime.datetime.now()
+        
     # screen play navigation
     def goToIntro(self, *arg):
         self.screens.current = 'screen1'
@@ -225,15 +188,6 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
         self.aiPlayed = True
 
-    def aiUpdates(self):
-        timeDifference = datetime.datetime.now() - self.t0
-        if self.aiActivated:
-            if self.aiPlayed:
-                self.ai.updateRatingsAI(
-                    self.cards, self.aiCards, timeDifference)
-            else:
-                self.ai.updateRatingsHuman(
-                    self.cards, selectedcards, timeDifference)
 
     # Functions related to displaying hint ###
     def on_displayHintTimer(self, obj, value):
@@ -255,8 +209,6 @@ class GameLayout(FloatLayout):
         for button in self.buttons:
             button.state = 'normal'
 
-
-
     def rotateCards(self, cards):
         ''' selects the given cards if they are in the given cards '''
         for index, button in enumerate(self.buttons):
@@ -264,13 +216,6 @@ class GameLayout(FloatLayout):
                 button.rotate()
 
 
-
-
-    # Dealing with multiplayer ###
-    def select_player_popup(self, *args):
-        '''called when three cards are selected'''
-        popup = SelectPlayersPopup()
-        popup.open()
 
     def set_players(self, value):
         '''set the number of players according to user's choice on the front page'''

@@ -1,6 +1,9 @@
 from kivy.properties import *
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
 
 from Deck import Deck
 from AI import AI
@@ -8,6 +11,34 @@ from AI import AI
 from Rotator import Rotator
 
 import datetime
+
+class SelectPlayersPopup(Popup):
+
+    '''controls the values shown in the player selection popup'''
+    playscreen = ObjectProperty()
+    def __init__(self, playscreen, **kwards):
+        super(SelectPlayersPopup, self).__init__()
+        # More UI that I can't quite put in the kv file
+        self.playscreen = playscreen
+        self.content = GridLayout(cols=2, spacing='10dp')
+        self.buttons = [None] * self.playscreen.number_of_players
+        for i in range(self.playscreen.number_of_players):
+            self.buttons[i] = Button()
+            self.buttons[i].text = self.playscreen.name_of_players[i]
+            self.buttons[i].value = i
+            self.buttons[i].bind(on_press=self.click)
+            self.content.add_widget(self.buttons[i])
+
+    def click(self,button):
+        self.update_scores(button.value)
+        self.dismiss()
+
+    def get_players_name(self, value):
+        return self.playscreen.name_of_players[value]
+
+    def update_scores(self, value):
+        '''need to other lines to update the score display'''
+        self.playscreen.scores_of_players[int(value)] += 1
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -25,12 +56,24 @@ class GamePlayScreen(Screen):
 
     aiPlayed = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
-    
+
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
         #self.buttons = self.ids.cards_layout.children
         #print(self.buttons)
+
+    # Dealing with multiplayer ###
+    def select_player_popup(self, *args):
+        '''called when three cards are selected'''
+        popup = SelectPlayersPopup(self)
+        
+        popup.open()
+
+    def unselectAll(self):
+        ''' Unselect all the toggle buttons '''
+        for button in self.buttons:
+            button.state = 'normal'
 
     def on_enter(self):
         self.deck = Deck()
