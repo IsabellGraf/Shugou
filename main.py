@@ -36,15 +36,13 @@ class PlayerNamePopup(Popup):
         self.game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
         #Create the screen which allows a user to change names.
         for i in range(self.game.number_of_players):
-            button = Button(value=i)
+            button = Button()
             button.text = self.game.name_of_players[i]
-            #button.value = i
+            button.value = i
             button.bind(on_press=self.click)
-            self.content.add_widget(button)
-            
-        self.enter = Button(text='Start Game', size_hint_y=None, height='40dp')
-        self.enter.bind(on_press=self.on_press_callback)
-        self.children[0].add_widget(self.enter)
+            self.ids.content.add_widget(button)
+        
+        self.ids.enter.bind(on_press=self.on_press_callback)
 
     def click(self,button):
         #In here, we create the popup where we request the user's names.
