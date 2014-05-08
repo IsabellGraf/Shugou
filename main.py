@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import datetime
-import pickle
 
 from kivy.app import App
 from kivy.lang import Builder
@@ -11,7 +10,6 @@ from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.dropdown import DropDown
-from kivy.uix.gridlayout import GridLayout
 from kivy.base import runTouchApp
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -25,48 +23,8 @@ from kivy.uix.popup import Popup
 from jsonConfig import settingsjson
 
 from gameplay import GamePlayScreen
-game = None
 
-class PlayerNamePopup(Popup):
-
-    def __init__(self, value, game):
-        super(PlayerNamePopup, self).__init__()
-        self.game = game
-        self.game.number_of_players = value
-        self.game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
-        #Create the screen which allows a user to change names.
-        for i in range(self.game.number_of_players):
-            button = Button()
-            button.text = self.game.name_of_players[i]
-            button.value = i
-            button.bind(on_press=self.click)
-            self.ids.content.add_widget(button)
-        
-        self.ids.enter.bind(on_press=self.on_press_callback)
-
-    def click(self,button):
-        #In here, we create the popup where we request the user's names.
-        #On click of the name we want to change, the user can enter a new name.
-        i = button.value
-        popup = Popup(title="Enter Name here",
-              size_hint=(0.25, 0.25),
-              on_dismiss=lambda x: self.set_caption(x,i,button))
-        box = GridLayout(cols=1)
-        box.add_widget(TextInput(focus=True,text=button.text))
-        box.children[0].select_all()
-        box.add_widget(Button(text="Enter Name",on_press = popup.dismiss) )
-        popup.content = box
-        popup.open()
-
-    def set_caption(self, popup,i,button):
-        #Set the name in the name_of_players array.
-        self.game.name_of_players[i] = popup.content.children[1].text
-        button.text = self.game.name_of_players[i]
-        
-    def on_press_callback(self, obj):
-        self.dismiss()
-        self.game.children[0].current = 'screen2'
-
+from PlayerNamePopup import PlayerNamePopup
 
 class TutorialScreen(Screen):
     active = BooleanProperty(False)
@@ -109,7 +67,7 @@ class GameLayout(FloatLayout):
     def goToIntro(self, *arg):
         self.screens.current = 'screen1'
 
-    def goToGameScreen(self):
+    def goToGameScreen(self, *arg):
         self.screens.current = 'screen2'
 
     # Dealing with Sound
@@ -123,8 +81,12 @@ class GameLayout(FloatLayout):
 
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
-        playername = PlayerNamePopup(numPlayers, self)
+        self.number_of_players = numPlayers
+        # Default names in a multiplayer game
+        self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
+        playername = PlayerNamePopup(self.name_of_players)
         playername.open()
+        playername.bind(on_dismiss = self.goToGameScreen)
 
     def restart(self):
         '''reset the scores and everything'''
