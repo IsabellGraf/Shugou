@@ -1,12 +1,3 @@
-<PlayerSection@Button>:
-    value: 0
-    size_hint: (None, None)
-    size: 200,100
-    font_size: '30sp'
-    size_hint_y: None
-    height: self.texture_size[1] + dp(10)
-    text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
-    
 <PlayerNamePopup@Popup>:
     size_hint: .5, .5
     title: 'Enter Name of the Players'
@@ -16,13 +7,13 @@
         orientation: 'vertical'
         size_hint_y: 0.8
         size_hint_x: 0.5
+        spacing: 10
         GridLayout:
             id: content
             spacing: '20dp'        
             cols: 2
             spacing:'10dp'
         Button:
-            id: enter
             text:'Start Game'
             size_hint_y: None
             height: '40dp'

@@ -8,6 +8,15 @@
 
 # All classes related to the intro screen
 
+<PlayerSection@Button>:
+    value: 0
+    size_hint: (None, None)
+    size: 200,100
+    font_size: '30sp'
+    size_hint_y: None
+    height: self.texture_size[1] + dp(10)
+    text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
+
 <CollectionTitle@Label>:
     size_hint: (None, None)
     text: 'Collection'
