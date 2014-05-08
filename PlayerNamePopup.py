@@ -3,6 +3,10 @@ from kivy.uix.popup import Popup
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.properties import *
+
+class PlayerNameEdit(Popup):
+    nameText = StringProperty('')
 
 
 class PlayerNamePopup(Popup):
@@ -23,19 +27,13 @@ class PlayerNamePopup(Popup):
         # In here, we create the popup where we request the user's names.
         # On click of the name we want to change, the user can enter a new
         # name.
-        i = button.value
-        popup = Popup(title="Enter Name here",
-                      size_hint=(0.25, 0.25),
-                      on_dismiss=lambda x: self.set_caption(x, i, button))
-        box = GridLayout(cols=1)
-        box.add_widget(
-            TextInput(focus=True, text=button.text, multiline=False))
-        box.children[0].select_all()
-        box.add_widget(Button(text="Enter Name", on_press=popup.dismiss))
-        popup.content = box
-        popup.open()
+        playerdit = PlayerNameEdit(nameText = button.text, 
+                                   on_dismiss=lambda popup: 
+                                            self.set_caption(popup.ids.textinput.text, button))
+        playerdit.ids.textinput.select_all()
+        playerdit.open()
 
-    def set_caption(self, popup, i, button):
+    def set_caption(self, newName, button):
         # Set the name in the name_of_players array.
-        self.namesOfPlayers[i] = popup.content.children[1].text
-        button.text = self.namesOfPlayers[i]
+        self.namesOfPlayers[button.value] = newName
+        button.text = self.namesOfPlayers[button.value]

@@ -7,7 +7,7 @@
     height: self.texture_size[1] + dp(10)
     text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
     
-<PlayerNamePopup>:
+<PlayerNamePopup@Popup>:
     size_hint: .5, .5
     title: 'Enter Name of the Players'
     title_size: '20sp'
@@ -26,4 +26,18 @@
             text:'Start Game'
             size_hint_y: None
             height: '40dp'
+            on_press: root.dismiss()
+
+<PlayerNameEdit@Popup>:
+    title: "Enter Name here"
+    size_hint: (0.25, 0.25)
+    GridLayout:
+        cols: 1
+        TextInput:
+            id: textinput
+            focus: True
+            text: root.nameText
+            multiline: False
+        Button:
+            text: "Enter name:"
             on_press: root.dismiss()
