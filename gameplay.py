@@ -3,8 +3,11 @@ from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 
 from Deck import Deck
+from AI import AI
 
 from Rotator import Rotator
+
+import datetime
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -19,6 +22,10 @@ class GamePlayScreen(Screen):
 
     cards = ListProperty()
     displayHintTimer = NumericProperty(5)
+
+    aiPlayed = BooleanProperty(False)
+    aiActivated = BooleanProperty(False)
+    
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
@@ -26,21 +33,80 @@ class GamePlayScreen(Screen):
         #print(self.buttons)
 
     def on_enter(self):
+        self.deck = Deck()
+
         self.buttons = self.ids.cards_layout.children
+        for i in range(12):
+            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
+        self.setupGame()
         self.updateGrid()
         self.game.active = True
         self.setUpHint()
         self.game.setUpAI()
+
+        self.t0 = datetime.datetime.now()
+    def setupGame(self):
+        ''' sets up a the deck and draws up some cards'''
+        self.cards = self.deck.drawGuarantee(numberofcards=12)
+        #self.updateGrid()
+        self.ai = AI()
+
+    def checkIfSetOnBoard(self, obj):
+        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
+        down = self.selected()
+
+        if len(down) == 3:
+            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+                selectedcards = {self.cards[i] for i in down}
+                try:
+                    newcards = self.deck.drawGuarantee(
+                        othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+                except ValueError:  # no more sets available
+                    self.screens.current = 'screen3'
+                    # need to clear the selection
+                    self.unselectAll()
+                    self.stopRotation()
+                    self.setupGame()
+                    return
+                if self.aiPlayed:
+                    self.aiScore += 1
+                else:
+                    if self.number_of_players > 1:
+                        # Load the popup
+                        self.select_player_popup()
+                    else:
+                        self.scores_of_players[0] += 1
+                for index, i in enumerate(down):
+                    self.cards[i] = newcards[index]
+                self.aiUpdates()
+                self.aiPlayed = False
+                self.updateGrid()
+                self.stopRotation()
+            else:  # The cards were not a set
+                self.unselectAll()
+        else:
+            self.stopRotation()
+            self.setUpHint()
 
     def updateGrid(self):
         for i, card in enumerate(self.cards):
             self.buttons[i].card = card
             self.buttons[i].state = 'normal'
         self.setUpHint()
-        #self.t0 = datetime.datetime.now()
-        #if self.aiActivated:
-        #    self.setUpAI()        
+        self.t0 = datetime.datetime.now()
+        if self.aiActivated:
+            self.setUpAI()        
 
+
+    def aiUpdates(self):
+        timeDifference = datetime.datetime.now() - self.t0
+        if self.aiActivated:
+            if self.aiPlayed:
+                self.ai.updateRatingsAI(
+                    self.cards, self.aiCards, timeDifference)
+            else:
+                self.ai.updateRatingsHuman(
+                    self.cards, selectedcards, timeDifference)
 
     def stopRotation(self):
         self.rotator.endRotate()

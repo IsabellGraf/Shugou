@@ -24,7 +24,7 @@ from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.boxlayout import BoxLayout
 
 from Deck import Deck
-from AI import AI
+
 from jsonConfig import settingsjson
 
 from gameplay import GamePlayScreen
@@ -126,10 +126,6 @@ class EndGameScreen(Screen):
         self.name_of_players = [x for y,x in sorted(zip(game.scores_of_players,game.name_of_players))][::-1]
         self.scores_of_players = sorted(game.scores_of_players)[::-1]
 
-
-class Scores(Label):
-    pass
-
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
 
@@ -157,7 +153,7 @@ class GameLayout(FloatLayout):
     hintActivated = BooleanProperty(False)
     
     # A variable that keeps tracked when an AI has played or not
-    aiPlayed = BooleanProperty(False)
+    
     aiActivated = BooleanProperty(False)
     aiScore = NumericProperty(0)
 
@@ -176,9 +172,9 @@ class GameLayout(FloatLayout):
         game = self
 
         self.screens = self.ids.screenManager
+        self.playscreen = self.screens.get_screen('screen2')
         # The UI element we were not able to add to collections.kv
         self.createGrid()
-        self.setupGame()
         self.sound = SoundLoader.load('set_song.wav')
         
         self.t0 = datetime.datetime.now()
@@ -189,20 +185,11 @@ class GameLayout(FloatLayout):
     def goToGameScreen(self):
         self.screens.current = 'screen2'
 
-    def setupGame(self):
-        ''' sets up a the deck and draws up some cards'''
-        self.deck = Deck()
-        self.cards = self.deck.drawGuarantee(numberofcards=12)
-        #self.updateGrid()
-        self.ai = AI()
-
     def createGrid(self):
         ''' Create the grid of the 12 card buttons, should only be called once'''
-        self.playscreen = self.screens.get_screen('screen2')
+        
         self.buttons = self.playscreen.ids.cards_layout.children
         # couldn't pass this on_press to the kv file.. no idea why
-        for i in range(12):
-            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
 
     def updateGrid(self):
         '''Updates the cards being displayed and updates hints/ai/numberofsets'''
@@ -277,42 +264,7 @@ class GameLayout(FloatLayout):
                 button.rotate()
 
 
-    def checkIfSetOnBoard(self, obj):
-        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
-        down = self.selected()
 
-        if len(down) == 3:
-            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-                selectedcards = {self.cards[i] for i in down}
-                try:
-                    newcards = self.deck.drawGuarantee(
-                        othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                except ValueError:  # no more sets available
-                    self.screens.current = 'screen3'
-                    # need to clear the selection
-                    self.unselectAll()
-                    self.playscreen.stopRotation()
-                    self.setupGame()
-                    return
-                if self.aiPlayed:
-                    self.aiScore += 1
-                else:
-                    if number_of_players > 1:
-                        # Load the popup
-                        self.select_player_popup()
-                    else:
-                        self.scores_of_players[0] += 1
-                for index, i in enumerate(down):
-                    self.cards[i] = newcards[index]
-                self.aiUpdates()
-                self.aiPlayed = False
-                self.updateGrid()
-                self.playscreen.stopRotation()
-            else:  # The cards were not a set
-                self.unselectAll()
-        else:
-            self.playscreen.stopRotation()
-            self.playscreen.setUpHint()
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -344,7 +296,7 @@ class GameLayout(FloatLayout):
         self.setupGame()
         self.restart()
         self.goToIntro()
-        self.stopRotation()
+        self.playscreen.stopRotation()
         self.active = False
 
     def goToTutorial(self):
@@ -434,8 +386,8 @@ class CollectionApp(App):
 
     def leaveSettingsPanel(self, *arg):       
         ''' activated when you exit the setting panels'''
-        self.gamelayout.setUpHint()
-        self.gamelayout.setUpAI()
+        self.gamelayout.playscreen.setUpHint()
+        self.gamelayout.playscreen.setUpAI()
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
