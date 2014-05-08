@@ -102,23 +102,14 @@ class PlayerSection(Button):
 
 class GameLayout(FloatLayout):
     ''' This class manages the movements between the various screen and the sound '''
-    number_of_players = NumericProperty(1)
-    score_display = StringProperty('')
-    playersScores = ListProperty([0,0,0,0])
-    soundActivated = BooleanProperty(False)
-
-    hintActivated = BooleanProperty(False)
     
-    # A variable that keeps tracked when an AI has played or not
-    
-    aiActivated = BooleanProperty(False)
-
     name_of_players = ListProperty(['Collections found', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
 
     # True if there is a game going on
     active = BooleanProperty(False)
+    soundActivated = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         self.screens = self.ids.screenManager
@@ -141,11 +132,6 @@ class GameLayout(FloatLayout):
         else:
             self.sound.stop()
 
-    def set_players(self, value):
-        '''set the number of players according to user's choice on the front page'''
-        global number_of_players
-        number_of_players = value
-
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         playername = PlayerNamePopup(numPlayers, self)
@@ -153,9 +139,6 @@ class GameLayout(FloatLayout):
 
     def restart(self):
         '''reset the scores and everything'''
-        global player_scores
-        self.score_display = ''
-        self.score = 0
         self.scores_of_players = [0,0,0,0]
         self.aiScore = 0
 
