@@ -31,19 +31,20 @@ game = None
 
 class PlayerNamePopup(Popup):
 
-    def __init__(self, value):
+    def __init__(self, value, game):
         super(PlayerNamePopup, self).__init__()
+        self.game = game
         self.text_inputs = [0]*value
         self.number_of_players = value
-        game.number_of_players = value
-        game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
+        self.game.number_of_players = value
+        self.game.name_of_players = ['John', 'Sally', 'Sam', 'Joey']
 
         #Create the screen which allows a user to change names.
         self.content = GridLayout(cols=2, spacing='10dp')
         self.buttons = [None] * number_of_players
         for i in range(number_of_players):
             self.buttons[i] = Button()
-            self.buttons[i].text = game.name_of_players[i]
+            self.buttons[i].text = self.game.name_of_players[i]
             self.buttons[i].value = i
             self.buttons[i].bind(on_press=self.click)
             self.content.add_widget(self.buttons[i])
@@ -70,13 +71,13 @@ class PlayerNamePopup(Popup):
 
     def set_caption(self, popup,i,button):
         #Set the name in the name_of_players array.
-        game.name_of_players[i] = popup.content.children[1].text
-        button.text = game.name_of_players[i]
+        self.game.name_of_players[i] = popup.content.children[1].text
+        button.text = self.game.name_of_players[i]
         
 
     def on_press_callback(self, obj):
         self.dismiss()
-        game.children[0].current = 'screen2'
+        self.game.children[0].current = 'screen2'
 
 
 class TutorialScreen(Screen):
@@ -88,11 +89,11 @@ class EndGameScreen(Screen):
     scores_of_players = ListProperty([0, 0, 0, 0])
     screenManager = ObjectProperty()
     number_of_players = NumericProperty(1)
+    game = ObjectProperty()
 
     def on_enter(self,*args):
-        print('gameover')
-        self.name_of_players = [x for y,x in sorted(zip(game.scores_of_players,game.name_of_players))][::-1]
-        self.scores_of_players = sorted(game.scores_of_players)[::-1]
+        self.name_of_players = [x for y,x in sorted(zip(self.game.scores_of_players,self.game.name_of_players))][::-1]
+        self.scores_of_players = sorted(self.game.scores_of_players)[::-1]
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -102,7 +103,7 @@ class PlayerSection(Button):
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
 class GameLayout(FloatLayout):
-    score = NumericProperty(0)
+    ''' This class manages the movements between the various screen and the sound '''
     number_of_players = NumericProperty(1)
     score_display = StringProperty('')
     playersScores = ListProperty([0,0,0,0])
@@ -126,9 +127,6 @@ class GameLayout(FloatLayout):
     active = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
-        global game
-        game = self
-
         self.screens = self.ids.screenManager
         self.playscreen = self.screens.get_screen('screen2')
         # The UI element we were not able to add to collections.kv
@@ -165,37 +163,6 @@ class GameLayout(FloatLayout):
         else:
             self.sound.stop()
 
-    # Functions related to the AIhint ###
-    def setUpAI(self):
-        Clock.unschedule(self.AIplay)
-        if self.aiActivated and self.screens.current == 'screen2':
-            (time, self.aiCards) = self.ai.suggestion(self.cards)
-            Clock.schedule_once(self.AIplay, 1)
-
-    def AIplay(self, *arg):
-        ''' The AI plays a turn '''
-        for index, card in enumerate(self.cards):
-            if card in self.aiCards:
-                self.buttons[index].state = 'down'
-            else:
-                self.buttons[index].state = 'normal'
-        # Basic AI animation.
-        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
-        self.aiPlayed = True
-
-    # Functions related to displaying hint ###
-    def on_displayHintTimer(self, obj, value):
-        if self.screens.current == 'screen2':
-            self.playscreen.setUpHint()
-
-    # Functions to handling the game play screen
-    def selected(self):
-        '''Returns the indices of all the selected ToggleButton'''
-        down = []
-        for index, button in enumerate(self.buttons):
-            if button.state == 'down':
-                down.append(index)
-        return down
 
     def set_players(self, value):
         '''set the number of players according to user's choice on the front page'''
@@ -204,7 +171,7 @@ class GameLayout(FloatLayout):
 
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
-        playername = PlayerNamePopup(numPlayers)
+        playername = PlayerNamePopup(numPlayers, self)
         playername.open()
 
     def restart(self):
@@ -217,7 +184,7 @@ class GameLayout(FloatLayout):
 
     def quit(self):
         ''' You are quiting the current game '''
-        self.unselectAll()
+        self.playscreen.unselectAll()
         self.setupGame()
         self.restart()
         self.goToIntro()
@@ -228,7 +195,7 @@ class GameLayout(FloatLayout):
         self.screens.current = 'tutorialFlow'
 
     def stopClocks(self):
-        Clock.unschedule(self.AIplay)
+        Clock.unschedule(self.playscreen.AIplay)
         Clock.unschedule(self.playscreen.displayHint)
         Clock.unschedule(self.playscreen.displayHintSecond)
 
@@ -259,14 +226,14 @@ class CollectionApp(App):
 
     def loadSettings(self):
         # Load the values already stored into the file
-        self.gamelayout.hintActivated = boolFromJS(
+        self.gamelayout.playscreen.hintActivated = boolFromJS(
             self.config.get('settings', 'hint'))
         speedSettings = {'slow':10, 'normal':5, 'fast':1}
-        self.gamelayout.displayHintTimer = speedSettings[
+        self.gamelayout.playscreen.displayHintTimer = speedSettings[
             self.config.get('settings', 'hintspeed')]
         self.gamelayout.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))
-        self.gamelayout.aiActivated = boolFromJS(
+        self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
 
     def build_config(self, config):

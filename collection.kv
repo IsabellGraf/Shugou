@@ -100,6 +100,7 @@
             game: root
             cards: root.cards
             hintActivated: root.hintActivated
+            active: root.active
 
         EndGameScreen:
             id: gameoverpage
@@ -108,7 +109,7 @@
             scores_of_players: root.scores_of_players
             screenManager: root.children[0]
             number_of_players: root.number_of_players
-
+            game: root
         Screen:
             name: 'tutorialFlow'
             TutorialScreen:

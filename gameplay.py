@@ -54,6 +54,8 @@ class GamePlayScreen(Screen):
     aiPlayed = BooleanProperty(False)
     aiActivated = BooleanProperty(False)
 
+    active = BooleanProperty(False)
+
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
@@ -81,7 +83,7 @@ class GamePlayScreen(Screen):
         self.updateGrid()
         self.game.active = True
         self.setUpHint()
-        self.game.setUpAI()
+        self.setUpAI()
 
         self.t0 = datetime.datetime.now()
     def setupGame(self):
@@ -170,6 +172,28 @@ class GamePlayScreen(Screen):
             if self.cards[index] in cards:
                 button.state = 'down'
 
+    # Functions related to the AIhint ###
+    def setUpAI(self):
+        Clock.unschedule(self.AIplay)
+        if self.aiActivated and self.screens.current == 'screen2':
+            (time, self.aiCards) = self.ai.suggestion(self.cards)
+            Clock.schedule_once(self.AIplay, 1)
+
+    def AIplay(self, *arg):
+        ''' The AI plays a turn '''
+        for index, card in enumerate(self.cards):
+            if card in self.aiCards:
+                self.buttons[index].state = 'down'
+            else:
+                self.buttons[index].state = 'normal'
+        # Basic AI animation.
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
+        self.aiPlayed = True
+
+    # Functions related to displaying hint ###
+    def on_displayHintTimer(self, obj, value):
+        self.setUpHint()
+
     def setUpHint(self):
         ''' unschedule any current hint and loads up the next one if appropriate'''
         # Need to remove any previous call or else it might be activated too
@@ -177,7 +201,7 @@ class GamePlayScreen(Screen):
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
         # After some time in seconds show a hint
-        if self.hintActivated:
+        if self.hintActivated and self.active:
             self.hint = Deck.hint(self.cards)
             Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
@@ -200,3 +224,12 @@ class GamePlayScreen(Screen):
             self.selectCards([self.hint[1]])
             buttonToRotate = self.buttonFromCard(self.hint[1])
             self.rotator.rotateThisButton(buttonToRotate)
+
+    # Functions to handling the game play screen
+    def selected(self):
+        '''Returns the indices of all the selected ToggleButton'''
+        down = []
+        for index, button in enumerate(self.buttons):
+            if button.state == 'down':
+                down.append(index)
+        return down            
