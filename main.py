@@ -102,10 +102,6 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
-class CardToggle(ToggleButton):
-    card = ObjectProperty()
-    angle = NumericProperty(0)
-
 class GameLayout(FloatLayout):
     score = NumericProperty(0)
     number_of_players = NumericProperty(1)
@@ -188,7 +184,6 @@ class GameLayout(FloatLayout):
         Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
         self.aiPlayed = True
 
-
     # Functions related to displaying hint ###
     def on_displayHintTimer(self, obj, value):
         if self.screens.current == 'screen2':
@@ -202,20 +197,6 @@ class GameLayout(FloatLayout):
             if button.state == 'down':
                 down.append(index)
         return down
-
-
-    def unselectAll(self):
-        ''' Unselect all the toggle buttons '''
-        for button in self.buttons:
-            button.state = 'normal'
-
-    def rotateCards(self, cards):
-        ''' selects the given cards if they are in the given cards '''
-        for index, button in enumerate(self.buttons):
-            if self.cards[index] in cards:
-                button.rotate()
-
-
 
     def set_players(self, value):
         '''set the number of players according to user's choice on the front page'''

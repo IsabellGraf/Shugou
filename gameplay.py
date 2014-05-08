@@ -40,6 +40,10 @@ class SelectPlayersPopup(Popup):
         '''need to other lines to update the score display'''
         self.playscreen.scores_of_players[int(value)] += 1
 
+class CardToggle(ToggleButton):
+    card = ObjectProperty()
+    angle = NumericProperty(0)
+    
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
