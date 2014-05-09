@@ -78,15 +78,11 @@ class GameLayout(FloatLayout):
         playername.open()
         playername.bind(on_dismiss = self.goToGameScreen)
 
-    def restart(self):
-        '''reset the scores and everything'''
-        self.scores_of_players = [0,0,0,0]
-        self.aiScore = 0
-
     def quit(self):
         ''' You are quiting the current game '''
         if self.active:
-            self.playscreen.unselectAll()
+            self.playscreen.scores_of_players = [0,0,0,0]
+            self.playscreen.aiScore = 0
             self.restart()
             self.goToIntro()
             self.playscreen.stopRotation()
