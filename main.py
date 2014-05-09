@@ -145,6 +145,7 @@ class CollectionApp(App):
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
         self.settingsCloseButton = settingsCloseButton
+        self.settingsCloseButton.text = "Return"
         settingsCloseButton.on_press = self.leaveSettingsPanel
         settings.interface.ids.menu.add_widget(Button(text="Tutorial",
                                                       size_hint = (None, None),
