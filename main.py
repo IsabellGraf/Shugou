@@ -1,23 +1,17 @@
 from __future__ import print_function
 
-import datetime
-
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.properties import *
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
-from kivy.uix.image import Image
-from kivy.uix.label import Label
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen
 from kivy.uix.settings import SettingsWithSidebar
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
 
 from jsonConfig import settingsjson
+import datetime
 
 from gameplay import GamePlayScreen
 from PlayerNamePopup import PlayerNamePopup

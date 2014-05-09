@@ -138,7 +138,6 @@ class GamePlayScreen(Screen):
         if self.aiActivated:
             self.setUpAI()        
 
-
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiActivated:
@@ -146,8 +145,10 @@ class GamePlayScreen(Screen):
                 self.ai.updateRatingsAI(
                     self.cards, self.aiCards, timeDifference)
             else:
-                self.ai.updateRatingsHuman(
-                    self.cards, selectedcards, timeDifference)
+                pass
+                # Broken? what does selected stand for?
+                #self.ai.updateRatingsHuman(
+                #    self.cards, selected, timeDifference)
 
     def stopRotation(self):
         self.rotator.endRotate()
@@ -206,6 +207,12 @@ class GamePlayScreen(Screen):
         if self.hintActivated and self.active:
             self.hint = Deck.hint(self.cards)
             Clock.schedule_once(self.displayHint, self.displayHintTimer)
+
+    def on_hintActivated(self, obj, value):
+        # If the hint was turned off, unselect the cards
+        if value == False:
+            self.stopRotation()
+            self.unselectAll()
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
