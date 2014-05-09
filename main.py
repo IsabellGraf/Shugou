@@ -73,7 +73,6 @@ class GameLayout(FloatLayout):
     def on_name_of_players(self,value, obj):
         pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
         
-
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
