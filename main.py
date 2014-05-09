@@ -91,12 +91,12 @@ class GameLayout(FloatLayout):
 
     def quit(self):
         ''' You are quiting the current game '''
-        self.playscreen.unselectAll()
-        self.setupGame()
-        self.restart()
-        self.goToIntro()
-        self.playscreen.stopRotation()
-        self.active = False
+        if self.active:
+            self.playscreen.unselectAll()
+            self.restart()
+            self.goToIntro()
+            self.playscreen.stopRotation()
+            self.active = False
 
     def goToTutorial(self):
         self.screens.current = 'tutorialFlow'
@@ -149,7 +149,6 @@ class CollectionApp(App):
                                         'hintspeed': 'fast'})
 
     def build_settings(self, settings):
-        print(settings)
         self.settings = settings
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
@@ -189,14 +188,15 @@ class CollectionApp(App):
 
     def on_config_change(self, config, section, key, value):
         if key == 'hint':
-            self.gamelayout.hintActivated = boolFromJS(value)
+            self.gamelayout.playscreen.hintActivated = boolFromJS(value)
         if key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
         if key == 'hintspeed':
             speedSettings = {'slow':10, 'normal':5, 'fast':1}
-            self.gamelayout.displayHintTimer = speedSettings[value]
+            self.gamelayout.playscreen.displayHintTimer = speedSettings[value]
+            print()
         if key == 'ai':
-            self.gamelayout.aiActivated = boolFromJS(value)
+            self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 
 # To test the screen size you can use:
 # kivy main.py -m screen:ipad3
