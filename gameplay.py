@@ -8,7 +8,6 @@ from kivy.uix.togglebutton import ToggleButton
 
 from Deck import Deck
 from AI import AI
-
 from Rotator import Rotator
 
 import datetime

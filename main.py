@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from kivy.app import App
 from kivy.properties import *
 from kivy.uix.floatlayout import FloatLayout
@@ -79,7 +77,7 @@ class GameLayout(FloatLayout):
         try:
             names = pickle.load(open("name_of_players.pkl", "rb"))
             if len(names) < numPlayers:
-                names = ['John', 'Sally', 'Sam', 'Joey'][numPlayers - len(names):-1]
+                names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
             self.name_of_players = names[:numPlayers]
         except:
             self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
