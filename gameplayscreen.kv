@@ -21,7 +21,6 @@
     font_size: '20sp'
     halign: 'center'
     
-
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
@@ -49,7 +48,7 @@
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
         GridLayout:
             id: cards_layout
-            cols: 3
+            cols: 4
             size_hint_y: 3
             spacing: '10dp'
             halign: 'center'

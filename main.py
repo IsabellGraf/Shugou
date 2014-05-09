@@ -5,7 +5,7 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
 from jsonConfig import settingsjson
@@ -36,7 +36,7 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
-class GameLayout(FloatLayout):
+class GameLayout(ScreenManager):
     ''' This class manages the movements between the various screen and the sound '''
     
     name_of_players = ListProperty(['Collections found', '', '', ''])
@@ -48,16 +48,15 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
-        self.screens = self.ids.screenManager
-        self.playscreen = self.screens.get_screen('screen2')
+        self.playscreen = self.get_screen('screen2')
         self.sound = SoundLoader.load('set_song.wav')
         
     # screen play navigation
     def goToIntro(self, *arg):
-        self.screens.current = 'screen1'
+        self.current = 'screen1'
 
     def goToGameScreen(self, *arg):
-        self.screens.current = 'screen2'
+        self.current = 'screen2'
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
@@ -95,7 +94,7 @@ class GameLayout(FloatLayout):
             self.active = False
 
     def goToTutorial(self):
-        self.screens.current = 'tutorialFlow'
+        self.current = 'tutorialFlow'
 
 
 def boolFromJS(value):
