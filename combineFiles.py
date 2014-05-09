@@ -1,8 +1,10 @@
 import os
 import sys
+import re
 
 def read_text_from_include(line):
-	filename = line.split(':include')[1].strip()
+	match = re.search("^#:include *(.*.kv)", line)
+	filename = match.group(1)
 	return open(filename, 'r').read()
 
 def main(combine):
