@@ -32,16 +32,15 @@
             orientation: "horizontal"
             Label:
                 id: label_p1
-                size_hint: .1, .1
+                #size_hint: .1, .1
                 color: 0, 0, 0, 1
                 text: root.name_of_players[0] + ': '+ str(root.scores_of_players[0]) if root.number_of_players >= 1 else ''
-                #pos: [root.width-label_p2.x-label_p2.width, root.height-self.height] if root.number_of_players > 1 else [self.width/2., root.height-self.height]
-                #halign: 'center' 
+                halign: 'center' 
             BoxLayout:
                 orientation: "vertical"           
                 Label:
                     id: label_numCollections
-                    size_hint: .1, .1
+                    #size_hint: .1, .1
                     color: 0, 0, 0, 1        
                     text: str(Deck.numberOfSets(root.cards)) + " collections on the board" 
                     #halign: 'center'
