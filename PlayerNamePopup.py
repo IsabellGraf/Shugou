@@ -29,5 +29,5 @@ class PlayerNamePopup(Popup):
 
     def set_caption(self, newName, button):
         # Set the name in the name_of_players array.
-        self.namesOfPlayers[button.value] = newName
+        self.namesOfPlayers[button.value] = newName[0:10]
         button.text = self.namesOfPlayers[button.value]
