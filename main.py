@@ -7,7 +7,7 @@ from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen
 from kivy.uix.settings import SettingsWithSidebar
-
+from kivy.metrics import dp
 from jsonConfig import settingsjson
 import datetime
 import pickle
@@ -113,9 +113,12 @@ class CollectionApp(App):
         self.use_kivy_settings = False
         self.gamelayout = GameLayout()
         self.settings_cls = SettingsWithSidebar
+        self.settings = SettingsWithSidebar()
+        self.settings.bind(on_config_change= self.on_config_change)
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
         return self.gamelayout
+
 
     def changeActive(self,instance,value):
         # This doesn't work.. crashes if the build_settings wasn't launched first
@@ -142,6 +145,7 @@ class CollectionApp(App):
 
     def build_settings(self, settings):
         self.settings = settings
+        self.settings.interface.menu.width = dp(100)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
         self.settingsCloseButton = settingsCloseButton
@@ -153,7 +157,7 @@ class CollectionApp(App):
                                                       size = settingsCloseButton.size, 
                                                       on_press= self.moveToTutorial))
 
-        self.quitButton = Button(text="Quit Current Game",
+        self.quitButton = Button(text="Quit",
                               background_color = [1,0,0,1],
                               size_hint = (None, None),
                               x= settingsCloseButton.x,
@@ -164,6 +168,7 @@ class CollectionApp(App):
 
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
+
 
     def quit(self, *arg):
         self.gamelayout.quit()
