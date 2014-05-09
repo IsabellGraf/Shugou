@@ -1,0 +1,37 @@
+# All classes related to the end game screen
+
+<Scores@Label>:
+    size_hint: (None, None)
+    markup: True
+    size: 100,100
+    x: 350
+    font_size: '30sp'
+    size_hint_y: None
+    height: self.texture_size[1] + dp(10) 
+    spacing: '5dp'
+
+<EndGameScreen>:
+    Label:
+        size_hint: (None, None)
+        text: 'Game Over'
+        font_size:40
+        font_name: 'DroidSans'
+        pos: (root.width-100)/2, root.height-100
+    Button:
+        text: 'Back to Main Screen'
+        size_hint: (None,None)
+        pos: (root.width-200)/2., root.height/5-100.
+        size: 200,100
+        on_press: root.screenManager.current = 'screen1'
+    Scores:
+        text: root.name_of_players[0]+ ':      ' + str(root.scores_of_players[0]) if root.number_of_players>=1 else ''
+        y: root.height-300
+    Scores:
+        text: root.name_of_players[1]+ ':      ' + str(root.scores_of_players[1]) if root.number_of_players >= 2 else ''
+        y: root.height-350
+    Scores:
+        text: root.name_of_players[2]+ ':      ' + str(root.scores_of_players[2]) if root.number_of_players>=3 else ''
+        y: root.height-400
+    Scores:
+        text: root.name_of_players[3]+ ':      ' + str(root.scores_of_players[3]) if root.number_of_players==4 else ''
+        y: root.height-450
