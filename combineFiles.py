@@ -19,22 +19,22 @@ def main(combine):
 				outfile.write(line)
 		infile.close()
 		outfile.close()
-		print "Files successfully concatenated."
+		print("Files successfully concatenated.")
 	else:
 		try:
 			os.rename('collection_original.kv', 'collection.kv')
-			print "Original file restored."
+			print("Original file restored.")
 		except:
-			print "No backup file. Maybe the original file has been restored already?"
+			print("No backup file. Maybe the original file has been restored already?")
 
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
-		print "Missing necessary argument. Use \n 'combine' to concatenate the include files into collection.kv \n 'clean' to restore the original collection.kv file"
+		print("Missing necessary argument. Use \n 'combine' to concatenate the include files into collection.kv \n 'clean' to restore the original collection.kv file")
 	else:
 		if sys.argv[1] == 'Combine' or sys.argv[1] == 'combine' or sys.argv[1] == 'True':
 			main(True)
 		elif sys.argv[1] == 'Clean' or sys.argv[1] == 'clean' or sys.argv[1] == 'False':
 			main(False)
 		else:
-			print "Can not understand the argument. Call this file again with no arguments to see possible arguments."
+			print("Can not understand the argument. Call this file again with no arguments to see possible arguments.")
 
