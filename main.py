@@ -91,10 +91,6 @@ class GameLayout(FloatLayout):
     def goToTutorial(self):
         self.screens.current = 'tutorialFlow'
 
-    def stopClocks(self):
-        Clock.unschedule(self.playscreen.AIplay)
-        Clock.unschedule(self.playscreen.displayHint)
-        Clock.unschedule(self.playscreen.displayHintSecond)
 
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
