@@ -108,13 +108,9 @@ class CollectionApp(App):
 
     def build(self):
         Clock.max_iteration = 50
-        # The following line will be uncommented in the beta
-        # For now, it gives us access to various kivy settings we can play with
         self.use_kivy_settings = False
         self.gamelayout = GameLayout()
         self.settings_cls = SettingsWithSidebar
-        self.settings = SettingsWithSidebar()
-        self.settings.bind(on_config_change= self.on_config_change)
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
         return self.gamelayout
@@ -168,7 +164,6 @@ class CollectionApp(App):
 
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
-
 
     def quit(self, *arg):
         self.gamelayout.quit()
