@@ -12,6 +12,7 @@ from kivy.uix.settings import SettingsWithSidebar
 
 from jsonConfig import settingsjson
 import datetime
+import pickle
 
 from gameplay import GamePlayScreen
 from PlayerNamePopup import PlayerNamePopup
@@ -69,11 +70,20 @@ class GameLayout(FloatLayout):
         else:
             self.sound.stop()
 
+    def on_name_of_players(self,value, obj):
+        pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
+        
+
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        # Default names in a multiplayer game
-        self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
+        try:
+            names = pickle.load(open("name_of_players.pkl", "rb"))
+            if len(names) < numPlayers:
+                names = ['John', 'Sally', 'Sam', 'Joey'][numPlayers - len(names):-1]
+            self.name_of_players = names[:numPlayers]
+        except:
+            self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
         playername = PlayerNamePopup(self.name_of_players)
         playername.open()
         playername.bind(on_dismiss = self.goToGameScreen)
@@ -83,7 +93,6 @@ class GameLayout(FloatLayout):
         if self.active:
             self.playscreen.scores_of_players = [0,0,0,0]
             self.playscreen.aiScore = 0
-            self.restart()
             self.goToIntro()
             self.playscreen.stopRotation()
             self.active = False

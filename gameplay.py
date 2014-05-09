@@ -242,3 +242,8 @@ class GamePlayScreen(Screen):
             if button.state == 'down':
                 down.append(index)
         return down            
+
+    def stopClocks(self):
+        Clock.unschedule(self.AIplay)
+        Clock.unschedule(self.displayHint)
+        Clock.unschedule(self.displayHintSecond)    
