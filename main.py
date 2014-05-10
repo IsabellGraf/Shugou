@@ -73,12 +73,15 @@ class GameLayout(ScreenManager):
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        try:
-            names = pickle.load(open("name_of_players.pkl", "rb"))
-            if len(names) < numPlayers:
-                names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
-            self.name_of_players = names[:numPlayers]
-        except:
+        if False: # iOS is not happy with pickling..??
+            try:
+                names = pickle.load(open("name_of_players.pkl", "rb"))
+                if len(names) < numPlayers:
+                    names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
+                self.name_of_players = names[:numPlayers]
+            except:
+                self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
+        else:
             self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
         playername = PlayerNamePopup(self.name_of_players)
         playername.open()

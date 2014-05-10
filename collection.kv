@@ -41,7 +41,7 @@
                     value: 4
                     on_press: root.player_name_popup(4)  
             BoxLayout:
-                Widget: # Blank widgets..
+                Widget:
                 BoxLayout:
                     orientation: "vertical"
                     Widget:
@@ -67,7 +67,7 @@
         game: root
     Screen:
         name: 'tutorialFlow'
-        TutorialScreen: # The tutorial screen is a screenmanager
+        TutorialScreen:
             goToIntro: root.goToIntro
             active: root.active
             goToGameScreen: root.goToGameScreen
