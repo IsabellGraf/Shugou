@@ -18,6 +18,9 @@ sandroid:
 	sudo python main.py -m screen:droid2
 	python combineFiles clean
 
+sipad3:
+	sudo python main.py -m screen:ipad3,scale:0.5
+	
 clean:
 	python combineFiles clean
 
