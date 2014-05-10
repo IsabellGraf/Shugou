@@ -46,6 +46,9 @@ class GameLayout(ScreenManager):
     # True if there is a game going on
     active = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
+
+    directory = StringProperty()
+
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         self.playscreen = self.get_screen('screen2')
@@ -67,22 +70,21 @@ class GameLayout(ScreenManager):
         else:
             self.sound.stop()
 
+    def pickleFile(self):
+        return self.directory + "name_of_players.pkl"
+
     def on_name_of_players(self,value, obj):
-        if False:
-            pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
+        pickle.dump(list(self.name_of_players), open(self.pickleFile(), "wb"))
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        if False: # iOS is not happy with pickling..??
-            try:
-                names = pickle.load(open("name_of_players.pkl", "rb"))
-                if len(names) < numPlayers:
-                    names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
-                self.name_of_players = names[:numPlayers]
-            except:
-                self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
-        else:
+        try:
+            names = pickle.load(open(self.pickleFile(), "rb"))
+            if len(names) < numPlayers:
+                names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
+            self.name_of_players = names[:numPlayers]
+        except:
             self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
         playername = PlayerNamePopup(self.name_of_players)
         playername.open()
@@ -116,8 +118,12 @@ class CollectionApp(App):
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
+        self.gamelayout.directory = self.whereToSave()
         return self.gamelayout
 
+    def whereToSave(self):
+        # Returns in which directory you can store files
+        return self.get_application_config().rstrip("collection.ini")
 
     def changeActive(self,instance,value):
         # This doesn't work.. crashes if the build_settings wasn't launched first
@@ -190,7 +196,6 @@ class CollectionApp(App):
         if key == 'hintspeed':
             speedSettings = {'slow':10, 'normal':5, 'fast':1}
             self.gamelayout.playscreen.displayHintTimer = speedSettings[value]
-            print()
         if key == 'ai':
             self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 
