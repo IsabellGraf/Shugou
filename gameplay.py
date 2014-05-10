@@ -39,7 +39,6 @@ class CardToggle(ToggleButton):
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
-    screenManager = ObjectProperty()
     aiScore = NumericProperty(0)
     
     hintActivated = BooleanProperty(False)
@@ -64,7 +63,6 @@ class GamePlayScreen(Screen):
     def select_player_popup(self, *args):
         '''called when three cards are selected'''
         popup = SelectPlayersPopup(self)
-        
         popup.open()
 
     def unselectAll(self):
@@ -209,7 +207,7 @@ class GamePlayScreen(Screen):
 
     def on_hintActivated(self, obj, value):
         # If the hint was turned off, unselect the cards
-        if value == False:
+        if value == False and self.active:
             self.stopRotation()
             self.unselectAll()
 
