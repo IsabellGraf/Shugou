@@ -1,9 +1,11 @@
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ObjectProperty
+
 
 class PlayerNameEdit(Popup):
     nameText = StringProperty('')
+    textBox = ObjectProperty()
 
 
 class PlayerNamePopup(Popup):
@@ -21,13 +23,14 @@ class PlayerNamePopup(Popup):
 
     def click(self, button):
         # In here, we create the popup where we request the new user's names.
-        playerdit = PlayerNameEdit(nameText = button.text, 
-                                   on_dismiss = lambda popup: 
-                                            self.set_caption(popup.ids.textinput.text, button))
-        playerdit.ids.textinput.select_all()
-        playerdit.open()
+
+        playerEdit = PlayerNameEdit(nameText=button.text,
+                                    on_dismiss=lambda popup:
+                                       self.set_caption(popup.textBox.text, button))
+        playerEdit.textBox.select_all()
+        playerEdit.open()
 
     def set_caption(self, newName, button):
-        # Set the name in the name_of_players array.
+        # Set the truncated name in the name_of_players array.
         self.namesOfPlayers[button.value] = newName[0:10]
-        button.text = self.namesOfPlayers[button.value]
+        button.text = newName[0:10]
