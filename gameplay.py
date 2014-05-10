@@ -162,6 +162,7 @@ class GamePlayScreen(Screen):
         ''' Returns the instance of the button that contains the given card'''
         for button in self.buttons:
             if button.card == card:
+                # Unique, so can return now
                 return button
 
     def selectCards(self, cards):
@@ -230,15 +231,6 @@ class GamePlayScreen(Screen):
             self.selectCards([self.hint[1]])
             buttonToRotate = self.buttonFromCard(self.hint[1])
             self.rotator.rotateThisButton(buttonToRotate)
-
-    # Functions to handling the game play screen
-    def selected(self):
-        '''Returns the indices of all the selected ToggleButton'''
-        down = []
-        for index, button in enumerate(self.buttons):
-            if button.state == 'down':
-                down.append(index)
-        return down            
 
     def stopClocks(self):
         Clock.unschedule(self.AIplay)
