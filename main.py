@@ -5,7 +5,7 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
 from jsonConfig import settingsjson
@@ -36,7 +36,7 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
-class GameLayout(FloatLayout):
+class GameLayout(ScreenManager):
     ''' This class manages the movements between the various screen and the sound '''
     
     name_of_players = ListProperty(['Collections found', '', '', ''])
@@ -48,16 +48,15 @@ class GameLayout(FloatLayout):
     soundActivated = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
-        self.screens = self.ids.screenManager
-        self.playscreen = self.screens.get_screen('screen2')
+        self.playscreen = self.get_screen('screen2')
         self.sound = SoundLoader.load('set_song.wav')
         
     # screen play navigation
     def goToIntro(self, *arg):
-        self.screens.current = 'screen1'
+        self.current = 'screen1'
 
     def goToGameScreen(self, *arg):
-        self.screens.current = 'screen2'
+        self.current = 'screen2'
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
@@ -69,17 +68,21 @@ class GameLayout(FloatLayout):
             self.sound.stop()
 
     def on_name_of_players(self,value, obj):
-        pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
+        if False:
+            pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        try:
-            names = pickle.load(open("name_of_players.pkl", "rb"))
-            if len(names) < numPlayers:
-                names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
-            self.name_of_players = names[:numPlayers]
-        except:
+        if False: # iOS is not happy with pickling..??
+            try:
+                names = pickle.load(open("name_of_players.pkl", "rb"))
+                if len(names) < numPlayers:
+                    names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
+                self.name_of_players = names[:numPlayers]
+            except:
+                self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
+        else:
             self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
         playername = PlayerNamePopup(self.name_of_players)
         playername.open()
@@ -95,7 +98,7 @@ class GameLayout(FloatLayout):
             self.active = False
 
     def goToTutorial(self):
-        self.screens.current = 'tutorialFlow'
+        self.current = 'tutorialFlow'
 
 
 def boolFromJS(value):
