@@ -1,4 +1,5 @@
-# All classes related to the end game screen
+# All classes related to the tutorial game screen
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
 <TutorialScreen@Widget>
     ScreenManager:
@@ -45,7 +46,7 @@
                             anchor_y: 'top'
                             text: 'Next: what is a Collection?'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'tutorial2'
+                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
             id: tutorial2
             name: 'tutorial2'
@@ -78,7 +79,7 @@
                             anchor_y: 'top'
                             text: 'Back to instruction page'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'tutorial1'
+                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -94,7 +95,7 @@
                             anchor_y: 'top'
                             text: 'Next: Examples of Sets'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'tutorial3'
+                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
         Screen:
             id: tutorial3
             name: 'tutorial3'
@@ -127,7 +128,7 @@
                             anchor_y: 'top'
                             text: 'Back to description page'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.current = 'tutorial2'
+                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial2'
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
