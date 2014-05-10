@@ -39,6 +39,7 @@ class CardToggle(ToggleButton):
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
+    screenManager = ObjectProperty()
     aiScore = NumericProperty(0)
     
     hintActivated = BooleanProperty(False)
@@ -77,54 +78,50 @@ class GamePlayScreen(Screen):
         for i in range(12):
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
         self.setupGame()
-        self.updateGrid()
         self.game.active = True
-        self.setUpHint()
-        self.setUpAI()
-
+        self.newRound()
         self.t0 = datetime.datetime.now()
+
+    def newRound(self):
+        self.stopRotation()
+        self.updateGrid()
+        self.setUpHint()
+        self.unselectAll()
+        self.setUpAI()        
+
     def setupGame(self):
         ''' sets up a the deck and draws up some cards'''
         self.cards = self.deck.drawGuarantee(numberofcards=12)
-        #self.updateGrid()
         self.ai = AI()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
         down = self.selected()
+        if not len(down) == 3:
+            return
 
-        if len(down) == 3:
-            if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-                selectedcards = {self.cards[i] for i in down}
-                try:
-                    newcards = self.deck.drawGuarantee(
-                        othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-                except ValueError:  # no more sets available
-                    self.screens.current = 'screen3'
-                    # need to clear the selection
-                    self.unselectAll()
-                    self.stopRotation()
-                    self.setupGame()
-                    return
-                if self.aiPlayed:
-                    self.aiScore += 1
-                else:
-                    if self.number_of_players > 1:
-                        # Load the popup
-                        self.select_player_popup()
-                    else:
-                        self.scores_of_players[0] += 1
-                for index, i in enumerate(down):
-                    self.cards[i] = newcards[index]
+        if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+            selectedcards = {self.cards[i] for i in down}
+            try:
+                newcards = self.deck.drawGuarantee(
+                    othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+            except ValueError:  # no more sets available
+                self.screens.current = 'screen3'
+                return
+            if self.aiPlayed:
+                self.aiScore += 1
                 self.aiUpdates()
-                self.aiPlayed = False
-                self.updateGrid()
-                self.stopRotation()
-            else:  # The cards were not a set
-                self.unselectAll()
-        else:
-            self.stopRotation()
-            self.setUpHint()
+                self.aiPlayed = False                    
+            else:
+                if self.number_of_players > 1:
+                    self.select_player_popup()
+                else:
+                    self.scores_of_players[0] += 1
+            for index, i in enumerate(down):
+                self.cards[i] = newcards[index]
+            self.newRound()
+        else:  # The cards were not a set
+            self.unselectAll()
 
     def updateGrid(self):
         for i, card in enumerate(self.cards):
@@ -162,7 +159,6 @@ class GamePlayScreen(Screen):
         ''' Returns the instance of the button that contains the given card'''
         for button in self.buttons:
             if button.card == card:
-                # Unique, so can return now
                 return button
 
     def selectCards(self, cards):
@@ -208,9 +204,8 @@ class GamePlayScreen(Screen):
 
     def on_hintActivated(self, obj, value):
         # If the hint was turned off, unselect the cards
-        if value == False and self.active:
+        if value == False:
             self.stopRotation()
-            self.unselectAll()
 
     def displayHint(self, *arg):
         ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
@@ -218,19 +213,24 @@ class GamePlayScreen(Screen):
             # displays on the first card in a hint
             buttonToRotate = self.buttonFromCard(self.hint[0])
             self.rotator.rotateThisButton(buttonToRotate)
-            self.selectCards([self.hint[0]])
             Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else:  # if the player has a card selected, try calling it again later
             self.setUpHint()
 
     def displayHintSecond(self, *arg):
-        ''' Displays the second of two cards in a hint if the current selected card is the first card of the hint'''
+        ''' Displays the second of two cards in a hint'''
         selectedcards = self.selected()
-        # One card is selected and it is a specific card.
-        if len(selectedcards) == 1 and self.buttons[selectedcards[0]].card == self.hint[0]:
-            self.selectCards([self.hint[1]])
-            buttonToRotate = self.buttonFromCard(self.hint[1])
-            self.rotator.rotateThisButton(buttonToRotate)
+        buttonToRotate = self.buttonFromCard(self.hint[1])
+        self.rotator.rotateThisButton(buttonToRotate)
+
+    # Functions to handling the game play screen
+    def selected(self):
+        '''Returns the indices of all the selected ToggleButton'''
+        down = []
+        for index, button in enumerate(self.buttons):
+            if button.state == 'down':
+                down.append(index)
+        return down            
 
     def stopClocks(self):
         Clock.unschedule(self.AIplay)

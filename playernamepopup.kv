@@ -20,15 +20,18 @@
             on_press: root.dismiss()
 
 <PlayerNameEdit@Popup>:
-    title: "Enter Name here"
+    title: "Change Name"
+    title_size: '20sp'
     size_hint: (0.25, 0.25)
-    GridLayout:
-        cols: 1
+    textBox: textinput
+    pos_hint: {'top':0.8}
+    BoxLayout:
+        orientation: "vertical"
         TextInput:
             id: textinput
             focus: True
             text: root.nameText
             multiline: False
         Button:
-            text: "Enter name:"
+            text: "Change"
             on_press: root.dismiss()
