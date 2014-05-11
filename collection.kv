@@ -15,6 +15,15 @@
     markup: True
     font_size: '40sp'
 
+<SettingButton@Button>:
+    text: 'Settings'
+    background_color: 102/255., 102/255., 0/255., 0.8
+    size_hint_y: 0.8
+    font_size: '25dp'
+    halign: 'center'
+    on_press:
+        app.open_settings()
+
 <GameLayout>:
     id: screenManager
     Screen:
@@ -45,10 +54,7 @@
                 BoxLayout:
                     orientation: "vertical"
                     Widget:
-                    Button:
-                        text: 'Settings'
-                        size_hint_y: 0.8
-                        on_press: app.open_settings()
+                    SettingButton:
                 Widget:
     GamePlayScreen:
         goToIntro: root.goToIntro

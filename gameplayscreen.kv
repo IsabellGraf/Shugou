@@ -22,7 +22,8 @@
     color: 0, 0, 0, 1
     font_size: '20sp'
     halign: 'center'
-    
+
+
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
@@ -77,15 +78,7 @@
                 orientation: "vertical"
                 Label:
                     text: ""
-                Button:
-                    id: settingsButton
-                    text: 'Settings'
-                    background_color: 102/255., 102/255., 0/255., 0.8
-                    size_hint_y: 0.8
-                    halign: 'center'
-                    on_press:
-                        root.stopClocks()
-                        app.open_settings()
+                SettingButton:
             ScoreLabel:
                 value: 3
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
