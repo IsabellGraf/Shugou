@@ -61,13 +61,106 @@
                     markup: True
                     size: 100,100
                     #pos: (root.width-100)/2, root.height-100
-                Label: 
-                    size_hint: (1, .7)
-                    text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different: includegraphic{images/2311.png} \ includegraphics{images/2321.png}\ \includegraphics{2331.png} \n In the second example the color and the filling are equal, the quantity and the shape are all different: includegraphic{images/1221.png} \ includegraphics{images/3223.png}\ \includegraphics{2222.png} \n Next, the color is equal and all other properties are different: includegraphic{images/2333.png} \ includegraphics{images/1321.png}\ \includegraphics{3312.png} \n Last all properties are different: includegraphic{images/3122.png} \ includegraphics{images/1313.png}\ \includegraphics{2231.png}'
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-200
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: '20dp'
+                    spacing: '10dp'
+                    Label:
+                        pos_hint: {'center_x': 0.5} 
+                        size_hint: (1, 1)
+                        text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'
+                        font_name: 'DroidSans'
+                        markup: True
+                        halign: 'left'
+                    BoxLayout:
+                        pos_hint: {'center_x': 0.5} 
+                        orientation: 'horizontal'
+                        padding: '1dp'
+                        spacing: '1dp'
+                        Image:
+                            source: 'images/2311.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/2321.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/2331.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'                          
+                    Label:
+                        pos_hint: {'center_x': 0.5}
+                        size_hint: (1, .7)
+                        text: 'In the second example the color and the filling are equal, the quantity and the shape are all different:'
+                        font_name: 'DroidSans'
+                        markup: True
+                        halign: 'left'  
+                    BoxLayout:
+                        pos_hint: {'center_x': 0.5}
+                        orientation: 'horizontal'
+                        padding: '1dp'
+                        spacing: '1dp'
+                        Image:
+                            source: 'images/1221.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/3223.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/2222.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'     
+                    Label:
+                        pos_hint: {'center_x': 0.3}
+                        size_hint: (1, .7)
+                        text: 'Next, the color is equal and all other properties are different:'
+                        font_name: 'DroidSans'
+                        markup: True
+                        halign: 'left'  
+                    BoxLayout:
+                        pos_hint: {'center_x': 0.5}
+                        orientation: 'horizontal'
+                        padding: '1dp'
+                        spacing: '1dp'
+                        Image:
+                            source: 'images/2333.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/1321.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/3312.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'    
+                    Label:
+                        pos_hint: {'center_x': 0.21}
+                        size_hint: (1, .7)
+                        text: 'Last all properties are different:'
+                        font_name: 'DroidSans'
+                        markup: True
+                        halign: 'left' 
+                    BoxLayout:
+                        pos_hint: {'center_x': 0.5}
+                        orientation: 'horizontal'
+                        padding: '1dp'
+                        spacing: '1dp'
+                        Image:
+                            source: 'images/3122.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/1313.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'
+                        Image:
+                            source: 'images/2231.png'
+                            size_hint_x: 0.5
+                            #width: '300dp'  
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
