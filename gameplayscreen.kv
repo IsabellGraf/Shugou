@@ -20,9 +20,8 @@
 
 <ScoreLabel@Label>:
     color: 0, 0, 0, 1
-    font_size: '20sp'
+    font_size: '25sp'
     halign: 'center'
-
 
 <GamePlayScreen@Screen>:
     id: mainpage
@@ -43,7 +42,7 @@
             BoxLayout:
                 orientation: "vertical"           
                 ScoreLabel:
-                    text: str(Deck.numberOfSets(root.cards)) + " collections on the board" 
+                    text: "Collections: " + str(Deck.numberOfSets(root.cards)) 
                 ScoreLabel:
                     text: "AI: " + str(root.aiScore) if root.aiActivated else ""
             ScoreLabel:

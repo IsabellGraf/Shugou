@@ -73,16 +73,17 @@ class GamePlayScreen(Screen):
 
     def on_enter(self):
         ''' Sets the game '''
-        self.deck = Deck()
-        self.buttons = self.ids.cards_layout.children
-        for i in range(12):
-            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
-        self.cards = self.deck.drawGuarantee(numberofcards=12)
-        self.scores_of_players = [0, 0, 0, 0]
-        self.ai = AI()
-        self.game.active = True
-        self.newRound()
-        self.t0 = datetime.datetime.now()
+        if not self.active: # checks if I don't return from the tutorial
+            self.deck = Deck()
+            self.buttons = self.ids.cards_layout.children
+            for i in range(12):
+                self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
+            self.cards = self.deck.drawGuarantee(numberofcards=12)
+            self.scores_of_players = [0, 0, 0, 0]
+            self.ai = AI()
+            self.game.active = True
+            self.newRound()
+            self.t0 = datetime.datetime.now()
 
     def newRound(self):
         ''' What should be done at the begining of every round '''

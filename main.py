@@ -41,7 +41,7 @@ class PlayerSection(Button):
 class GameLayout(ScreenManager):
     ''' This class manages the movements between the various screen and the sound '''
     
-    name_of_players = ListProperty(['Collections found', '', '', ''])
+    name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
 
