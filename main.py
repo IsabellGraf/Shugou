@@ -8,6 +8,8 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
+from kivy import platform
+
 from jsonConfig import settingsjson
 import datetime
 import pickle
@@ -81,19 +83,22 @@ class GameLayout(ScreenManager):
         return self.directory + "name_of_players.pkl"
 
     def on_name_of_players(self,value, obj):
-        with open(self.pickleFile(), "wb") as playersNamePickle:
-            pickle.dump(list(self.name_of_players), playersNamePickle)
+        if platform == 'macosx' or platform == 'ios':
+            with open(self.pickleFile(), "wb") as playersNamePickle:
+                pickle.dump(list(self.name_of_players), playersNamePickle)
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
+        print('*'*1000, platform)
         self.number_of_players = numPlayers
         tempNames = ['John', 'Sally', 'Sam', 'Joey']
-        try:
-            names = pickle.load(open(self.pickleFile(), "rb"))
-            for index, name in enumerate(names):
-                tempNames[index] = name
-        except Exception as exception:
-            print("Loading from Pickling went wrong, using default names")
+        if platform == 'macosx' or platform == 'ios':
+            try:
+                names = pickle.load(open(self.pickleFile(), "rb"))
+                for index, name in enumerate(names):
+                    tempNames[index] = name
+            except Exception as exception:
+                print("Loading from Pickling went wrong, using default names")
             
         self.name_of_players = tempNames
         playername = PlayerNamePopup(self.name_of_players, numPlayers)
