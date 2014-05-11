@@ -5,7 +5,7 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
 from jsonConfig import settingsjson
@@ -50,13 +50,20 @@ class GameLayout(ScreenManager):
         super(GameLayout, self).__init__(**kwargs)
         self.playscreen = self.get_screen('screen2')
         self.sound = SoundLoader.load('set_song.wav')
+        self.transition = FadeTransition()
         
     # screen play navigation
     def goToIntro(self, *arg):
+        self.transition = NoTransition()
         self.current = 'screen1'
 
     def goToGameScreen(self, *arg):
+        self.transition = FadeTransition()
         self.current = 'screen2'
+
+    def goToTutorial(self):
+        self.transition = NoTransition()
+        self.current = 'tutorialFlow' 
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
@@ -96,9 +103,6 @@ class GameLayout(ScreenManager):
             self.goToIntro()
             self.playscreen.stopRotation()
             self.active = False
-
-    def goToTutorial(self):
-        self.current = 'tutorialFlow'
 
 
 def boolFromJS(value):
