@@ -74,19 +74,22 @@ class GameLayout(ScreenManager):
         return self.directory + "name_of_players.pkl"
 
     def on_name_of_players(self,value, obj):
-        pickle.dump(list(self.name_of_players), open(self.pickleFile(), "wb"))
+        with open(self.pickleFile(), "wb") as playersNamePickle:
+            pickle.dump(list(self.name_of_players), playersNamePickle)
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
+        tempNames = ['John', 'Sally', 'Sam', 'Joey']
         try:
             names = pickle.load(open(self.pickleFile(), "rb"))
-            if len(names) < numPlayers:
-                names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
-            self.name_of_players = names[:numPlayers]
-        except:
-            self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
-        playername = PlayerNamePopup(self.name_of_players)
+            for index, name in enumerate(names):
+                tempNames[index] = name
+        except Exception as exception:
+            print("Loading from Pickling went wrong, using default names")
+            
+        self.name_of_players = tempNames
+        playername = PlayerNamePopup(self.name_of_players, numPlayers)
         playername.open()
         playername.bind(on_dismiss = self.goToGameScreen)
 

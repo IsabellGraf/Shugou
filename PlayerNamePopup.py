@@ -12,11 +12,11 @@ class PlayerNamePopup(Popup):
 
     ''' Handles inputing the name of the users in the intro screen '''
 
-    def __init__(self, namesOfPlayers):
+    def __init__(self, namesOfPlayers, numPlayers):
         super(PlayerNamePopup, self).__init__()
         self.namesOfPlayers = namesOfPlayers
         # Create the screen which allows to select which users' name to change
-        for i, name in enumerate(self.namesOfPlayers):
+        for i, name in enumerate(self.namesOfPlayers[0:numPlayers]):
             button = Button(text=name, on_press=self.click)
             button.value = i
             self.ids.content.add_widget(button)
