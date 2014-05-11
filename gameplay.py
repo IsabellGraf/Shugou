@@ -85,6 +85,7 @@ class GamePlayScreen(Screen):
         self.t0 = datetime.datetime.now()
 
     def newRound(self):
+        ''' What should be done at the begining of every round '''
         self.stopRotation()
         self.updateGrid()
         self.setUpHint()
