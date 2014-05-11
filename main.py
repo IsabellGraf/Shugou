@@ -89,7 +89,6 @@ class GameLayout(ScreenManager):
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
-        print('*'*1000, platform)
         self.number_of_players = numPlayers
         tempNames = ['John', 'Sally', 'Sam', 'Joey']
         if platform == 'macosx' or platform == 'ios':
