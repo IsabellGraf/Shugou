@@ -29,6 +29,12 @@
     Screen:
         id: frontpage
         name: 'screen1'
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.95, 0.8
+            Rectangle:
+                pos: self.pos
+                size: self.size        
         BoxLayout:
             orientation: "vertical"
             CollectionTitle:       
