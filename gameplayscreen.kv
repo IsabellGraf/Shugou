@@ -1,0 +1,91 @@
+# All classes related to the game play screen
+
+#: import Deck Deck.Deck
+
+<CardToggle>:
+    background_normal: root.card.normalimage() if root.card else ''   
+    background_down: root.card.downimage() if root.card else ''   
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: self.angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+<SelectPlayersPopup@Popup>:
+    size_hint: 1, 1
+    separator_height: 0
+    title: 'Who found the collection?'
+
+<ScoreLabel@Label>:
+    color: 0, 0, 0, 1
+    font_size: '20sp'
+    halign: 'center'
+    
+<GamePlayScreen@Screen>:
+    id: mainpage
+    name: 'screen2'
+    canvas.before:
+        Color:
+            rgba: 173/255. , 255/255., 47/255., 0.8
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            ScoreLabel:
+                value: 0
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
+            BoxLayout:
+                orientation: "vertical"           
+                ScoreLabel:
+                    text: str(Deck.numberOfSets(root.cards)) + " collections on the board" 
+                ScoreLabel:
+                    text: "AI: " + str(root.aiScore) if root.aiActivated else ""
+            ScoreLabel:
+                value: 1 
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
+        GridLayout:
+            id: cards_layout
+            cols: 4
+            size_hint_y: 3
+            spacing: '10dp'
+            halign: 'center'
+            padding: '10dp'
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+            CardToggle:
+
+        BoxLayout:
+            orientation: "horizontal"
+            ScoreLabel:  
+                value: 2
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
+            BoxLayout:
+                orientation: "vertical"
+                Label:
+                    text: ""
+                Button:
+                    id: settingsButton
+                    text: 'Settings'
+                    background_color: 102/255., 102/255., 0/255., 0.8
+                    size_hint_y: 0.8
+                    halign: 'center'
+                    on_press:
+                        root.stopClocks()
+                        app.open_settings()
+            ScoreLabel:
+                value: 3
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
