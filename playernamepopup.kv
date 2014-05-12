@@ -1,7 +1,7 @@
 <PlayerNamePopup@Popup>:
     size_hint: .5, .5
     title: 'Enter Name of the Players'
-    title_size: '20sp'
+    title_size: '25sp'
     separator_height: 5
     BoxLayout:
         orientation: 'vertical'
@@ -16,7 +16,8 @@
         Button:
             text:'Start Game'
             size_hint_y: None
-            height: '40dp'
+            height: '50dp'
+            font_size: '25dp'
             on_press: root.dismiss()
 
 <PlayerNameEdit@Popup>:
