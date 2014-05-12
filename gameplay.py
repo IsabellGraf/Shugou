@@ -72,27 +72,25 @@ class GamePlayScreen(Screen):
             button.state = 'normal'
 
     def on_enter(self):
+        ''' Sets the game '''
         self.deck = Deck()
-
         self.buttons = self.ids.cards_layout.children
         for i in range(12):
             self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
-        self.setupGame()
+        self.cards = self.deck.drawGuarantee(numberofcards=12)
+        self.scores_of_players = [0, 0, 0, 0]
+        self.ai = AI()
         self.game.active = True
         self.newRound()
         self.t0 = datetime.datetime.now()
 
     def newRound(self):
+        ''' What should be done at the begining of every round '''
         self.stopRotation()
         self.updateGrid()
         self.setUpHint()
         self.unselectAll()
         self.setUpAI()        
-
-    def setupGame(self):
-        ''' sets up a the deck and draws up some cards'''
-        self.cards = self.deck.drawGuarantee(numberofcards=12)
-        self.ai = AI()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
