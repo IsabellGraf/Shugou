@@ -22,14 +22,14 @@ class TutorialScreen(Screen):
 
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
-    scores_of_players = ListProperty([0, 0, 0, 0])
+    scores_of_players = ListProperty()
     screenManager = ObjectProperty()
-    number_of_players = NumericProperty(1)
+    number_of_players = NumericProperty()
     game = ObjectProperty()
 
     def on_enter(self,*args):
-        self.name_of_players = [x for y,x in sorted(zip(self.game.scores_of_players,self.game.name_of_players))][::-1]
-        self.scores_of_players = sorted(self.game.scores_of_players)[::-1]
+        self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
+        self.scores_of_players = sorted(self.scores_of_players)[::-1]
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
