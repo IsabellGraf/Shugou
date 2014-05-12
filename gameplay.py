@@ -105,7 +105,7 @@ class GamePlayScreen(Screen):
                 newcards = self.deck.drawGuarantee(
                     othercards=set(self.cards) ^ selectedcards, numberofcards=3)
             except ValueError:  # no more sets available
-                self.screens.current = 'screen3'
+                self.game.current = 'screen3'
                 return
             if self.aiPlayed:
                 self.aiScore += 1
