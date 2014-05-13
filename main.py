@@ -142,22 +142,24 @@ class ShugouApp(App):
         pass
 
     def loadSettings(self):
-        # Load the values already stored into the file
-        self.gamelayout.playscreen.hintActivated = boolFromJS(
-            self.config.get('settings', 'hint'))
-        speedSettings = {'slow':10, 'normal':5, 'fast':1}
-        self.gamelayout.playscreen.displayHintTimer = speedSettings[
-            self.config.get('settings', 'hintspeed')]
+        # Load the values already stored into the file        
         self.gamelayout.soundActivated = boolFromJS(
-            self.config.get('settings', 'sound'))
+            self.config.get('settings', 'sound'))        
+        speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0}
+        speed = speedSettings[self.config.get('settings', 'hint')]
+        if speed != 0:
+            self.gamelayout.playscreen.displayHintTimer = speed
+            self.gamelayout.playscreen.hintActivated = True
+        else:
+            self.gamelayout.playscreen.hintActivated = False
+
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
 
     def build_config(self, config):
-        config.setdefaults('settings', {'hint': True, 
-                                        'sound': False,
+        config.setdefaults('settings', {'sound': False,
                                         'ai': False, 
-                                        'hintspeed': 'fast'})
+                                        'hint': 'off'})
 
     def build_settings(self, settings):
         self.settings = settings
@@ -200,13 +202,16 @@ class ShugouApp(App):
         self.gamelayout.playscreen.setUpAI()
 
     def on_config_change(self, config, section, key, value):
-        if key == 'hint':
-            self.gamelayout.playscreen.hintActivated = boolFromJS(value)
         if key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
-        if key == 'hintspeed':
-            speedSettings = {'slow':10, 'normal':5, 'fast':1}
-            self.gamelayout.playscreen.displayHintTimer = speedSettings[value]
+        if key == 'hint':
+            speedSettings = {u'slow':10, u'normal':5, u'fast':1, u'off': 0}
+            speed = speedSettings[value]
+            if speed != 0:
+                self.gamelayout.playscreen.displayHintTimer = speed
+                self.gamelayout.playscreen.hintActivated = True
+            else:
+                self.gamelayout.playscreen.hintActivated = False
         if key == 'ai':
             self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 
