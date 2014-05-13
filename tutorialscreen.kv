@@ -161,7 +161,7 @@
                         Button:
                             anchor_x: 'right'
                             anchor_y: 'top'
-                            text: 'Next: Examples of Sets'
+                            text: 'Next: How to Play'
                             size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
         Screen:
@@ -169,16 +169,35 @@
             name: 'tutorial3'
             BoxLayout:
                 orientation: 'vertical'
-                padding: 10
+                padding: '10dp'
                 TitleLabel: 
                     text: 'Examples'
-                Label: 
-                    size_hint: (1, .7)
-                    text: 'Examples here'
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-200
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: 10
+                    TextLabel:
+                        valign: 'middle' 
+                        text: 'There are twelve cards on the board. When you see three cards forming a Shugou, you can click on them and cards become red. Once three proper cards are selected, cards will go away immediately in single player game or a popup will show up in a multiplayer game. Then you can click your name and scores!'
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: '10dp'
+                        halign: 'center'
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '10dp'
+                            spacing: '10dp'
+                            size_hint: (0.7, 0.3)
+                            halign: 'center'
+                            valign: 'middle'
+                            Image:
+                                source: 'images/2231.png'
+                                size_hint_x: 0.5
+                            Image:
+                                source: 'images/2231_down.png'
+                                size_hint_x: 0.5
+                        Image:
+                            source: 'images/popup_eg.png'
+                            size_hint_x: 0.7
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
