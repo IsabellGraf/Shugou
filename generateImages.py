@@ -67,19 +67,23 @@ def draw_rounded(cr, area, radius, fillin, *argv):
 def draw_contour(w,h,state):
     import cairo
     offset = 10
-    wid = 35
-    if state == 'Normal':
-        fig_size = (w+offset,h+offset+wid)
-    else:
-        fig_size = (w+offset,h+offset)
-
+    wid = 30
+    w+=offset
+    h+=offset
+    fig_size = (w,h)
     # an area with coordinates of
     # (top, bottom, left, right) edges in absolute coordinates:
-    inside_area = (offset, w-offset, offset, h-offset)
+    if state == 'Down':
+        inside_area = (offset, w-offset, offset, h-offset-wid)
+    else:
+        inside_area = (offset, w-offset, offset, h-offset)
+
 
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, *fig_size)
     cr = cairo.Context(surface)
-
+    # to create a white background to the image, uncomment the following two lines
+    # outside_area = (0,w,0,h)
+    # draw_rounded(cr,outside_area,10,'Fill',1,1,1,1)
     if state == 'Normal':
         colorcode = (101/255.,173/255.,178/255.,1)
         background_color = (1.,1.,1.,1.)
@@ -107,7 +111,7 @@ red = (255, 200, 200)
 
 # A factor that creates a much larger image that is much larger than needed
 # It is scalled back down later on, this greatly improves the image quality.
-double = 9
+double = 9 
 # How the scalling occurs
 smaller = 0.8
 large, medium, small = 1, 0.7, 0.4
