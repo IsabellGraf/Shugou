@@ -54,18 +54,18 @@ class GameLayout(ScreenManager):
 
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
-        self.playscreen = self.get_screen('screen2')
+        self.playscreen = self.get_screen('game')
         self.sound = SoundLoader.load('set_song.wav')
         self.transition = FadeTransition()
 
     # screen play navigation
     def goToIntro(self, *arg):
         self.transition = NoTransition()
-        self.current = 'screen1'
+        self.current = 'intro'
 
     def goToGameScreen(self, *arg):
         self.transition = FadeTransition()
-        self.current = 'screen2'
+        self.current = 'game'
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
