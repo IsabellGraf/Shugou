@@ -1,6 +1,19 @@
 # All classes related to the tutorial game screen
 #:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
+<TitleLabel@Label>
+    size_hint: (1, .15)
+    font_name: 'DroidSans'
+    markup: True
+    font_size: '30dp'
+
+<TextLabel@Label>
+    pos_hint: {'center_x': 0.5}
+    size_hint: (1, .7)
+    font_name: 'DroidSans'
+    markup: True
+    halign: 'left'
+
 <TutorialScreen@Popup>
     ScreenManager:
         id: tutorialScreens
@@ -10,21 +23,11 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                Label: 
-                    size_hint: (1, .15)
+                TitleLabel: 
                     text: 'How To Play Collection'
-                    font_size:40
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-100
-                Label: 
-                    size_hint: (1, .7)
+                TextLabel: 
                     text: 'Welcome to Collection! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a COLLECTION.  Once you find one, \n click on the three cards one by one. \n If you have found a Collection, \n you will be able to choose your name \n to receive points for your Collection.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Collections, is the winner. \n To learn what constitutes a Collection, \n go to the next tutorial screen.'
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-200
+                
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -53,25 +56,14 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                Label: 
-                    size_hint: (1, .15)
+                TitleLabel:
                     text: 'What is a Collection'
-                    font_size:40
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-100
                 BoxLayout:
                     orientation: 'vertical'
                     padding: '20dp'
                     spacing: '10dp'
-                    Label:
-                        pos_hint: {'center_x': 0.5} 
-                        size_hint: (1, 1)
-                        text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left'
+                    TextLabel:
+                        text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'                        
                     BoxLayout:
                         pos_hint: {'center_x': 0.5} 
                         orientation: 'horizontal'
@@ -195,14 +187,8 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                Label: 
-                    size_hint: (1, .15)
-                    text: 'Tutorial'
-                    font_size:40
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-100
+                TitleLabel: 
+                    text: 'Examples'
                 Label: 
                     size_hint: (1, .7)
                     text: 'Examples here'

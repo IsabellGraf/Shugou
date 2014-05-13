@@ -20,7 +20,7 @@ from PlayerNamePopup import PlayerNamePopup
 
 class TutorialScreen(Popup):
     pass
-    
+
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
     scores_of_players = ListProperty()
@@ -188,7 +188,7 @@ class CollectionApp(App):
         self.settingsCloseButton.trigger_action()
 
     def moveToTutorial(self, buttonInstance):
-        tutorial = TutorialScreen()
+        tutorial = TutorialScreen(title="Tutorial")
         tutorial.open()
 
     def leaveSettingsPanel(self, *arg):       
