@@ -41,6 +41,7 @@ class GamePlayScreen(Screen):
     restart = ObjectProperty()
     screenManager = ObjectProperty()
     aiScore = NumericProperty(0)
+    directory = StringProperty('')
     
     hintActivated = BooleanProperty(False)
     number_of_players = NumericProperty(1)
@@ -58,7 +59,8 @@ class GamePlayScreen(Screen):
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
-        self.ai = AI()
+        self.ai = AI(self.directory)
+
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -87,7 +89,7 @@ class GamePlayScreen(Screen):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(len(self.scores_of_players)):
             self.scores_of_players[i] = 0
-        self.ai = AI()
+        self.ai = AI(self.directory)
         self.game.active = True
         self.newRound()
         self.t0 = datetime.datetime.now()
@@ -111,7 +113,7 @@ class GamePlayScreen(Screen):
             try:
                 newcards = self.deck.drawGuarantee(
                     othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            except ValueError:  # no more collections available
+            except ValueError:  # no more shugous available
                 self.game.current = 'screen3'
                 return
             if self.aiPlayed:

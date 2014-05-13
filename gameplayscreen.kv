@@ -16,7 +16,7 @@
 <SelectPlayersPopup@Popup>:
     size_hint: 1, 1
     separator_height: 0
-    title: 'Who found the collection?'
+    title: 'Who found the Shugou?'
 
 <ScoreLabel@Label>:
     color: 0, 0, 0, 1
@@ -38,11 +38,11 @@
             orientation: "horizontal"
             ScoreLabel:
                 value: 0
-                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players > self.value + 1 else 'Score:\n' + str(root.scores_of_players[self.value])
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"           
                 ScoreLabel:
-                    text: "Collections: " + str(Deck.numberOfSets(root.cards)) 
+                	text: str(Deck.numberOfSets(root.cards)) + " Shugou" if Deck.numberOfSets(root.cards) == 1 else str(Deck.numberOfSets(root.cards)) + " Shugous"
                 ScoreLabel:
                     text: "AI: " + str(root.aiScore) if root.aiActivated else ""
             ScoreLabel:

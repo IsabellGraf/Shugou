@@ -1,18 +1,18 @@
 import random
 from pickle import load, dump
 
-
-from Deck import Deck,Card
+from Deck import Deck, Card
 
 
 class AI(object):
 
-    def __init__(self):
+    def __init__(self, path):
         self.ratingList =  self.loadData()
-    
+    	self.path = path
+
     def loadData(self):
         try:
-            inputFile = open('AIdata.pkl', 'rb')
+            inputFile = open(self.path + 'AIdata.pkl', 'rb')
             data = load(inputFile)
             inputFile.close()
             return data
@@ -20,12 +20,12 @@ class AI(object):
             return {}
 
     def dumpData(self):
-        output = open('AIdata.pkl', 'wb')
+        output = open(self.path + 'AIdata.pkl', 'wb')
         dump(self.ratingList, output)
         output.close()
 
     def reset(self):
-        output = open('AIdata.pkl', 'wb')
+        output = open(self.path + 'AIdata.pkl', 'wb')
         dump({}, output)
         output.close()
 

@@ -11,7 +11,7 @@ How to build Android Playstore distributable APK
 
 3. (if you are not Bernhard) Change
 
-source.dir = /home/berny/Desktop/Collection
+source.dir = /home/berny/Desktop/Shugou
 
 to the directory where main.py lives
 
@@ -33,17 +33,17 @@ an unsigned apk should appear in the 'bin' subdirectory
 
 6. Create a keystore
 
-$keytool –genkey –v –keystore collection.game.keystore –alias collection.game –keyalg RSA –validity 10000
+$keytool –genkey –v –keystore shugou.game.keystore –alias shugou.game –keyalg RSA –validity 10000
 
-or use the one provided in Collection/build
+or use the one provided in Shugou/build
 
 
 
 7. Sign the apk using jarsigner
 
-$jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore collection.game.keystore Collection-1.0-release-unsigned.apk collection.game
+$jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore shugou.game.keystore Shugou-1.0-release-unsigned.apk shugou.game
 
-where you replace 'Collection-1.0-release-unsigned.apk' with the location of the unsigned apk
+where you replace 'Shugou-1.0-release-unsigned.apk' with the location of the unsigned apk
 
 
 

@@ -24,9 +24,9 @@
                 orientation: 'vertical'
                 padding: 10
                 TitleLabel: 
-                    text: 'How To Play Collection'
+                    text: 'How To Play Shugou'
                 TextLabel: 
-                    text: 'Welcome to Collection! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a COLLECTION.  Once you find one, \n click on the three cards one by one. \n If you have found a Collection, \n you will be able to choose your name \n to receive points for your Collection.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Collections, is the winner. \n To learn what constitutes a Collection, \n go to the next tutorial screen.'
+                    text: 'Welcome to Shugou! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a Shugou.  Once you find one, \n click on the three cards one by one. \n If you have found a Shugou, \n you will be able to choose your name \n to receive points for your Shugou.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Shugous, is the winner. \n To learn what constitutes a Shugou, \n go to the next tutorial screen.'
                 
                 BoxLayout:
                     orientation: 'horizontal'
@@ -47,7 +47,7 @@
                         Button:
                             anchor_x: 'right'
                             anchor_y: 'top'
-                            text: 'Next: what is a Collection?'
+                            text: 'Next: what is a shugou?'
                             size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
@@ -57,13 +57,13 @@
                 orientation: 'vertical'
                 padding: 10
                 TitleLabel:
-                    text: 'What is a Collection'
+                    text: 'What is a Shugou'
                 BoxLayout:
                     orientation: 'vertical'
                     padding: '20dp'
                     spacing: '10dp'
                     TextLabel:
-                        text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'                        
+                        text: 'The cards have four properties: quantity, shape, filling and color. A Shugou contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Shugous.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'                        
                     BoxLayout:
                         pos_hint: {'center_x': 0.5} 
                         orientation: 'horizontal'
@@ -173,48 +173,48 @@
                             text: 'Back'
                             size_hint: .9, 1
                             on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'right'
-                            anchor_y: 'top'
-                            text: 'Next: Examples of Sets'
-                            size_hint: .9, 1
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
-        Screen:
-            id: tutorial3
-            name: 'tutorial3'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                TitleLabel: 
-                    text: 'Examples'
-                Label: 
-                    size_hint: (1, .7)
-                    text: 'Examples here'
-                    font_name: 'DroidSans'
-                    markup: True
-                    size: 100,100
-                    #pos: (root.width-100)/2, root.height-200
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
-                            text: 'Back to description page'
-                            size_hint: .9, 1
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial2'
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
-                            text: 'Back'
-                            size_hint: .9, 1
-                            on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
+#                    AnchorLayout:
+#                        size_hint:(.3,1)
+#                        Button:
+#                            anchor_x: 'right'
+#                            anchor_y: 'top'
+#                            text: 'Next: Examples of Sets'
+#                            size_hint: .9, 1
+#                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
+#        Screen:
+#            id: tutorial3
+#            name: 'tutorial3'
+#            BoxLayout:
+#                orientation: 'vertical'
+#                padding: 10
+#                TitleLabel: 
+#                    text: 'Examples'
+#                Label: 
+#                    size_hint: (1, .7)
+#                    text: 'Examples here'
+#                    font_name: 'DroidSans'
+#                    markup: True
+#                    size: 100,100
+#                    #pos: (root.width-100)/2, root.height-200
+#                BoxLayout:
+#                    orientation: 'horizontal'
+#                    size_hint: (1,.1)
+#                    spacing: 5
+#                    AnchorLayout:
+#                        size_hint:(.3,1)
+#                        Button:
+#                            anchor_x: 'center'
+#                            anchor_y: 'top'
+#                            text: 'Back to description page'
+#                            size_hint: .9, 1
+#                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial2'
+#                    AnchorLayout:
+#                        size_hint:(.3,1)
+#                        Button:
+#                           anchor_x: 'center'
+#                            anchor_y: 'top'
+#                            text: 'Back'
+#                            size_hint: .9, 1
+#                            on_press: root.dismiss()
+#                    AnchorLayout:
+#                        size_hint:(.3,1)

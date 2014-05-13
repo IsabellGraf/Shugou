@@ -90,7 +90,7 @@ class Deck(object):
 
     @staticmethod
     def allSets(cards):
-        ''' Returns all sets in a collections of cards '''
+        ''' Returns all sets in a shugous of cards '''
         return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
 
     @staticmethod
@@ -112,7 +112,7 @@ class Deck(object):
 
     @staticmethod
     def numberOfSets(cards):
-        ''' cards -> int -- Returns the number of sets in a collections of cards '''
+        ''' cards -> int -- Returns the number of sets in a shugous of cards '''
         return sum(Deck.checkSet(*c) for c in combinations(cards, 3))
 
     @staticmethod

@@ -10,8 +10,8 @@
     font_size: '30dp'
     text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
 
-<CollectionTitle@Label>:
-    text: '[color=ff3333]Col[/color][color=3333ff]lec[/color][color=33ff33]tion[/color]'
+<ShugouTitle@Label>:
+    text: '[color=ff3333]Sh[/color][color=3333ff]ug[/color][color=33ff33]ou[/color]'
     markup: True
     font_size: '40dp'
 
@@ -37,7 +37,7 @@
                 size: self.size
         BoxLayout:
             orientation: "vertical"
-            CollectionTitle:
+            ShugouTitle:
             GridLayout:
                 size_hint_y: 3
                 cols: 2
@@ -64,6 +64,7 @@
                 Widget:
     GamePlayScreen:
         goToIntro: root.goToIntro
+        directory: root.directory
         number_of_players: root.number_of_players
         name_of_players: root.name_of_players
         scores_of_players: root.scores_of_players
