@@ -38,7 +38,7 @@
             orientation: "horizontal"
             ScoreLabel:
                 value: 0
-                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
+                text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players > self.value + 1 else 'Score:\n' + str(root.scores_of_players[self.value])
             BoxLayout:
                 orientation: "vertical"           
                 ScoreLabel:
