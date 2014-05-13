@@ -8,6 +8,8 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
+from kivy import platform
+
 from jsonConfig import settingsjson
 import datetime
 import pickle
@@ -39,13 +41,16 @@ class PlayerSection(Button):
 class GameLayout(ScreenManager):
     ''' This class manages the movements between the various screen and the sound '''
     
-    name_of_players = ListProperty(['Collections found', '', '', ''])
+    name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
 
     # True if there is a game going on
     active = BooleanProperty(False)
     soundActivated = BooleanProperty(False)
+
+    directory = StringProperty()
+
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         self.playscreen = self.get_screen('screen2')
@@ -74,24 +79,28 @@ class GameLayout(ScreenManager):
         else:
             self.sound.stop()
 
+    def pickleFile(self):
+        return self.directory + "name_of_players.pkl"
+
     def on_name_of_players(self,value, obj):
-        if False:
-            pickle.dump(list(self.name_of_players), open("name_of_players.pkl", "wb"))
+        if platform == 'macosx' or platform == 'ios':
+            with open(self.pickleFile(), "wb") as playersNamePickle:
+                pickle.dump(list(self.name_of_players), playersNamePickle)
         
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        if False: # iOS is not happy with pickling..??
+        tempNames = ['John', 'Sally', 'Sam', 'Joey']
+        if platform == 'macosx' or platform == 'ios':
             try:
-                names = pickle.load(open("name_of_players.pkl", "rb"))
-                if len(names) < numPlayers:
-                    names = names +  ['John', 'Sally', 'Sam', 'Joey'][::-1][numPlayers - len(names)]
-                self.name_of_players = names[:numPlayers]
-            except:
-                self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
-        else:
-            self.name_of_players = ['John', 'Sally', 'Sam', 'Joey'][0:numPlayers]
-        playername = PlayerNamePopup(self.name_of_players)
+                names = pickle.load(open(self.pickleFile(), "rb"))
+                for index, name in enumerate(names):
+                    tempNames[index] = name
+            except Exception as exception:
+                print("Loading from Pickling went wrong, using default names")
+            
+        self.name_of_players = tempNames
+        playername = PlayerNamePopup(self.name_of_players, numPlayers)
         playername.open()
         playername.bind(on_dismiss = self.goToGameScreen)
 
@@ -120,8 +129,12 @@ class CollectionApp(App):
         self.settings_cls = SettingsWithSidebar
         self.loadSettings()
         self.gamelayout.bind(active=self.changeActive)
+        self.gamelayout.directory = self.whereToSave()
         return self.gamelayout
 
+    def whereToSave(self):
+        # Returns in which directory you can store files
+        return self.get_application_config().rstrip("collection.ini")
 
     def changeActive(self,instance,value):
         # This doesn't work.. crashes if the build_settings wasn't launched first
@@ -194,7 +207,6 @@ class CollectionApp(App):
         if key == 'hintspeed':
             speedSettings = {'slow':10, 'normal':5, 'fast':1}
             self.gamelayout.playscreen.displayHintTimer = speedSettings[value]
-            print()
         if key == 'ai':
             self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 

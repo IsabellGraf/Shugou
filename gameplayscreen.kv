@@ -20,15 +20,15 @@
 
 <ScoreLabel@Label>:
     color: 0, 0, 0, 1
-    font_size: '20sp'
+    font_size: '25sp'
     halign: 'center'
-    
+
 <GamePlayScreen@Screen>:
     id: mainpage
     name: 'screen2'
     canvas.before:
         Color:
-            rgba: 173/255. , 255/255., 47/255., 0.8
+            rgba: 0.95, 0.95, 0.95, 0.8
         Rectangle:
             pos: self.pos
             size: self.size
@@ -42,7 +42,7 @@
             BoxLayout:
                 orientation: "vertical"           
                 ScoreLabel:
-                    text: str(Deck.numberOfSets(root.cards)) + " collections on the board" 
+                    text: "Collections: " + str(Deck.numberOfSets(root.cards)) 
                 ScoreLabel:
                     text: "AI: " + str(root.aiScore) if root.aiActivated else ""
             ScoreLabel:
@@ -77,15 +77,7 @@
                 orientation: "vertical"
                 Label:
                     text: ""
-                Button:
-                    id: settingsButton
-                    text: 'Settings'
-                    background_color: 102/255., 102/255., 0/255., 0.8
-                    size_hint_y: 0.8
-                    halign: 'center'
-                    on_press:
-                        root.stopClocks()
-                        app.open_settings()
+                SettingButton:
             ScoreLabel:
                 value: 3
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
