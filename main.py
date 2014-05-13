@@ -7,9 +7,10 @@ from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
 from kivy.uix.settings import SettingsWithSidebar
+from kivy.uix.popup import Popup
 from kivy.metrics import dp
 from kivy import platform
-
+from kivy.clock import Clock
 from jsonConfig import settingsjson
 import datetime
 import pickle
@@ -17,19 +18,19 @@ import pickle
 from gameplay import GamePlayScreen
 from PlayerNamePopup import PlayerNamePopup
 
-class TutorialScreen(Screen):
-    active = BooleanProperty(False)
+class TutorialScreen(Popup):
+    pass
 
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
-    scores_of_players = ListProperty([0, 0, 0, 0])
+    scores_of_players = ListProperty()
     screenManager = ObjectProperty()
-    number_of_players = NumericProperty(1)
+    number_of_players = NumericProperty()
     game = ObjectProperty()
 
     def on_enter(self,*args):
-        self.name_of_players = [x for y,x in sorted(zip(self.game.scores_of_players,self.game.name_of_players))][::-1]
-        self.scores_of_players = sorted(self.game.scores_of_players)[::-1]
+        self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
+        self.scores_of_players = sorted(self.scores_of_players)[::-1]
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -56,7 +57,7 @@ class GameLayout(ScreenManager):
         self.playscreen = self.get_screen('screen2')
         self.sound = SoundLoader.load('set_song.wav')
         self.transition = FadeTransition()
-        
+
     # screen play navigation
     def goToIntro(self, *arg):
         self.transition = NoTransition()
@@ -65,10 +66,6 @@ class GameLayout(ScreenManager):
     def goToGameScreen(self, *arg):
         self.transition = FadeTransition()
         self.current = 'screen2'
-
-    def goToTutorial(self):
-        self.transition = NoTransition()
-        self.current = 'tutorialFlow' 
 
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
@@ -107,7 +104,7 @@ class GameLayout(ScreenManager):
     def quit(self):
         ''' You are quiting the current game '''
         if self.active:
-            self.playscreen.scores_of_players = [0,0,0,0]
+            #self.playscreen.scores_of_players = [0,0,0,0]
             self.playscreen.aiScore = 0
             self.goToIntro()
             self.playscreen.stopRotation()
@@ -191,8 +188,8 @@ class CollectionApp(App):
         self.settingsCloseButton.trigger_action()
 
     def moveToTutorial(self, buttonInstance):
-        self.gamelayout.goToTutorial()
-        self.settingsCloseButton.trigger_action()
+        tutorial = TutorialScreen(title="Tutorial")
+        tutorial.open()
 
     def leaveSettingsPanel(self, *arg):       
         ''' activated when you exit the setting panels'''
