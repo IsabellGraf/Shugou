@@ -116,7 +116,7 @@ def boolFromJS(value):
     return True if value == '1' else False
 
 
-class CollectionApp(App):
+class ShugouApp(App):
     active = BooleanProperty(False)
 
     def build(self):
@@ -131,7 +131,7 @@ class CollectionApp(App):
 
     def whereToSave(self):
         # Returns in which directory you can store files
-        return self.get_application_config().rstrip("collection.ini")
+        return self.get_application_config().rstrip("shugou.ini")
 
     def changeActive(self,instance,value):
         # This doesn't work.. crashes if the build_settings wasn't launched first
@@ -211,4 +211,4 @@ class CollectionApp(App):
 # kivy main.py -m screen:ipad3
 
 if __name__ == '__main__':
-    CollectionApp().run()
+    ShugouApp().run()
