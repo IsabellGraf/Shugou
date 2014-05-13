@@ -66,6 +66,12 @@ class GamePlayScreen(Screen):
         popup = SelectPlayersPopup(self)
         popup.open()
 
+    def on_leave(self):
+        self.endscreen = self.game.get_screen('screen3')
+        self.endscreen.scores_of_players = self.scores_of_players
+        self.endscreen.name_of_players = self.name_of_players
+        self.active = False
+
     def unselectAll(self):
         ''' Unselect all the toggle buttons '''
         for button in self.buttons:
@@ -73,17 +79,18 @@ class GamePlayScreen(Screen):
 
     def on_enter(self):
         ''' Sets the game '''
-        if not self.active: # checks if I don't return from the tutorial
-            self.deck = Deck()
-            self.buttons = self.ids.cards_layout.children
-            for i in range(12):
-                self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
-            self.cards = self.deck.drawGuarantee(numberofcards=12)
-            self.scores_of_players = [0, 0, 0, 0]
-            self.ai = AI()
-            self.game.active = True
-            self.newRound()
-            self.t0 = datetime.datetime.now()
+        # You can only enter the game from the intro
+        self.deck = Deck()
+        self.buttons = self.ids.cards_layout.children
+        for i in range(12):
+            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
+        self.cards = self.deck.drawGuarantee(numberofcards=12)
+        for i in range(len(self.scores_of_players)):
+            self.scores_of_players[i] = 0
+        self.ai = AI()
+        self.game.active = True
+        self.newRound()
+        self.t0 = datetime.datetime.now()
 
     def newRound(self):
         ''' What should be done at the begining of every round '''
@@ -104,8 +111,8 @@ class GamePlayScreen(Screen):
             try:
                 newcards = self.deck.drawGuarantee(
                     othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            except ValueError:  # no more sets available
-                self.screens.current = 'screen3'
+            except ValueError:  # no more collections available
+                self.game.current = 'screen3'
                 return
             if self.aiPlayed:
                 self.aiScore += 1

@@ -13,7 +13,7 @@
 <CollectionTitle@Label>:
     text: '[color=ff3333]Col[/color][color=3333ff]lec[/color][color=33ff33]tion[/color]'
     markup: True
-    font_size: '40sp'
+    font_size: '40dp'
 
 <SettingButton@Button>:
     text: 'Settings'
@@ -34,10 +34,10 @@
                 rgba: 0.95, 0.95, 0.95, 0.8
             Rectangle:
                 pos: self.pos
-                size: self.size        
+                size: self.size
         BoxLayout:
             orientation: "vertical"
-            CollectionTitle:       
+            CollectionTitle:
             GridLayout:
                 size_hint_y: 3
                 cols: 2
@@ -48,13 +48,13 @@
                     on_press: root.goToGameScreen()
                 PlayerSection:
                     value: 2
-                    on_press: root.player_name_popup(2)
+                    on_press: root.player_name_popup(self.value)
                 PlayerSection:
                     value: 3
-                    on_press: root.player_name_popup(3)
+                    on_press: root.player_name_popup(self.value)
                 PlayerSection:
                     value: 4
-                    on_press: root.player_name_popup(4)  
+                    on_press: root.player_name_popup(self.value)
             BoxLayout:
                 Widget:
                 BoxLayout:
@@ -69,17 +69,11 @@
         scores_of_players: root.scores_of_players
         game: root
         active: root.active
+
     EndGameScreen:
         id: gameoverpage
         name: 'screen3'
         name_of_players: root.name_of_players
         scores_of_players: root.scores_of_players
-        screenManager: root
         number_of_players: root.number_of_players
         game: root
-    Screen:
-        name: 'tutorialFlow'
-        TutorialScreen:
-            goToIntro: root.goToIntro
-            active: root.active
-            goToGameScreen: root.goToGameScreen
