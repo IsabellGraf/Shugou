@@ -146,7 +146,7 @@ class GamePlayScreen(Screen):
                     self.cards, self.aiCards, timeDifference)
             else:
                 pass
-                # Broken? what does selected stand for?
+                # Fixme! selected are the cards of the collection the human found
                 #self.ai.updateRatingsHuman(
                 #    self.cards, selected, timeDifference)
 
@@ -176,11 +176,9 @@ class GamePlayScreen(Screen):
     # Functions related to the AIhint ###
     def setUpAI(self):
         Clock.unschedule(self.AIplay)
-        if self.aiActivated:
-            pass
-            # Broken..?
-            #(time, self.aiCards) = self.ai.suggestion(self.cards)
-            #Clock.schedule_once(self.AIplay, 1)
+        if self.aiActivated and self.active:
+            (time, self.aiCards) = self.ai.suggestion(self.cards)
+            Clock.schedule_once(self.AIplay, time)
 
     def AIplay(self, *arg):
         ''' The AI plays a turn '''
@@ -200,7 +198,7 @@ class GamePlayScreen(Screen):
     def setUpHint(self):
         ''' unschedule any current hint and loads up the next one if appropriate'''
         # Need to remove any previous call or else it might be activated too
-        # quickly    
+        # quickly
         Clock.unschedule(self.displayHint)
         Clock.unschedule(self.displayHintSecond)
         # After some time in seconds show a hint
