@@ -1,7 +1,7 @@
 # All classes related to the tutorial game screen
 #:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
-<TutorialScreen@Widget>
+<TutorialScreen@Popup>
     ScreenManager:
         id: tutorialScreens
         Screen:
@@ -36,9 +36,9 @@
                         Button:
                             anchor_x: 'center'
                             anchor_y: 'top'
-                            text: 'Back to Main Screen'
+                            text: 'Back'
                             size_hint: .9, 1
-                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
+                            on_press: root.dismiss()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -178,9 +178,9 @@
                         Button:
                             anchor_x: 'center'
                             anchor_y: 'top'
-                            text: 'Back to Main Screen'
+                            text: 'Back'
                             size_hint: .9, 1
-                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
+                            on_press: root.dismiss()
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
@@ -227,8 +227,8 @@
                         Button:
                             anchor_x: 'center'
                             anchor_y: 'top'
-                            text: 'Back to Main Screen'
+                            text: 'Back'
                             size_hint: .9, 1
-                            on_press: root.goToGameScreen() if root.active else root.goToIntro()
+                            on_press: root.dismiss()
                     AnchorLayout:
                         size_hint:(.3,1)
