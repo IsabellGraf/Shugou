@@ -66,6 +66,12 @@ class GamePlayScreen(Screen):
         popup = SelectPlayersPopup(self)
         popup.open()
 
+    def on_leave(self):
+        self.endscreen = self.game.get_screen('screen3')
+        self.endscreen.scores_of_players = self.scores_of_players
+        self.endscreen.name_of_players = self.name_of_players
+        self.active = False
+
     def unselectAll(self):
         ''' Unselect all the toggle buttons '''
         for button in self.buttons:
@@ -73,13 +79,16 @@ class GamePlayScreen(Screen):
 
     def on_enter(self):
         ''' Sets the game '''
+        print("Entered the game")
         if not self.active: # checks if I don't return from the tutorial
+            print("Setting up a new game")
             self.deck = Deck()
             self.buttons = self.ids.cards_layout.children
             for i in range(12):
                 self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
             self.cards = self.deck.drawGuarantee(numberofcards=12)
-            self.scores_of_players = [0, 0, 0, 0]
+            for i in range(len(self.scores_of_players)):
+                self.scores_of_players[i] = 0
             self.ai = AI()
             self.game.active = True
             self.newRound()
@@ -106,7 +115,6 @@ class GamePlayScreen(Screen):
                     othercards=set(self.cards) ^ selectedcards, numberofcards=3)
             except ValueError:  # no more collections available
                 self.game.current = 'screen3'
-                Clock.schedule_once(self.printScore , 0.5)
                 return
             if self.aiPlayed:
                 self.aiScore += 1

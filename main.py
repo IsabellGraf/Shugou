@@ -9,7 +9,7 @@ from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideT
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.metrics import dp
 from kivy import platform
-
+from kivy.clock import Clock
 from jsonConfig import settingsjson
 import datetime
 import pickle
@@ -56,7 +56,7 @@ class GameLayout(ScreenManager):
         self.playscreen = self.get_screen('screen2')
         self.sound = SoundLoader.load('set_song.wav')
         self.transition = FadeTransition()
-        
+
     # screen play navigation
     def goToIntro(self, *arg):
         self.transition = NoTransition()
@@ -107,7 +107,7 @@ class GameLayout(ScreenManager):
     def quit(self):
         ''' You are quiting the current game '''
         if self.active:
-            self.playscreen.scores_of_players = [0,0,0,0]
+            #self.playscreen.scores_of_players = [0,0,0,0]
             self.playscreen.aiScore = 0
             self.goToIntro()
             self.playscreen.stopRotation()
