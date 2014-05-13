@@ -2,17 +2,36 @@
 #:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
 <TitleLabel@Label>
-    size_hint: (1, .15)
+    size_hint: (.6, .1)
+    pos_hint: {'center_x': 0.5}
     font_name: 'DroidSans'
     markup: True
+    halign: 'center'
+    valign: 'middle'
     font_size: '30dp'
 
 <TextLabel@Label>
     pos_hint: {'center_x': 0.5}
-    size_hint: (1, .7)
+    size_hint: (0.9, 1)
     font_name: 'DroidSans'
     markup: True
     halign: 'left'
+    valign: 'middle'
+    text_size: self.size
+
+<BoxLayoutcol@BoxLayout>
+    orientation: 'vertical'
+    padding: '2dp'
+    spacing: '5dp' 
+    size_hint: (1, 1)
+
+
+<BoxLayoutim@BoxLayout>
+    size_hint: (0.8, 0.8)
+    pos_hint: {'center_x': 0.5}
+    orientation: 'horizontal'
+    padding: '5dp'
+    spacing: '5dp'
 
 <TutorialScreen@Popup>
     ScreenManager:
@@ -24,10 +43,9 @@
                 orientation: 'vertical'
                 padding: 10
                 TitleLabel: 
-                    text: 'How To Play Collection'
-                TextLabel: 
-                    text: 'Welcome to Collection! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a COLLECTION.  Once you find one, \n click on the three cards one by one. \n If you have found a Collection, \n you will be able to choose your name \n to receive points for your Collection.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Collections, is the winner. \n To learn what constitutes a Collection, \n go to the next tutorial screen.'
-                
+                    text: 'How To Play Shugou'
+                TextLabel:
+                    text: 'Welcome to Shugou! To get started, click on the number of players. After entering your names, you will be taken to the game screen, where 12 set cards have been dealt. \n Try to find a COLLECTION.  Once you find one, click on the three cards one by one.If you have found a Shugou, you will be able to choose your name to receive points for your Shugou. Play continues until the deck runs out of cards. Playing with several players, the one who found the most Shugous, is the winner. To learn what constitutes a Shugou, go to the next tutorial screen.'
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -47,7 +65,7 @@
                         Button:
                             anchor_x: 'right'
                             anchor_y: 'top'
-                            text: 'Next: what is a Collection?'
+                            text: 'Next: what is a Shugou?'
                             size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
@@ -55,104 +73,69 @@
             name: 'tutorial2'
             BoxLayout:
                 orientation: 'vertical'
-                padding: 10
+                padding: 10                
                 TitleLabel:
-                    text: 'What is a Collection'
+                    size_hint: (1,0.1)
+                    text: 'What is a Shugou'
                 BoxLayout:
-                    orientation: 'vertical'
-                    padding: '20dp'
-                    spacing: '10dp'
+                    orientation: 'horizontal'
+                    padding: '5dp'
+                    spacing: '5dp'
                     TextLabel:
-                        text: 'The cards have four properties: quantity, shape, filling and color. A Collection contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Collections.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'                        
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5} 
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/2311.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2321.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2331.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'                          
-                    Label:
-                        pos_hint: {'center_x': 0.5}
-                        size_hint: (1, .7)
-                        text: 'In the second example the color and the filling are equal, the quantity and the shape are all different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left'  
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/1221.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/3223.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2222.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'     
-                    Label:
-                        pos_hint: {'center_x': 0.3}
-                        size_hint: (1, .7)
-                        text: 'Next, the color is equal and all other properties are different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left'  
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/2333.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/1321.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/3312.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'    
-                    Label:
-                        pos_hint: {'center_x': 0.21}
-                        size_hint: (1, .7)
-                        text: 'Last all properties are different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left' 
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/3122.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/1313.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2231.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'  
+                        text: 'The cards have four properties: quantity, shape, filling and color. A Shugou contains three cards, which properties are all equal or all different. In the following, you see some examples for Shugous. In the first example the quantity, the color and the shape are equal, the filling is all different: \n \n In the second example the color and the filling are equal, the quantity and the shape are all different:\n \n \n Next, the color is equal and all other properties are different: \n \n\nLast all properties are different:'
+                    BoxLayoutcol:                            
+                        BoxLayoutim:
+                            Image:
+                                source: 'images/1221.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/3223.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/2222.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                        BoxLayoutim:
+                            Image:
+                                source: 'images/2333.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/1321.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/3312.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                        BoxLayoutim:
+                            Image:
+                                source: 'images/2311.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/2321.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/2331.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                        BoxLayoutim:
+                            Image:
+                                source: 'images/3122.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/1313.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'
+                            Image:
+                                source: 'images/2231.png'
+                                size_hint_x: 0.5
+                                #width: '300dp'  
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
