@@ -4,11 +4,15 @@ commands:
 
 ## normal: for PCs
 normal:
+	python combineFiles.py combine
 	sudo python main.py
+	python combineFiles.py clean
 
 ## play: same as normal
 play:
+	python combineFiles.py combine
 	sudo python main.py
+	python combineFiles.py clean
 
 ## android: to run on connected android phone
 android: 
@@ -39,4 +43,4 @@ sipad3:
 
 ## clean: clean up
 clean:
-	python combineFiles clean
+	python combineFiles.py clean
