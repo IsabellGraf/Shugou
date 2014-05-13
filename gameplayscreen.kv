@@ -25,7 +25,7 @@
 
 <GamePlayScreen@Screen>:
     id: mainpage
-    name: 'screen2'
+    name: 'game'
     canvas.before:
         Color:
             rgba: 0.95, 0.95, 0.95, 0.8
@@ -77,7 +77,7 @@
                 orientation: "vertical"
                 Button:
                     text: "Go to end"
-                    on_press: root.game.current = 'screen3'
+                    on_press: root.game.current = 'end'
                 SettingButton:
             ScoreLabel:
                 value: 3
