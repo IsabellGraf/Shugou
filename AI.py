@@ -57,6 +57,8 @@ class AI(object):
         index = random.randint(0,length-1)
         difficulty = set_difficulties[index]
         time = the_time - 4*(4-difficulty)*length
+        if time > 10:
+        	time = 10
         
         return time, index
         
