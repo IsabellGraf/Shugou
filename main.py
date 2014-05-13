@@ -18,7 +18,9 @@ import pickle
 from gameplay import GamePlayScreen
 from PlayerNamePopup import PlayerNamePopup
 
-
+class TutorialScreen(Popup):
+    pass
+    
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
     scores_of_players = ListProperty()
@@ -188,8 +190,6 @@ class CollectionApp(App):
     def moveToTutorial(self, buttonInstance):
         tutorial = TutorialScreen()
         tutorial.open()
-        #self.gamelayout.goToTutorial()
-        #self.settingsCloseButton.trigger_action()
 
     def leaveSettingsPanel(self, *arg):       
         ''' activated when you exit the setting panels'''
