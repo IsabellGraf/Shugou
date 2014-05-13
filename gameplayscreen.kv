@@ -4,7 +4,8 @@
 
 <CardToggle>:
     background_normal: root.card.normalimage() if root.card else ''   
-    background_down: root.card.downimage() if root.card else ''   
+    background_down: root.card.downimage() if root.card else ''
+    border: 2, 5, 10, 5   
     canvas.before:
         PushMatrix
         Rotate:
