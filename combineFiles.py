@@ -9,10 +9,10 @@ def read_text_from_include(line):
 
 def main(combine):
 	if combine:
-		if not os.path.isfile('collection_original.kv'):
-			os.rename('collection.kv','collection_original.kv')
-		infile = open('collection_original.kv', 'r')
-		outfile = open('collection.kv', 'w')	
+		if not os.path.isfile('shugou_original.kv'):
+			os.rename('shugou.kv','shugou_original.kv')
+		infile = open('shugou_original.kv', 'r')
+		outfile = open('shugou.kv', 'w')	
 		for line in infile:
 			if '#:include' in line:
 				text_from_include = read_text_from_include(line)
@@ -24,14 +24,14 @@ def main(combine):
 		print("Files successfully concatenated.")
 	else:
 		try:
-			os.rename('collection_original.kv', 'collection.kv')
+			os.rename('shugou_original.kv', 'shugou.kv')
 			print("Original file restored.")
 		except:
 			print("No backup file. Maybe the original file has been restored already?")
 
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
-		print("Missing necessary argument. Use \n 'combine' to concatenate the include files into collection.kv \n 'clean' to restore the original collection.kv file")
+		print("Missing necessary argument. Use \n 'combine' to concatenate the include files into shugou.kv \n 'clean' to restore the original shugou.kv file")
 	else:
 		if sys.argv[1] == 'Combine' or sys.argv[1] == 'combine' or sys.argv[1] == 'True':
 			main(True)

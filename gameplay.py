@@ -111,7 +111,7 @@ class GamePlayScreen(Screen):
             try:
                 newcards = self.deck.drawGuarantee(
                     othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            except ValueError:  # no more collections available
+            except ValueError:  # no more shugous available
                 self.game.current = 'screen3'
                 return
             if self.aiPlayed:

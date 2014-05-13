@@ -1,16 +1,16 @@
 [app]
 
 # (str) Title of your application
-title = Collection
+title = Shugou
 
 # (str) Package name
-package.name = collection.game
+package.name = shugou.game
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = collection.game
+package.domain = shugou.game
 
 # (str) Source code where the main.py live
-source.dir = /home/berny/Desktop/Collection
+source.dir = /home/berny/Desktop/Shugou
 
 # (list) Source files to include (let empty to include all the files)
 source.include_exts = py,png,jpg,kv,atlas,wav
