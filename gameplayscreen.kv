@@ -75,9 +75,8 @@
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"
-                Button:
-                    text: "Go to end"
-                    on_press: root.game.current = 'end'
+                Label:
+                    text: ""
                 SettingButton:
             ScoreLabel:
                 value: 3
