@@ -4,7 +4,8 @@
 
 <CardToggle>:
     background_normal: root.card.normalimage() if root.card else ''   
-    background_down: root.card.downimage() if root.card else ''   
+    background_down: root.card.downimage() if root.card else ''
+    border: 2, 5, 10, 5   
     canvas.before:
         PushMatrix
         Rotate:
@@ -25,7 +26,7 @@
 
 <GamePlayScreen@Screen>:
     id: mainpage
-    name: 'screen2'
+    name: 'game'
     canvas.before:
         Color:
             rgba: 0.95, 0.95, 0.95, 0.8
@@ -75,9 +76,8 @@
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"
-                Button:
-                    text: "Go to end"
-                    on_press: root.game.current = 'screen3'
+                Label:
+                    text: ""
                 SettingButton:
             ScoreLabel:
                 value: 3

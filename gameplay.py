@@ -69,7 +69,7 @@ class GamePlayScreen(Screen):
         popup.open()
 
     def on_leave(self):
-        self.endscreen = self.game.get_screen('screen3')
+        self.endscreen = self.game.get_screen('end')
         self.endscreen.scores_of_players = self.scores_of_players
         self.endscreen.name_of_players = self.name_of_players
         self.active = False
@@ -109,13 +109,6 @@ class GamePlayScreen(Screen):
             return
 
         if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-            selectedcards = {self.cards[i] for i in down}
-            try:
-                newcards = self.deck.drawGuarantee(
-                    othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            except ValueError:  # no more shugous available
-                self.game.current = 'screen3'
-                return
             if self.aiPlayed:
                 self.aiScore += 1
                 self.aiUpdates()
@@ -125,6 +118,13 @@ class GamePlayScreen(Screen):
                     self.select_player_popup()
                 else:
                     self.scores_of_players[0] += 1
+
+            selectedcards = {self.cards[i] for i in down}
+            try:
+                newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+            except ValueError:  # no more shugous available
+                self.game.current = 'end'
+                return
             for index, i in enumerate(down):
                 self.cards[i] = newcards[index]
             self.newRound()
