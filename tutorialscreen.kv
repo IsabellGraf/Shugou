@@ -1,15 +1,6 @@
 # All classes related to the tutorial game screen
 #:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
-<TitleLabel@Label>
-    size_hint: (.6, .1)
-    pos_hint: {'center_x': 0.5}
-    font_name: 'DroidSans'
-    markup: True
-    halign: 'center'
-    valign: 'middle'
-    font_size: '30dp'
-
 <TextLabel@Label>
     pos_hint: {'center_x': 0.5}
     size_hint: (0.9, 1)
@@ -25,15 +16,24 @@
     spacing: '5dp' 
     size_hint: (1, 1)
 
-
 <BoxLayoutim@BoxLayout>
     size_hint: (0.8, 0.8)
     pos_hint: {'center_x': 0.5}
     orientation: 'horizontal'
     padding: '5dp'
     spacing: '5dp'
+    Image:
+        size_hint_x: 0.5
+        source: root.image1
+    Image:
+        size_hint_x: 0.5
+        source: root.image2
+    Image:
+        size_hint_x: 0.5
+        source: root.image3
 
 <TutorialScreen@Popup>
+    title: 'How To Play Shugou'
     ScreenManager:
         id: tutorialScreens
         Screen:
@@ -42,10 +42,8 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                TitleLabel: 
-                    text: 'How To Play Shugou'
                 TextLabel:
-                    text: 'Welcome to Shugou! To get started, click on the number of players. After entering your names, you will be taken to the game screen, where 12 set cards have been dealt. \n Try to find a COLLECTION.  Once you find one, click on the three cards one by one.If you have found a Shugou, you will be able to choose your name to receive points for your Shugou. Play continues until the deck runs out of cards. Playing with several players, the one who found the most Shugous, is the winner. To learn what constitutes a Shugou, go to the next tutorial screen.'
+                    text: "Welcome to Shugou! Your goal is to find a collection of 3 cards among the 12 that have been dealt that form a shogou. Play continues until there are no more shogou to be found on the board. A shogou is a collection of 3 cards, in which all four properties, quantity, shape, filling and color are all the same or all different."
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -65,77 +63,46 @@
                         Button:
                             anchor_x: 'right'
                             anchor_y: 'top'
-                            text: 'Next: what is a Shugou?'
+                            text: 'Next: Examples'
                             size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
-            id: tutorial2
             name: 'tutorial2'
+            on_enter: root.title = "Examples"
             BoxLayout:
                 orientation: 'vertical'
-                padding: 10                
-                TitleLabel:
-                    size_hint: (1,0.1)
-                    text: 'What is a Shugou'
+                padding: 10
                 BoxLayout:
                     orientation: 'horizontal'
                     padding: '5dp'
                     spacing: '5dp'
-                    TextLabel:
-                        text: 'The cards have four properties: quantity, shape, filling and color. A Shugou contains three cards, which properties are all equal or all different. In the following, you see some examples for Shugous. In the first example the quantity, the color and the shape are equal, the filling is all different: \n \n In the second example the color and the filling are equal, the quantity and the shape are all different:\n \n \n Next, the color is equal and all other properties are different: \n \n\nLast all properties are different:'
+                    BoxLayoutcol:
+                        TextLabel:
+                            text: "In this first example the quantity, the color and the shape are equal, the filling are all different:" 
+                        TextLabel:
+                            text: "In the second example the color and the filling are equal, the quantity and the shape are all different:"
+                        TextLabel:
+                            text: "Next, the color is equal and all other properties are different:" 
+                        TextLabel:
+                            text: "Last all properties are different:"
                     BoxLayoutcol:                            
                         BoxLayoutim:
-                            Image:
-                                source: 'images/1221.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/3223.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/2222.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
+                            id: row1
+                            image1: 'images/1221.png'
+                            image2: 'images/3223.png'
+                            image3: 'images/2222.png'
                         BoxLayoutim:
-                            Image:
-                                source: 'images/2333.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/1321.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/3312.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
+                            image1: 'images/2333.png'
+                            image2: 'images/1321.png'
+                            image3: 'images/3312.png'
                         BoxLayoutim:
-                            Image:
-                                source: 'images/2311.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/2321.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/2331.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
+                            image1: 'images/2311.png'
+                            image2: 'images/2321.png'
+                            image3: 'images/2331.png'
                         BoxLayoutim:
-                            Image:
-                                source: 'images/3122.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/1313.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'
-                            Image:
-                                source: 'images/2231.png'
-                                size_hint_x: 0.5
-                                #width: '300dp'  
+                            image1: 'images/3122.png'
+                            image2: 'images/1313.png'
+                            image3: 'images/2231.png'
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -156,67 +123,4 @@
                             text: 'Back'
                             size_hint: .9, 1
                             on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'right'
-                            anchor_y: 'top'
-                            text: 'Next: How to Play'
-                            size_hint: .9, 1
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
-        Screen:
-            id: tutorial3
-            name: 'tutorial3'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: '10dp'
-                TitleLabel: 
-                    text: 'Examples'
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: 10
-                    TextLabel:
-                        valign: 'middle' 
-                        text: 'There are twelve cards on the board. When you see three cards forming a Shugou, you can click on them and cards become red. Once three proper cards are selected, cards will go away immediately in single player game or a popup will show up in a multiplayer game. Then you can click your name and scores!'
-                    BoxLayout:
-                        orientation: 'vertical'
-                        padding: '10dp'
-                        halign: 'center'
-                        BoxLayout:
-                            orientation: 'horizontal'
-                            padding: '10dp'
-                            spacing: '10dp'
-                            size_hint: (0.7, 0.3)
-                            halign: 'center'
-                            valign: 'middle'
-                            Image:
-                                source: 'images/2231.png'
-                                size_hint_x: 0.5
-                            Image:
-                                source: 'images/2231_down.png'
-                                size_hint_x: 0.5
-                        Image:
-                            source: 'images/popup_eg.png'
-                            size_hint_x: 0.7
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
-                            text: 'Back to description page'
-                            size_hint: .9, 1
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial2'
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
-                            text: 'Back'
-                            size_hint: .9, 1
-                            on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
+ 
