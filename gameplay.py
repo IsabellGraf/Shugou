@@ -190,7 +190,7 @@ class GamePlayScreen(Screen):
             else:
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
-        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 0.1)
         self.aiPlayed = True
 
     # Functions related to displaying hint ###

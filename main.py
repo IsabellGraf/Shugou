@@ -27,10 +27,25 @@ class EndGameScreen(Screen):
     screenManager = ObjectProperty()
     number_of_players = NumericProperty()
     game = ObjectProperty()
+    aiActivated = BooleanProperty()
+    aiScore = NumericProperty()
 
-    def on_enter(self,*args):
+    def on_pre_enter(self, *args):
+        print('1', self.scores_of_players)
+
+    def on_enter(self, *args, **kwargs):
+        print('2', self.scores_of_players)
+        if self.aiActivated:
+            self.number_of_players += 1
+            self.name_of_players.append('AI')
+            self.scores_of_players.append(self.aiScore)
         self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
         self.scores_of_players = sorted(self.scores_of_players)[::-1]
+        print('3', self.scores_of_players)
+
+    def on_leave(self, *args):
+        print('4', self.scores_of_players)
+
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
@@ -45,6 +60,8 @@ class GameLayout(ScreenManager):
     name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
+    aiActivated = BooleanProperty(False)
+    aiScore = NumericProperty(0)
 
     # True if there is a game going on
     active = BooleanProperty(False)
@@ -136,7 +153,7 @@ class ShugouApp(App):
         # Returns in which directory you can store files
         return self.get_application_config().rstrip("shugou.ini")
 
-    def changeActive(self,instance,value):
+    def changeActive(self, instance, value):
         # This doesn't work.. crashes if the build_settings wasn't launched first
         #self.quitButton.disabled = not self.gamelayout.active
         pass
