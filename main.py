@@ -145,7 +145,7 @@ class ShugouApp(App):
         # Load the values already stored into the file        
         self.gamelayout.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))        
-        speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0}
+        speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0, 'True': 1}
         speed = speedSettings[self.config.get('settings', 'hint')]
         if speed != 0:
             self.gamelayout.playscreen.displayHintTimer = speed
