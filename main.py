@@ -9,6 +9,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.popup import Popup
+from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
 from kivy import platform
 from kivy.clock import Clock
@@ -21,6 +22,11 @@ from PlayerNamePopup import PlayerNamePopup
 
 class TutorialScreen(Popup):
     pass
+
+class BoxLayoutim(BoxLayout):
+    image1 = StringProperty('')
+    image2 = StringProperty('')
+    image3 = StringProperty('')
 
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['','','',''])
