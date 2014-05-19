@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.properties import *
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
+from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
@@ -39,6 +40,27 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
+class Music(Widget):
+    soundActivated = BooleanProperty(False)    
+    currentSong = StringProperty('set_song')
+    sound = ObjectProperty()
+
+    def on_currentSong(self, obj, value):
+        self.playMusic()
+
+    def on_soundActivated(self, obj, value):
+        self.playMusic()
+
+    def playMusic(self):
+        if self.sound:
+            self.sound.stop()
+        self.sound = SoundLoader.load(self.currentSong + ".wav")
+        if self.soundActivated:
+            self.sound.loop = True
+            self.sound.play()
+        else:
+            self.sound.stop()
+
 class GameLayout(ScreenManager):
     ''' This class manages the movements between the various screen and the sound '''
     
@@ -48,14 +70,12 @@ class GameLayout(ScreenManager):
 
     # True if there is a game going on
     active = BooleanProperty(False)
-    soundActivated = BooleanProperty(False)
 
     directory = StringProperty()
 
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         self.playscreen = self.get_screen('game')
-        self.sound = SoundLoader.load('set_song.wav')
         self.transition = FadeTransition()
 
     # screen play navigation
@@ -66,15 +86,6 @@ class GameLayout(ScreenManager):
     def goToGameScreen(self, *arg):
         self.transition = FadeTransition()
         self.current = 'game'
-
-    # Dealing with Sound
-    def on_soundActivated(self, obj, value):
-        ''' Turn the intro song on or off '''
-        if value:
-            self.sound.loop = True
-            self.sound.play()
-        else:
-            self.sound.stop()
 
     def pickleFile(self):
         return self.directory + "name_of_players.pkl"
@@ -123,6 +134,7 @@ class ShugouApp(App):
     active = BooleanProperty(False)
 
     def build(self):
+        self.music = Music()
         Clock.max_iteration = 50
         self.use_kivy_settings = False
         self.gamelayout = GameLayout()
@@ -143,7 +155,7 @@ class ShugouApp(App):
 
     def loadSettings(self):
         # Load the values already stored into the file        
-        self.gamelayout.soundActivated = boolFromJS(
+        self.music.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))        
         speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0, 'True': 1}
         speed = speedSettings[self.config.get('settings', 'hint')]
@@ -155,11 +167,13 @@ class ShugouApp(App):
 
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
+        self.music.currentSong = self.config.get('settings', 'song_title')
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
                                         'ai': False, 
-                                        'hint': 'off'})
+                                        'hint': 'off',
+                                        'song_title': 'shugou_song_main'})
 
     def build_settings(self, settings):
         self.settings = settings
@@ -202,9 +216,11 @@ class ShugouApp(App):
         self.gamelayout.playscreen.setUpAI()
 
     def on_config_change(self, config, section, key, value):
-        if key == 'sound':
-            self.gamelayout.soundActivated = boolFromJS(value)
-        if key == 'hint':
+        if key == 'song_title':
+            self.music.currentSong = value
+        elif key == 'sound':
+            self.music.soundActivated = boolFromJS(value)
+        elif key == 'hint':
             speedSettings = {u'slow':10, u'normal':5, u'fast':1, u'off': 0}
             speed = speedSettings[value]
             if speed != 0:
@@ -212,7 +228,7 @@ class ShugouApp(App):
                 self.gamelayout.playscreen.hintActivated = True
             else:
                 self.gamelayout.playscreen.hintActivated = False
-        if key == 'ai':
+        elif key == 'ai':
             self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 
 # To test the screen size you can use:
