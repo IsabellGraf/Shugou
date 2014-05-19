@@ -44,7 +44,6 @@ class GameLayout(ScreenManager):
     
     name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
-    scores_of_players = ListProperty([0, 0, 0, 0])
 
     # True if there is a game going on
     active = BooleanProperty(False)
