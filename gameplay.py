@@ -87,6 +87,7 @@ class GamePlayScreen(Screen):
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(len(self.scores_of_players)):
             self.scores_of_players[i] = 0
+        self.aiScore = 0
         self.ai = AI()
         self.game.active = True
         self.newRound()

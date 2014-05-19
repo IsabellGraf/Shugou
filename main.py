@@ -106,10 +106,7 @@ class GameLayout(ScreenManager):
     def quit(self):
         ''' You are quiting the current game '''
         if self.active:
-            #self.playscreen.scores_of_players = [0,0,0,0]
-            self.playscreen.aiScore = 0
             self.goToIntro()
-            self.playscreen.stopRotation()
             self.active = False
 
 
