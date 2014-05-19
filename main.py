@@ -52,10 +52,12 @@ class GameLayout(ScreenManager):
 
     directory = StringProperty()
 
+    currentSong = StringProperty('set_song')
+
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
         self.playscreen = self.get_screen('game')
-        self.sound = SoundLoader.load('set_song.wav')
+        self.sound = SoundLoader.load(self.currentSong)
         self.transition = FadeTransition()
 
     # screen play navigation
@@ -67,10 +69,19 @@ class GameLayout(ScreenManager):
         self.transition = FadeTransition()
         self.current = 'game'
 
+    def on_currentSong(self, obj, value):
+        self.playMusic()
+        
     # Dealing with Sound
     def on_soundActivated(self, obj, value):
         ''' Turn the intro song on or off '''
-        if value:
+        self.playMusic()
+
+    def playMusic(self):
+        if self.sound:
+            self.sound.stop()
+        self.sound = SoundLoader.load(self.currentSong + ".wav")
+        if self.soundActivated:
             self.sound.loop = True
             self.sound.play()
         else:
@@ -155,11 +166,13 @@ class ShugouApp(App):
 
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
+        self.gamelayout.currentSong = self.config.get('settings', 'song_title')
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
                                         'ai': False, 
-                                        'hint': 'off'})
+                                        'hint': 'off',
+                                        'song_title': 'shugou_song_main'})
 
     def build_settings(self, settings):
         self.settings = settings
@@ -202,9 +215,12 @@ class ShugouApp(App):
         self.gamelayout.playscreen.setUpAI()
 
     def on_config_change(self, config, section, key, value):
-        if key == 'sound':
+        if key == 'song_title':
+            self.gamelayout.currentSong = value
+            self.gamelayout.playMusic()
+        elif key == 'sound':
             self.gamelayout.soundActivated = boolFromJS(value)
-        if key == 'hint':
+        elif key == 'hint':
             speedSettings = {u'slow':10, u'normal':5, u'fast':1, u'off': 0}
             speed = speedSettings[value]
             if speed != 0:
@@ -212,7 +228,7 @@ class ShugouApp(App):
                 self.gamelayout.playscreen.hintActivated = True
             else:
                 self.gamelayout.playscreen.hintActivated = False
-        if key == 'ai':
+        elif key == 'ai':
             self.gamelayout.playscreen.aiActivated = boolFromJS(value)
 
 # To test the screen size you can use:
