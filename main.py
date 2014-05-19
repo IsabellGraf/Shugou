@@ -218,7 +218,6 @@ class ShugouApp(App):
     def on_config_change(self, config, section, key, value):
         if key == 'song_title':
             self.music.currentSong = value
-            self.music.playMusic()
         elif key == 'sound':
             self.music.soundActivated = boolFromJS(value)
         elif key == 'hint':
