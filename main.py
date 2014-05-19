@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.properties import *
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
+from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
@@ -39,42 +40,15 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
-class GameLayout(ScreenManager):
-    ''' This class manages the movements between the various screen and the sound '''
-    
-    name_of_players = ListProperty(['Score', '', '', ''])
-    number_of_players = NumericProperty(1)
-    scores_of_players = ListProperty([0, 0, 0, 0])
-
-    # True if there is a game going on
-    active = BooleanProperty(False)
-    soundActivated = BooleanProperty(False)
-
-    directory = StringProperty()
-
+class Music(Widget):
+    soundActivated = BooleanProperty(False)    
     currentSong = StringProperty('set_song')
-
-    def __init__(self, **kwargs):
-        super(GameLayout, self).__init__(**kwargs)
-        self.playscreen = self.get_screen('game')
-        self.sound = SoundLoader.load(self.currentSong)
-        self.transition = FadeTransition()
-
-    # screen play navigation
-    def goToIntro(self, *arg):
-        self.transition = NoTransition()
-        self.current = 'intro'
-
-    def goToGameScreen(self, *arg):
-        self.transition = FadeTransition()
-        self.current = 'game'
+    sound = ObjectProperty()
 
     def on_currentSong(self, obj, value):
         self.playMusic()
-        
-    # Dealing with Sound
+
     def on_soundActivated(self, obj, value):
-        ''' Turn the intro song on or off '''
         self.playMusic()
 
     def playMusic(self):
@@ -86,6 +60,32 @@ class GameLayout(ScreenManager):
             self.sound.play()
         else:
             self.sound.stop()
+
+class GameLayout(ScreenManager):
+    ''' This class manages the movements between the various screen and the sound '''
+    
+    name_of_players = ListProperty(['Score', '', '', ''])
+    number_of_players = NumericProperty(1)
+    scores_of_players = ListProperty([0, 0, 0, 0])
+
+    # True if there is a game going on
+    active = BooleanProperty(False)
+
+    directory = StringProperty()
+
+    def __init__(self, **kwargs):
+        super(GameLayout, self).__init__(**kwargs)
+        self.playscreen = self.get_screen('game')
+        self.transition = FadeTransition()
+
+    # screen play navigation
+    def goToIntro(self, *arg):
+        self.transition = NoTransition()
+        self.current = 'intro'
+
+    def goToGameScreen(self, *arg):
+        self.transition = FadeTransition()
+        self.current = 'game'
 
     def pickleFile(self):
         return self.directory + "name_of_players.pkl"
@@ -134,6 +134,7 @@ class ShugouApp(App):
     active = BooleanProperty(False)
 
     def build(self):
+        self.music = Music()
         Clock.max_iteration = 50
         self.use_kivy_settings = False
         self.gamelayout = GameLayout()
@@ -154,7 +155,7 @@ class ShugouApp(App):
 
     def loadSettings(self):
         # Load the values already stored into the file        
-        self.gamelayout.soundActivated = boolFromJS(
+        self.music.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))        
         speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0, 'True': 1}
         speed = speedSettings[self.config.get('settings', 'hint')]
@@ -166,7 +167,7 @@ class ShugouApp(App):
 
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
-        self.gamelayout.currentSong = self.config.get('settings', 'song_title')
+        self.music.currentSong = self.config.get('settings', 'song_title')
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
@@ -216,10 +217,10 @@ class ShugouApp(App):
 
     def on_config_change(self, config, section, key, value):
         if key == 'song_title':
-            self.gamelayout.currentSong = value
-            self.gamelayout.playMusic()
+            self.music.currentSong = value
+            self.music.playMusic()
         elif key == 'sound':
-            self.gamelayout.soundActivated = boolFromJS(value)
+            self.music.soundActivated = boolFromJS(value)
         elif key == 'hint':
             speedSettings = {u'slow':10, u'normal':5, u'fast':1, u'off': 0}
             speed = speedSettings[value]
