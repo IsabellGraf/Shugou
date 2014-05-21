@@ -90,6 +90,7 @@ class GamePlayScreen(Screen):
         for i in range(len(self.scores_of_players)):
             self.scores_of_players[i] = 0
         self.ai = AI(self.directory)
+        self.aiScore = 0
         self.game.active = True
         self.newRound()
         self.t0 = datetime.datetime.now()
