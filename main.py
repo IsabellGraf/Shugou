@@ -45,6 +45,15 @@ class EndGameScreen(Screen):
         self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
         self.scores_of_players = sorted(self.scores_of_players)[::-1]
 
+    def on_leave(self, *args, **kwargs):
+        if self.aiActivated:
+            self.name_of_players.remove('AI')
+            self.scores_of_players.remove(self.aiScore)
+            self.number_of_players -= 1
+            self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
+            self.scores_of_players = sorted(self.scores_of_players)[::-1]
+
+
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
 

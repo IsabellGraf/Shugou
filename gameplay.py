@@ -58,8 +58,6 @@ class GamePlayScreen(Screen):
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
-        self.ai = AI(self.directory)
-
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -90,6 +88,7 @@ class GamePlayScreen(Screen):
         self.ai = AI(self.directory)
         self.aiScore = 0
         self.game.active = True
+        self.active = True
         self.newRound()
         self.t0 = datetime.datetime.now()
 
@@ -99,7 +98,7 @@ class GamePlayScreen(Screen):
         self.updateGrid()
         self.setUpHint()
         self.unselectAll()
-        self.setUpAI()        
+        self.setUpAI()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
