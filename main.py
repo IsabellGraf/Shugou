@@ -118,7 +118,7 @@ class GameLayout(ScreenManager):
         self.name_of_players = tempNames
         playername = PlayerNamePopup(self.name_of_players, numPlayers)
         playername.open()
-        #playername.bind(on_dismiss = self.goToGameScreen)
+        playername.bind(on_dismiss = self.goToGameScreen)
 
     def quit(self):
         ''' You are quiting the current game '''
