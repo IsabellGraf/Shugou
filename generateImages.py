@@ -65,7 +65,6 @@ def draw_rounded(cr, area, radius, fillin, *argv):
 
 
 def draw_contour(w,h,state):
-    import cairo
     offset = 10
     wid = 30
     w+=offset
