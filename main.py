@@ -72,7 +72,6 @@ class GameLayout(ScreenManager):
     
     name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
-    scores_of_players = ListProperty([0, 0, 0, 0])
 
     # True if there is a game going on
     active = BooleanProperty(False)
@@ -124,10 +123,7 @@ class GameLayout(ScreenManager):
     def quit(self):
         ''' You are quiting the current game '''
         if self.active:
-            #self.playscreen.scores_of_players = [0,0,0,0]
-            self.playscreen.aiScore = 0
             self.goToIntro()
-            self.playscreen.stopRotation()
             self.active = False
 
 
