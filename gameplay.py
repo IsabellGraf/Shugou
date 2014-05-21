@@ -40,7 +40,8 @@ class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
     screenManager = ObjectProperty()
-    aiScore = NumericProperty(0)
+    aiScore = NumericProperty()
+    aiActivated = BooleanProperty()
     directory = StringProperty('')
     
     hintActivated = BooleanProperty(False)
@@ -52,8 +53,6 @@ class GamePlayScreen(Screen):
     displayHintTimer = NumericProperty(5)
 
     aiPlayed = BooleanProperty(False)
-    aiActivated = BooleanProperty(False)
-
     active = BooleanProperty(False)
 
     def __init__(self,*args, **kwargs):
@@ -68,10 +67,9 @@ class GamePlayScreen(Screen):
         popup = SelectPlayersPopup(self)
         popup.open()
 
-    def on_leave(self):
+    def on_pre_leave(self):
         self.endscreen = self.game.get_screen('end')
-        self.endscreen.scores_of_players = self.scores_of_players
-        self.endscreen.name_of_players = self.name_of_players
+        self.endscreen.aiScore = self.aiScore
         self.active = False
 
     def unselectAll(self):
