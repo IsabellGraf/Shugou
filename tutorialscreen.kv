@@ -9,7 +9,7 @@
     halign: 'left'
     valign: 'middle'
     text_size: self.size
-    font_size: '20sp'
+    font_size: '25sp'
 
 <BoxLayoutcol@BoxLayout>
     orientation: 'vertical'
@@ -33,6 +33,12 @@
         size_hint_x: 0.5
         source: root.image3
 
+<NavButton@Button>:
+    size_hint: .9, 1
+    font_size: '20dp'
+    anchor_y: 'top'
+    anchor_x: 'center'
+
 <TutorialScreen@Popup>
     title: 'How To Play Shugou'
     ScreenManager:
@@ -44,26 +50,20 @@
                 orientation: 'vertical'
                 padding: 10
                 TextLabel:
-                    text: u"Welcome to Shugou!　Shugou is the Japanese word for sets or collection of elements. Your goal is to find special collections of 3 cards among the 12 that have been dealt. Those collections is what we call a shugou. Play continues until there are no more shogou to be found on the board. A shogou is a collection of 3 cards, in which all four properties, quantity, shape, filling and color are all the same or all different."
+                    text: u"Welcome to Shugou! Shugou is the Japanese word for sets or collection of elements. Your goal is to find special collections of 3 cards among the 12 that will be dealt. Those collections is what we call a shugou. And to do so as quickly as possible. Play continues until there are no more shogou to be found on the board. A shogou is a collection of 3 cards, in which all four properties, quantity, shape, filling and color are all the same or all different."
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
                     spacing: 5
                     AnchorLayout:
                         size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
+                        NavButton:
                             text: 'Back'
-                            size_hint: .9, 1
                             on_press: root.dismiss()
                     AnchorLayout:
                         size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'right'
-                            anchor_y: 'top'
+                        NavButton:
                             text: 'Next: Examples'
-                            size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
             name: 'tutorial2'
@@ -77,9 +77,9 @@
                     spacing: '5dp'
                     BoxLayoutcol:
                         TextLabel:
-                            text: "In this first example the quantity, the color and the shape are equal, the filling are all different:" 
+                            text: "In this first example the quantity, the color and the shape are equal, the fillings are all different:" 
                         TextLabel:
-                            text: "In the second example the color and the filling are equal, the quantity and the shape are all different:"
+                            text: "In the second example the color and the filling are equal, the quantities and the shapes are all different:"
                         TextLabel:
                             text: "Next, the color is equal and all other properties are different:" 
                         TextLabel:
@@ -107,18 +107,12 @@
                     spacing: 5
                     AnchorLayout:
                         size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
+                        NavButton:
                             text: 'Back to instruction page'
-                            size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
                     AnchorLayout:
                         size_hint:(.3,1)
-                        Button:
-                            anchor_x: 'center'
-                            anchor_y: 'top'
+                        NavButton:
                             text: 'Done'
-                            size_hint: .9, 1
                             on_press: root.dismiss()
  
