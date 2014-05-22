@@ -40,7 +40,8 @@ class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
     restart = ObjectProperty()
     screenManager = ObjectProperty()
-    aiScore = NumericProperty(0)
+    aiScore = NumericProperty()
+    aiActivated = BooleanProperty()
     directory = StringProperty('')
     
     hintActivated = BooleanProperty(False)
@@ -52,15 +53,11 @@ class GamePlayScreen(Screen):
     displayHintTimer = NumericProperty(5)
 
     aiPlayed = BooleanProperty(False)
-    aiActivated = BooleanProperty(False)
-
     active = BooleanProperty(False)
 
     def __init__(self,*args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
-        self.ai = AI(self.directory)
-
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -68,10 +65,9 @@ class GamePlayScreen(Screen):
         popup = SelectPlayersPopup(self)
         popup.open()
 
-    def on_leave(self):
+    def on_pre_leave(self):
         self.endscreen = self.game.get_screen('end')
-        self.endscreen.scores_of_players = self.scores_of_players
-        self.endscreen.name_of_players = self.name_of_players
+        self.endscreen.aiScore = self.aiScore
         self.active = False
 
     def unselectAll(self):
@@ -90,7 +86,9 @@ class GamePlayScreen(Screen):
         for i in range(len(self.scores_of_players)):
             self.scores_of_players[i] = 0
         self.ai = AI(self.directory)
+        self.aiScore = 0
         self.game.active = True
+        self.active = True
         self.newRound()
         self.t0 = datetime.datetime.now()
 
@@ -100,7 +98,7 @@ class GamePlayScreen(Screen):
         self.updateGrid()
         self.setUpHint()
         self.unselectAll()
-        self.setUpAI()        
+        self.setUpAI()
 
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
@@ -109,13 +107,6 @@ class GamePlayScreen(Screen):
             return
 
         if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
-            selectedcards = {self.cards[i] for i in down}
-            try:
-                newcards = self.deck.drawGuarantee(
-                    othercards=set(self.cards) ^ selectedcards, numberofcards=3)
-            except ValueError:  # no more shugous available
-                self.game.current = 'end'
-                return
             if self.aiPlayed:
                 self.aiScore += 1
                 self.aiUpdates()
@@ -125,6 +116,13 @@ class GamePlayScreen(Screen):
                     self.select_player_popup()
                 else:
                     self.scores_of_players[0] += 1
+
+            selectedcards = {self.cards[i] for i in down}
+            try:
+                newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+            except ValueError:  # no more shugous available
+                self.game.current = 'end'
+                return
             for index, i in enumerate(down):
                 self.cards[i] = newcards[index]
             self.newRound()
@@ -190,7 +188,7 @@ class GamePlayScreen(Screen):
             else:
                 self.buttons[index].state = 'normal'
         # Basic AI animation.
-        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 1)
+        Clock.schedule_once(lambda x: self.checkIfSetOnBoard(None), 0.1)
         self.aiPlayed = True
 
     # Functions related to displaying hint ###

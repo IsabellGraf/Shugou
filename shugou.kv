@@ -6,6 +6,8 @@
 # All classes related to the intro screen
 
 <PlayerSection@Button>:
+    background_normal: 'images/players.png'
+    border: 2,2,2,2
     value: 0
     font_size: '30dp'
     text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
@@ -62,19 +64,24 @@
                     Widget:
                     SettingButton:
                 Widget:
+                
     GamePlayScreen:
         goToIntro: root.goToIntro
         directory: root.directory
+        id: gameplayscreen
         number_of_players: root.number_of_players
         name_of_players: root.name_of_players
-        scores_of_players: root.scores_of_players
+        aiActivated: root.aiActivated
+        aiScore: root.aiScore
         game: root
         active: root.active
 
     EndGameScreen:
         id: gameoverpage
         name: 'end'
-        name_of_players: root.name_of_players
-        scores_of_players: root.scores_of_players
         number_of_players: root.number_of_players
+        name_of_players: root.name_of_players[:root.number_of_players]
+        scores_of_players: gameplayscreen.scores_of_players[:root.number_of_players]
+        aiActivated: root.aiActivated
+        aiScore: root.aiScore
         game: root

@@ -57,8 +57,10 @@ class AI(object):
         index = random.randint(0,length-1)
         difficulty = set_difficulties[index]
         time = the_time - 4*(4-difficulty)*length
+        if time > 10:
+        	time = 10
         
-        return time, index
+        return 0.1, index
         
     def newRatings(self, winnerRating, loserRating, K = 32):
         '''calculates ratings of winner and loser according to ELO http://en.wikipedia.org/wiki/Elo_rating_system'''

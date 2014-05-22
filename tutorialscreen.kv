@@ -1,20 +1,39 @@
 # All classes related to the tutorial game screen
 #:import SlideTransition kivy.uix.screenmanager.SlideTransition
 
-<TitleLabel@Label>
-    size_hint: (1, .15)
-    font_name: 'DroidSans'
-    markup: True
-    font_size: '30dp'
-
 <TextLabel@Label>
     pos_hint: {'center_x': 0.5}
-    size_hint: (1, .7)
+    size_hint: (0.9, 1)
     font_name: 'DroidSans'
     markup: True
     halign: 'left'
+    valign: 'middle'
+    text_size: self.size
+
+<BoxLayoutcol@BoxLayout>
+    orientation: 'vertical'
+    padding: '2dp'
+    spacing: '5dp' 
+    size_hint: (1, 1)
+
+<BoxLayoutim@BoxLayout>
+    size_hint: (0.8, 0.8)
+    pos_hint: {'center_x': 0.5}
+    orientation: 'horizontal'
+    padding: '5dp'
+    spacing: '5dp'
+    Image:
+        size_hint_x: 0.5
+        source: root.image1
+    Image:
+        size_hint_x: 0.5
+        source: root.image2
+    Image:
+        size_hint_x: 0.5
+        source: root.image3
 
 <TutorialScreen@Popup>
+    title: 'How To Play Shugou'
     ScreenManager:
         id: tutorialScreens
         Screen:
@@ -23,11 +42,8 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                TitleLabel: 
-                    text: 'How To Play Shugou'
-                TextLabel: 
-                    text: 'Welcome to Shugou! \n \n To get started, click on the number of players. \n After entering your names, you will be taken to the game screen, \n where 12 set cards have been dealt. \n \n Try to find a Shugou.  Once you find one, \n click on the three cards one by one. \n If you have found a Shugou, \n you will be able to choose your name \n to receive points for your Shugou.  \n Play continues until the deck runs out of cards. Playing with several players, the one who found the most Shugous, is the winner. \n To learn what constitutes a Shugou, \n go to the next tutorial screen.'
-                
+                TextLabel:
+                    text: "Welcome to Shugou! Your goal is to find a collection of 3 cards among the 12 that have been dealt that form a shogou. Play continues until there are no more shogou to be found on the board. A shogou is a collection of 3 cards, in which all four properties, quantity, shape, filling and color are all the same or all different."
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -47,112 +63,46 @@
                         Button:
                             anchor_x: 'right'
                             anchor_y: 'top'
-                            text: 'Next: what is a shugou?'
+                            text: 'Next: Examples'
                             size_hint: .9, 1
                             on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
         Screen:
-            id: tutorial2
             name: 'tutorial2'
+            on_enter: root.title = "Examples"
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
-                TitleLabel:
-                    text: 'What is a Shugou'
                 BoxLayout:
-                    orientation: 'vertical'
-                    padding: '20dp'
-                    spacing: '10dp'
-                    TextLabel:
-                        text: 'The cards have four properties: quantity, shape, filling and color. A Shugou contains three cards, \n which properties are all equal or all different. In the following, you see some examples for Shugous.\n In the first example the quantity, the color and the shape are equal, the filling is all different:'                        
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5} 
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/2311.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2321.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2331.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'                          
-                    Label:
-                        pos_hint: {'center_x': 0.5}
-                        size_hint: (1, .7)
-                        text: 'In the second example the color and the filling are equal, the quantity and the shape are all different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left'  
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/1221.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/3223.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2222.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'     
-                    Label:
-                        pos_hint: {'center_x': 0.3}
-                        size_hint: (1, .7)
-                        text: 'Next, the color is equal and all other properties are different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left'  
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/2333.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/1321.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/3312.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'    
-                    Label:
-                        pos_hint: {'center_x': 0.21}
-                        size_hint: (1, .7)
-                        text: 'Last all properties are different:'
-                        font_name: 'DroidSans'
-                        markup: True
-                        halign: 'left' 
-                    BoxLayout:
-                        pos_hint: {'center_x': 0.5}
-                        orientation: 'horizontal'
-                        padding: '1dp'
-                        spacing: '1dp'
-                        Image:
-                            source: 'images/3122.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/1313.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'
-                        Image:
-                            source: 'images/2231.png'
-                            size_hint_x: 0.5
-                            #width: '300dp'  
+                    orientation: 'horizontal'
+                    padding: '5dp'
+                    spacing: '5dp'
+                    BoxLayoutcol:
+                        TextLabel:
+                            text: "In this first example the quantity, the color and the shape are equal, the filling are all different:" 
+                        TextLabel:
+                            text: "In the second example the color and the filling are equal, the quantity and the shape are all different:"
+                        TextLabel:
+                            text: "Next, the color is equal and all other properties are different:" 
+                        TextLabel:
+                            text: "Last all properties are different:"
+                    BoxLayoutcol:                            
+                        BoxLayoutim:
+                            id: row1
+                            image1: 'images/1221.png'
+                            image2: 'images/3223.png'
+                            image3: 'images/2222.png'
+                        BoxLayoutim:
+                            image1: 'images/2333.png'
+                            image2: 'images/1321.png'
+                            image3: 'images/3312.png'
+                        BoxLayoutim:
+                            image1: 'images/2311.png'
+                            image2: 'images/2321.png'
+                            image3: 'images/2331.png'
+                        BoxLayoutim:
+                            image1: 'images/3122.png'
+                            image2: 'images/1313.png'
+                            image3: 'images/2231.png'
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: (1,.1)
@@ -173,48 +123,4 @@
                             text: 'Back'
                             size_hint: .9, 1
                             on_press: root.dismiss()
-#                    AnchorLayout:
-#                        size_hint:(.3,1)
-#                        Button:
-#                            anchor_x: 'right'
-#                            anchor_y: 'top'
-#                            text: 'Next: Examples of Sets'
-#                            size_hint: .9, 1
-#                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial3'
-#        Screen:
-#            id: tutorial3
-#            name: 'tutorial3'
-#            BoxLayout:
-#                orientation: 'vertical'
-#                padding: 10
-#                TitleLabel: 
-#                    text: 'Examples'
-#                Label: 
-#                    size_hint: (1, .7)
-#                    text: 'Examples here'
-#                    font_name: 'DroidSans'
-#                    markup: True
-#                    size: 100,100
-#                    #pos: (root.width-100)/2, root.height-200
-#                BoxLayout:
-#                    orientation: 'horizontal'
-#                    size_hint: (1,.1)
-#                    spacing: 5
-#                    AnchorLayout:
-#                        size_hint:(.3,1)
-#                        Button:
-#                            anchor_x: 'center'
-#                            anchor_y: 'top'
-#                            text: 'Back to description page'
-#                            size_hint: .9, 1
-#                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial2'
-#                    AnchorLayout:
-#                        size_hint:(.3,1)
-#                        Button:
-#                           anchor_x: 'center'
-#                            anchor_y: 'top'
-#                            text: 'Back'
-#                            size_hint: .9, 1
-#                            on_press: root.dismiss()
-#                    AnchorLayout:
-#                        size_hint:(.3,1)
+ 

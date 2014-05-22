@@ -4,7 +4,8 @@
 
 <CardToggle>:
     background_normal: root.card.normalimage() if root.card else ''   
-    background_down: root.card.downimage() if root.card else ''   
+    background_down: root.card.downimage() if root.card else ''
+    border: 2, 3, 3, 3   
     canvas.before:
         PushMatrix
         Rotate:
@@ -78,6 +79,11 @@
                 Label:
                     text: ""
                 SettingButton:
+                	border: 1,1,1,1
+                    text: ""
+                    background_normal: "images/gear.png"
+                    size_hint: (None, None)
+                    height: "80px"
             ScoreLabel:
                 value: 3
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
