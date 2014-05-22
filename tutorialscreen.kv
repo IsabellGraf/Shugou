@@ -51,8 +51,6 @@
                     spacing: 5
                     AnchorLayout:
                         size_hint:(.3,1)
-                    AnchorLayout:
-                        size_hint:(.3,1)
                         Button:
                             anchor_x: 'center'
                             anchor_y: 'top'
@@ -115,13 +113,13 @@
                             anchor_y: 'top'
                             text: 'Back to instruction page'
                             size_hint: .9, 1
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'
+                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
                     AnchorLayout:
                         size_hint:(.3,1)
                         Button:
                             anchor_x: 'center'
                             anchor_y: 'top'
-                            text: 'Back'
+                            text: 'Done'
                             size_hint: .9, 1
                             on_press: root.dismiss()
  
