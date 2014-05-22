@@ -79,9 +79,9 @@
     EndGameScreen:
         id: gameoverpage
         name: 'end'
-        name_of_players: root.name_of_players
-        scores_of_players: gameplayscreen.scores_of_players
         number_of_players: root.number_of_players
+        name_of_players: root.name_of_players[:root.number_of_players]
+        scores_of_players: gameplayscreen.scores_of_players[:root.number_of_players]
         aiActivated: root.aiActivated
         aiScore: root.aiScore
         game: root

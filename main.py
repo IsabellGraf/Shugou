@@ -37,22 +37,25 @@ class EndGameScreen(Screen):
     aiActivated = BooleanProperty()
     aiScore = NumericProperty()
 
+    def nthname(self, n):
+        try:
+            return [x for y,x in sorted(zip(self.scores_of_players + [self.aiScore],self.name_of_players + ['AI']*self.aiActivated))][::-1][n]
+        except IndexError:
+            return ''
+
+    def nthscore(self, n):
+        try:
+            return sorted(self.scores_of_players + [self.aiScore]*self.aiActivated)[::-1][n]
+        except IndexError:
+            return ''
+
     def on_enter(self, *args, **kwargs):
         if self.aiActivated:
-            self.name_of_players.append('AI')
-            self.scores_of_players.append(self.aiScore)
             self.number_of_players += 1
-        self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
-        self.scores_of_players = sorted(self.scores_of_players)[::-1]
 
     def on_leave(self, *args, **kwargs):
         if self.aiActivated:
-            self.name_of_players.remove('AI')
-            self.scores_of_players.remove(self.aiScore)
             self.number_of_players -= 1
-            self.name_of_players = [x for y,x in sorted(zip(self.scores_of_players,self.name_of_players))][::-1]
-            self.scores_of_players = sorted(self.scores_of_players)[::-1]
-
 
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
