@@ -199,6 +199,9 @@ class ShugouApp(App):
                                         'song_title': 'shugou_song_main'})
 
     def build_settings(self, settings):
+        Clock.unschedule(self.gamelayout.playscreen.AIplay)
+        Clock.unschedule(self.gamelayout.playscreen.aiMoves)
+        
         self.settings = settings
         self.settings.interface.menu.width = dp(100)
         settings.add_json_panel('Settings', self.config, data=settingsjson)

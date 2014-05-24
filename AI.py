@@ -60,7 +60,7 @@ class AI(object):
         if time > 10:
         	time = 10
         
-        return 0.1, index
+        return 1, index
         
     def newRatings(self, winnerRating, loserRating, K = 32):
         '''calculates ratings of winner and loser according to ELO http://en.wikipedia.org/wiki/Elo_rating_system'''
