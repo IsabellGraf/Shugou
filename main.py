@@ -6,7 +6,11 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
-from kivy.uix.screenmanager import Screen, ScreenManager, FadeTransition, SlideTransition, NoTransition
+from kivy.uix.screenmanager import (Screen,
+                                    ScreenManager,
+                                    FadeTransition,
+                                    SlideTransition,
+                                    NoTransition)
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
@@ -19,16 +23,19 @@ import pickle
 from gameplay import GamePlayScreen
 from PlayerNamePopup import PlayerNamePopup
 
+
 class TutorialScreen(Popup):
     pass
+
 
 class BoxLayoutim(BoxLayout):
     image1 = StringProperty('')
     image2 = StringProperty('')
     image3 = StringProperty('')
 
+
 class EndGameScreen(Screen):
-    name_of_players = ListProperty(['','','',''])
+    name_of_players = ListProperty(['', '', '', ''])
     scores_of_players = ListProperty()
     screenManager = ObjectProperty()
     number_of_players = NumericProperty()
@@ -38,13 +45,16 @@ class EndGameScreen(Screen):
 
     def nthname(self, n):
         try:
-            return [x for y,x in sorted(zip(self.scores_of_players + [self.aiScore],self.name_of_players + ['AI']*self.aiActivated))][::-1][n]
+            return [x for y, x in sorted(zip(
+                self.scores_of_players + [self.aiScore],
+                self.name_of_players + ['AI']*self.aiActivated))][::-1][n]
         except IndexError:
             return ''
 
     def nthscore(self, n):
         try:
-            return sorted(self.scores_of_players + [self.aiScore]*self.aiActivated)[::-1][n]
+            return sorted(self.scores_of_players +
+                          [self.aiScore]*self.aiActivated)[::-1][n]
         except IndexError:
             return ''
 
@@ -56,6 +66,7 @@ class EndGameScreen(Screen):
         if self.aiActivated:
             self.number_of_players -= 1
 
+
 class PlayerSection(Button):
     myvalue = NumericProperty(4)
 
@@ -63,8 +74,9 @@ class PlayerSection(Button):
         super(PlayerSection, self).__init__(**kwargs)
         self.size = Window.size[0] // 6, Window.size[1] // 6
 
+
 class Music(Widget):
-    soundActivated = BooleanProperty(False)    
+    soundActivated = BooleanProperty(False)
     currentSong = StringProperty('set_song')
     sound = ObjectProperty()
 
@@ -84,9 +96,11 @@ class Music(Widget):
         else:
             self.sound.stop()
 
+
 class GameLayout(ScreenManager):
-    ''' This class manages the movements between the various screen and the sound '''
-    
+    ''' This class manages the movements
+    between the various screen and the sound '''
+
     name_of_players = ListProperty(['Score', '', '', ''])
     number_of_players = NumericProperty(1)
     scores_of_players = ListProperty([0, 0, 0, 0])
@@ -115,15 +129,15 @@ class GameLayout(ScreenManager):
     def pickleFile(self):
         return self.directory + "name_of_players.pkl"
 
-    def on_name_of_players(self,value, obj):
+    def on_name_of_players(self, value, obj):
         if platform == 'macosx' or platform == 'ios':
             with open(self.pickleFile(), "wb") as playersNamePickle:
                 pickle.dump(list(self.name_of_players), playersNamePickle)
-        
+
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        if self.number_of_players == 1:
+        if self.number_of_players == 1 or platform == 'android':
             self.goToGameScreen()
             return
         tempNames = ['John', 'Sally', 'Sam', 'Joey']
@@ -134,11 +148,11 @@ class GameLayout(ScreenManager):
                     tempNames[index] = name
             except Exception as exception:
                 print("Loading from Pickling went wrong, using default names")
-            
+
         self.name_of_players = tempNames
         playername = PlayerNamePopup(self.name_of_players, numPlayers)
         playername.open()
-        playername.bind(on_dismiss = self.goToGameScreen)
+        playername.bind(on_dismiss=self.goToGameScreen)
 
     def quit(self):
         ''' You are quiting the current game '''
@@ -171,15 +185,17 @@ class ShugouApp(App):
         return self.get_application_config().rstrip("shugou.ini")
 
     def changeActive(self, instance, value):
-        # This doesn't work.. crashes if the build_settings wasn't launched first
-        #self.quitButton.disabled = not self.gamelayout.active
+        # This doesn't work..
+        # crashes if the build_settings wasn't launched first
+        # self.quitButton.disabled = not self.gamelayout.active
         pass
 
     def loadSettings(self):
-        # Load the values already stored into the file        
+        # Load the values already stored into the file
         self.music.soundActivated = boolFromJS(
-            self.config.get('settings', 'sound'))        
-        speedSettings = {'slow':10, 'normal':5, 'fast':1, 'off': 0, 'True': 1}
+            self.config.get('settings', 'sound'))
+        speedSettings = {'slow': 10, 'normal': 5,
+                         'fast': 1, 'off': 0, 'True': 1}
         speed = speedSettings[self.config.get('settings', 'hint')]
         if speed != 0:
             self.gamelayout.playscreen.displayHintTimer = speed
@@ -193,14 +209,14 @@ class ShugouApp(App):
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
-                                        'ai': False, 
+                                        'ai': False,
                                         'hint': 'off',
                                         'song_title': 'shugou_song_main'})
 
     def build_settings(self, settings):
         Clock.unschedule(self.gamelayout.playscreen.AIplay)
         Clock.unschedule(self.gamelayout.playscreen.aiMoves)
-        
+
         self.settings = settings
         self.settings.interface.menu.width = dp(100)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
@@ -208,21 +224,23 @@ class ShugouApp(App):
         self.settingsCloseButton = settingsCloseButton
         self.settingsCloseButton.text = "Return"
         settingsCloseButton.on_press = self.leaveSettingsPanel
-        settings.interface.ids.menu.add_widget(Button(text="Tutorial",
-                                                      size_hint = (None, None),
-                                                      x= settingsCloseButton.x,
-                                                      y = settingsCloseButton.top + 10,
-                                                      size = settingsCloseButton.size, 
-                                                      on_press= self.moveToTutorial))
+        settings.interface.ids.menu.add_widget(
+            Button(text="Tutorial",
+                   size_hint=(None, None),
+                   x=settingsCloseButton.x,
+                   y=settingsCloseButton.top + 10,
+                   size=settingsCloseButton.size,
+                   on_press=self.moveToTutorial))
 
         self.quitButton = Button(text="Quit",
-                              background_color = [1,0,0,1],
-                              size_hint = (None, None),
-                              x= settingsCloseButton.x,
-                              y = settingsCloseButton.top + settingsCloseButton.height + 20,
-                              size = settingsCloseButton.size,
-                              disabled = False,
-                              on_press= self.quit)   
+                                 background_color=[1, 0, 0, 1],
+                                 size_hint=(None, None),
+                                 x=settingsCloseButton.x,
+                                 y=settingsCloseButton.top
+                                 + settingsCloseButton.height + 20,
+                                 size=settingsCloseButton.size,
+                                 disabled=False,
+                                 on_press=self.quit)
 
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
@@ -235,7 +253,7 @@ class ShugouApp(App):
         tutorial = TutorialScreen(title="Tutorial")
         tutorial.open()
 
-    def leaveSettingsPanel(self, *arg):       
+    def leaveSettingsPanel(self, *arg):
         ''' activated when you exit the setting panels'''
         self.gamelayout.playscreen.setUpHint()
         self.gamelayout.playscreen.setUpAI()
@@ -246,7 +264,7 @@ class ShugouApp(App):
         elif key == 'sound':
             self.music.soundActivated = boolFromJS(value)
         elif key == 'hint':
-            speedSettings = {u'slow':10, u'normal':5, u'fast':1, u'off': 0}
+            speedSettings = {u'slow': 10, u'normal': 5, u'fast': 1, u'off': 0}
             speed = speedSettings[value]
             if speed != 0:
                 self.gamelayout.playscreen.displayHintTimer = speed

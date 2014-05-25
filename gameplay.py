@@ -13,6 +13,7 @@ from Rotator import Rotator
 
 import datetime
 
+
 class SelectPlayersPopup(Popup):
 
     '''controls the values shown in the player selection popup'''
@@ -29,13 +30,15 @@ class SelectPlayersPopup(Popup):
             button.bind(on_press=self.click)
             self.content.add_widget(button)
 
-    def click(self,button):
+    def click(self, button):
         self.playscreen.scores_of_players[int(button.value)] += 1
         self.dismiss()
+
 
 class CardToggle(ToggleButton):
     card = ObjectProperty()
     angle = NumericProperty(0)
+
 
 class GamePlayScreen(Screen):
     numberofsets = NumericProperty(0)
@@ -44,10 +47,10 @@ class GamePlayScreen(Screen):
     aiScore = NumericProperty()
     aiActivated = BooleanProperty()
     directory = StringProperty('')
-    
+
     hintActivated = BooleanProperty(False)
     number_of_players = NumericProperty(1)
-    name_of_players = ListProperty(['','','',''])
+    name_of_players = ListProperty(['', '', '', ''])
     scores_of_players = ListProperty([0, 0, 0, 0])
 
     cards = ListProperty()
@@ -56,7 +59,7 @@ class GamePlayScreen(Screen):
     aiPlayed = BooleanProperty(False)
     active = BooleanProperty(False)
 
-    def __init__(self,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
 
@@ -93,12 +96,11 @@ class GamePlayScreen(Screen):
         self.newRound()
         self.t0 = datetime.datetime.now()
 
-        
     def goToSettings(self):
         Clock.unschedule(self.AIplay)
         Clock.unschedule(self.aiMoves)
         App.get_running_app().open_settings()
-            
+
     def newRound(self):
         ''' What should be done at the begining of every round '''
         self.stopRotation()
@@ -108,16 +110,19 @@ class GamePlayScreen(Screen):
         self.setUpAI()
 
     def checkIfSetOnBoard(self, obj):
-        '''Called when a button is pressed, checks if there is a set. If there is one, then refill the display cards'''
+        '''Called when a button is pressed, checks if there is a set.
+        If there is one, then refill the display cards'''
         down = self.selected()
         if not len(down) == 3:
             return
 
-        if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+        if Deck.checkSet(self.cards[down[0]],
+                         self.cards[down[1]],
+                         self.cards[down[2]]):
             self.aiUpdates()
             if self.aiPlayed:
                 self.aiScore += 1
-                self.aiPlayed = False                    
+                self.aiPlayed = False
             else:
                 if self.number_of_players > 1:
                     self.select_player_popup()
@@ -126,7 +131,9 @@ class GamePlayScreen(Screen):
 
             selectedcards = {self.cards[i] for i in down}
             try:
-                newcards = self.deck.drawGuarantee(othercards=set(self.cards) ^ selectedcards, numberofcards=3)
+                newcards = self.deck.drawGuarantee(
+                    othercards=set(self.cards) ^ selectedcards,
+                    numberofcards=3)
             except ValueError:  # no more shugous available
                 self.game.current = 'end'
                 return
@@ -143,7 +150,7 @@ class GamePlayScreen(Screen):
         self.setUpHint()
         self.t0 = datetime.datetime.now()
         if self.aiActivated:
-            self.setUpAI()        
+            self.setUpAI()
 
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
@@ -156,7 +163,9 @@ class GamePlayScreen(Screen):
             if self.ai.time < 5:
                 self.ai.time = 5
             down = self.selected()
-            selected = self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]
+            selected = self.cards[down[0]], \
+                self.cards[down[1]],\
+                self.cards[down[2]]
             self.ai.updateRatingsHuman(
                 self.cards, selected, timeDifference)
 
@@ -209,7 +218,8 @@ class GamePlayScreen(Screen):
         self.setUpHint()
 
     def setUpHint(self):
-        ''' unschedule any current hint and loads up the next one if appropriate'''
+        ''' unschedule any current hint and loads up
+        the next one if appropriate'''
         # Need to remove any previous call or else it might be activated too
         # quickly
         Clock.unschedule(self.displayHint)
@@ -224,7 +234,8 @@ class GamePlayScreen(Screen):
             self.stopRotation()
 
     def displayHint(self, *arg):
-        ''' Displays the first card in the hint and sets-up the display of the second card in the hint'''
+        ''' Displays the first card in the hint and sets-up
+        the display of the second card in the hint'''
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
             buttonToRotate = self.buttonFromCard(self.hint[0])
@@ -246,7 +257,7 @@ class GamePlayScreen(Screen):
         for index, button in enumerate(self.buttons):
             if button.state == 'down':
                 down.append(index)
-        return down            
+        return down
 
     def stopClocks(self):
         Clock.unschedule(self.AIplay)

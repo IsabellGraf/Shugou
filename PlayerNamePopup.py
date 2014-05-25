@@ -26,7 +26,8 @@ class PlayerNamePopup(Popup):
 
         playerEdit = PlayerNameEdit(nameText=button.text,
                                     on_dismiss=lambda popup:
-                                       self.set_caption(popup.textBox.text, button))
+                                    self.set_caption(popup.textBox.text,
+                                                     button))
         playerEdit.textBox.select_all()
         playerEdit.open()
 
