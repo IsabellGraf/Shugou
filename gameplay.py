@@ -148,9 +148,13 @@ class GamePlayScreen(Screen):
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
         if self.aiPlayed:
+            self.ai.time += 10
             self.ai.updateRatingsAI(
                 self.cards, self.aiCards, timeDifference)
         else:
+            self.ai.time -= 7
+            if self.ai.time < 5:
+                self.ai.time = 5
             down = self.selected()
             selected = self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]
             self.ai.updateRatingsHuman(

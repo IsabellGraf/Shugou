@@ -9,6 +9,7 @@ class AI(object):
     def __init__(self, path):
         self.ratingList =  self.loadData()
     	self.path = path
+        self.time = 45
 
     def loadData(self):
         try:
@@ -36,7 +37,7 @@ class AI(object):
         for the_set in all_sets:
             set_difficulties.append(self.get_difficulties(the_set))
 
-        time,index = self.get_time(set_difficulties)
+        time, index = self.get_time(set_difficulties)
         set_cards1, set_cards2, set_cards3 = all_sets[index]
 
         return time, (set_cards1, set_cards2, set_cards3)
@@ -50,17 +51,16 @@ class AI(object):
     
     
     def get_time(self, set_difficulties):
-        # For a 'normal' table an advanced player needs about 15s, the beginner needs about 120s to find a set.
+# For a 'normal' table an advanced player needs about 15s, the beginner needs about 120s to find a set.
 
-        the_time = 90
+#        the_time = 90
         length = len(set_difficulties)
         index = random.randint(0,length-1)
-        difficulty = set_difficulties[index]
-        time = the_time - 4*(4-difficulty)*length
-        if time > 10:
-        	time = 10
-        
-        return 1, index
+#        difficulty = set_difficulties[index]
+#        time = the_time - 4*(4-difficulty)*length
+#        if time > 10:
+#        	time = 10
+        return self.time, index
         
     def newRatings(self, winnerRating, loserRating, K = 32):
         '''calculates ratings of winner and loser according to ELO http://en.wikipedia.org/wiki/Elo_rating_system'''
