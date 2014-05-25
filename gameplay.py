@@ -153,7 +153,6 @@ class GamePlayScreen(Screen):
         else:
             down = self.selected()
             selected = self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]
-            print selected
             self.ai.updateRatingsHuman(
                 self.cards, selected, timeDifference)
 
