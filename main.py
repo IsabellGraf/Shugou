@@ -137,10 +137,12 @@ class GameLayout(ScreenManager):
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
+        tempNames = ['John', 'Sally', 'Sam', 'Joey']
+
         if self.number_of_players == 1 or platform == 'android':
+            self.name_of_players = tempNames
             self.goToGameScreen()
             return
-        tempNames = ['John', 'Sally', 'Sam', 'Joey']
         if platform == 'macosx' or platform == 'ios':
             try:
                 names = pickle.load(open(self.pickleFile(), "rb"))
