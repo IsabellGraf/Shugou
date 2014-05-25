@@ -1,6 +1,7 @@
 
 from kivy.clock import Clock
 
+
 class Rotator(object):
     ''' A class that handles the rotation of buttons '''
     def __init__(self):
@@ -15,7 +16,7 @@ class Rotator(object):
         if len(self.buttons) > 1:
             self.buttons[-1].angle = self.angle
         else:
-            Clock.schedule_interval(self.rotateLeft,0.05)
+            Clock.schedule_interval(self.rotateLeft, 0.05)
 
     def rotateLeft(self, dt):
         if self.angle < 8:
@@ -24,7 +25,7 @@ class Rotator(object):
             button.angle = self.angle
         if self.angle == 8:
             Clock.unschedule(self.rotateLeft)
-            Clock.schedule_interval(self.rotateRight,0.05)
+            Clock.schedule_interval(self.rotateRight, 0.05)
 
     def rotateRight(self, dt):
         if self.angle > -8:
@@ -33,7 +34,7 @@ class Rotator(object):
             button.angle = self.angle
         if self.angle == -8:
             Clock.unschedule(self.rotateRight)
-            Clock.schedule_interval(self.rotateLeft,0.05)
+            Clock.schedule_interval(self.rotateLeft, 0.05)
 
     def endRotate(self):
         Clock.unschedule(self.rotateRight)

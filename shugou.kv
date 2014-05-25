@@ -18,13 +18,13 @@
     font_size: '40dp'
 
 <SettingButton@Button>:
-    text: 'Settings'
+    border: 1,1,1,1
+    text: ""
     background_color: 102/255., 102/255., 0/255., 0.8
-    size_hint_y: 0.8
-    font_size: '25dp'
+    background_normal: "images/gear.png"
+    size_hint: (None, None)
+    height: "80px"
     halign: 'center'
-    on_press:
-        app.open_settings()
 
 <GameLayout>:
     id: screenManager
@@ -63,18 +63,27 @@
                     orientation: "vertical"
                     Widget:
                     SettingButton:
+                        on_press:
+                            app.open_settings()
                 Widget:
+                
     GamePlayScreen:
+        goToIntro: root.goToIntro
+        directory: root.directory
         id: gameplayscreen
         number_of_players: root.number_of_players
         name_of_players: root.name_of_players
+        aiActivated: root.aiActivated
+        aiScore: root.aiScore
         game: root
         active: root.active
 
     EndGameScreen:
         id: gameoverpage
         name: 'end'
-        name_of_players: root.name_of_players
-        scores_of_players: gameplayscreen.scores_of_players
         number_of_players: root.number_of_players
+        name_of_players: root.name_of_players[:root.number_of_players]
+        scores_of_players: gameplayscreen.scores_of_players[:root.number_of_players]
+        aiActivated: root.aiActivated
+        aiScore: root.aiScore
         game: root
