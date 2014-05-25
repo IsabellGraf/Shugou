@@ -18,10 +18,12 @@
     font_size: '40dp'
 
 <SettingButton@Button>:
-    text: 'Settings'
+    border: 1,1,1,1
+    text: ""
     background_color: 102/255., 102/255., 0/255., 0.8
-    size_hint_y: 0.8
-    font_size: '25dp'
+    background_normal: "images/gear.png"
+    size_hint: (None, None)
+    height: "80px"
     halign: 'center'
     on_press:
         app.open_settings()
