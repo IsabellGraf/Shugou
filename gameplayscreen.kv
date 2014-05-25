@@ -79,11 +79,6 @@
                 Label:
                     text: ""
                 SettingButton:
-                	border: 1,1,1,1
-                    text: ""
-                    background_normal: "images/gear.png"
-                    size_hint: (None, None)
-                    height: "80px"
             ScoreLabel:
                 value: 3
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
