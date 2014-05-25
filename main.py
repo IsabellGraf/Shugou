@@ -14,7 +14,6 @@ from kivy.metrics import dp
 from kivy import platform
 from kivy.clock import Clock
 from jsonConfig import settingsjson
-import datetime
 import pickle
 
 from gameplay import GamePlayScreen
