@@ -76,9 +76,7 @@ class AI(object):
     def updateRatingsAI(self, table, setFound, the_time):
         '''AI was faster, so all sets involved are actually harder than we thought, ie increase their rating
         
-        Please call
-        >> updateRatingsAI(table)
-        whenever an AI finds a set
+        Please call whenever an AI finds a set
         '''
 
         allSets = Deck.allSets(table)
@@ -91,10 +89,7 @@ class AI(object):
 
     def updateRatingsHuman(self, table, setFound, the_time):
         '''updates the ratings of all sets involved in this round
-        
-        Please call
-        >> updateRatingsHuman(table, setFound)
-        whenever a human finds a set
+        Please call whenever a human finds a set
         '''
         initialRating = 1500 #any number would work, chess uses something like this usually, so why not...
         setFoundKey = Deck.idOfSet(setFound)

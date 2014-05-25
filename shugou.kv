@@ -25,8 +25,6 @@
     size_hint: (None, None)
     height: "80px"
     halign: 'center'
-    on_press:
-        app.open_settings()
 
 <GameLayout>:
     id: screenManager
@@ -65,6 +63,8 @@
                     orientation: "vertical"
                     Widget:
                     SettingButton:
+                        on_press:
+                            app.open_settings()
                 Widget:
                 
     GamePlayScreen:

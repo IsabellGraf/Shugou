@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.properties import *
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
@@ -92,6 +93,12 @@ class GamePlayScreen(Screen):
         self.newRound()
         self.t0 = datetime.datetime.now()
 
+        
+    def goToSettings(self):
+        Clock.unschedule(self.AIplay)
+        Clock.unschedule(self.aiMoves)
+        App.get_running_app().open_settings()
+            
     def newRound(self):
         ''' What should be done at the begining of every round '''
         self.stopRotation()
@@ -107,9 +114,9 @@ class GamePlayScreen(Screen):
             return
 
         if Deck.checkSet(self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]):
+            self.aiUpdates()
             if self.aiPlayed:
                 self.aiScore += 1
-                self.aiUpdates()
                 self.aiPlayed = False                    
             else:
                 if self.number_of_players > 1:
@@ -140,15 +147,15 @@ class GamePlayScreen(Screen):
 
     def aiUpdates(self):
         timeDifference = datetime.datetime.now() - self.t0
-        if self.aiActivated:
-            if self.aiPlayed:
-                self.ai.updateRatingsAI(
-                    self.cards, self.aiCards, timeDifference)
-            else:
-                pass
-                # Fixme! selected are the cards of the collection the human found
-                #self.ai.updateRatingsHuman(
-                #    self.cards, selected, timeDifference)
+        if self.aiPlayed:
+            self.ai.updateRatingsAI(
+                self.cards, self.aiCards, timeDifference)
+        else:
+            down = self.selected()
+            selected = self.cards[down[0]], self.cards[down[1]], self.cards[down[2]]
+            print selected
+            self.ai.updateRatingsHuman(
+                self.cards, selected, timeDifference)
 
     def stopRotation(self):
         self.rotator.endRotate()
@@ -209,9 +216,8 @@ class GamePlayScreen(Screen):
             self.hint = Deck.hint(self.cards)
             Clock.schedule_once(self.displayHint, self.displayHintTimer)
 
-    def on_hintActivated(self, obj, value):
-        # If the hint was turned off, unselect the cards
-        if value == False:
+    def on_hintActivated(self, obj, is_activated):
+        if not is_activated:
             self.stopRotation()
 
     def displayHint(self, *arg):
