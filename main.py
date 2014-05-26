@@ -194,11 +194,10 @@ class ShugouApp(App):
 
     def loadSettings(self):
         # Load the values already stored into the file
+        self.speedSettings = {u'slow': 60, u'normal': 30, u'fast': 1, u'off': 0}
         self.music.soundActivated = boolFromJS(
             self.config.get('settings', 'sound'))
-        speedSettings = {'slow': 10, 'normal': 5,
-                         'fast': 1, 'off': 0, 'True': 1}
-        speed = speedSettings[self.config.get('settings', 'hint')]
+        speed = self.speedSettings[self.config.get('settings', 'hint')]
         if speed != 0:
             self.gamelayout.playscreen.displayHintTimer = speed
             self.gamelayout.playscreen.hintActivated = True
@@ -266,8 +265,7 @@ class ShugouApp(App):
         elif key == 'sound':
             self.music.soundActivated = boolFromJS(value)
         elif key == 'hint':
-            speedSettings = {u'slow': 10, u'normal': 5, u'fast': 1, u'off': 0}
-            speed = speedSettings[value]
+            speed = self.speedSettings[value]
             if speed != 0:
                 self.gamelayout.playscreen.displayHintTimer = speed
                 self.gamelayout.playscreen.hintActivated = True
