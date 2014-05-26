@@ -114,6 +114,8 @@ class GameLayout(ScreenManager):
 
     def __init__(self, **kwargs):
         super(GameLayout, self).__init__(**kwargs)
+        # on_enter of intro screen is not called, set the song here
+        App.get_running_app().music.currentSong = 'shugou_song_main'
         self.playscreen = self.get_screen('game')
         self.transition = FadeTransition()
 
@@ -204,16 +206,13 @@ class ShugouApp(App):
             self.gamelayout.playscreen.hintActivated = True
         else:
             self.gamelayout.playscreen.hintActivated = False
-
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
-        self.music.currentSong = self.config.get('settings', 'song_title')
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
                                         'ai': False,
-                                        'hint': 'off',
-                                        'song_title': 'shugou_song_main'})
+                                        'hint': 'off'})
 
     def build_settings(self, settings):
         Clock.unschedule(self.gamelayout.playscreen.AIplay)
@@ -261,9 +260,7 @@ class ShugouApp(App):
         self.gamelayout.playscreen.setUpAI()
 
     def on_config_change(self, config, section, key, value):
-        if key == 'song_title':
-            self.music.currentSong = value
-        elif key == 'sound':
+        if key == 'sound':
             self.music.soundActivated = boolFromJS(value)
         elif key == 'hint':
             speedSettings = {u'slow': 10, u'normal': 5, u'fast': 1, u'off': 0}
