@@ -68,6 +68,7 @@
                 Widget:
                 
     GamePlayScreen:
+        on_enter: app.music.currentSong = 'main_game'
         goToIntro: root.goToIntro
         directory: root.directory
         id: gameplayscreen

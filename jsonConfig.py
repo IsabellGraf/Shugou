@@ -11,6 +11,4 @@ settingsjson = json.dumps([
      'Compete against an AI', 'section': 'settings', 'key': 'ai'},
     {'type': 'options', 'title': 'Hint', 'desc': 'Control frequency of hints',
      'options': ['off', 'slow', 'normal', 'fast'], 'section': 'settings', 'key': 'hint'},
-    {'type': 'options', 'title': 'Songs', 'desc': 'Pick a song',
-     'options': [ f.rstrip('.wav') for f in listdir('.') if isfile(join('.',f)) and f.endswith('.wav') ], 'section': 'settings', 'key': 'song_title'},
     {'type': 'title', 'title': 'Email bugs and ideas for improvement: \n shugou.app@gmail.com'}])
