@@ -18,13 +18,11 @@
     font_size: '40dp'
 
 <SettingButton@Button>:
-    border: 1,1,1,1
-    text: ""
-    background_color: 102/255., 102/255., 0/255., 0.8
-    background_normal: "images/gear.png"
-    size_hint: (None, None)
-    height: "80px"
-    halign: 'center'
+    #background_color: 102/255., 102/255., 0/255., 0
+    background_color: 1, 1, 1, 1
+    Image:
+        source: "images/gear.png"
+        x: self.parent.x + self.parent.width/2 - self.width/2
 
 <GameLayout>:
     id: screenManager
@@ -61,7 +59,7 @@
                 Widget:
                 BoxLayout:
                     orientation: "vertical"
-                    Widget:
+                    #Widget:
                     SettingButton:
                         on_press:
                             app.open_settings()
