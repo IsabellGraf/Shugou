@@ -18,15 +18,12 @@
     font_size: '40dp'
 
 <SettingButton@Button>:
-    border: 1,1,1,1
-    text: ""
-    background_color: 102/255., 102/255., 0/255., 0.8
-    background_normal: "images/gear.png"
-    size_hint: (None, None)
-    height: "80px"
-    halign: 'center'
-    x: self.parent.x
-
+    background_color: 1, 1, 1, 0
+    size_hint: None, None
+    Image:
+        source: "images/gear.png"
+        x: self.parent.x
+        
 <GameLayout>:
     id: screenManager
     Screen:
@@ -68,7 +65,7 @@
                         anchor_y: 'bottom'
                         SettingButton:
                             on_press:
-                                app.open_settings()
+                                app.open_settings()                              
                 Widget:
                 
     GamePlayScreen:
