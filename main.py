@@ -89,7 +89,7 @@ class Music(Widget):
     def playMusic(self):
         if self.sound:
             self.sound.stop()
-        self.sound = SoundLoader.load(self.currentSong + ".wav")
+        self.sound = SoundLoader.load("music/" + self.currentSong + ".wav")
         if self.soundActivated:
             self.sound.loop = True
             self.sound.play()
