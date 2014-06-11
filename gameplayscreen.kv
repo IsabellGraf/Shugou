@@ -78,9 +78,13 @@
                 orientation: "vertical"
                 Label:
                     text: ""
-                SettingButton:
-                    on_press:
-                        root.goToSettings()
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'bottom'
+                    SettingButton:
+                        on_press:
+                            print(self.x)
+                            root.goToSettings()
 
             ScoreLabel:
                 value: 3
