@@ -35,6 +35,8 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
+        on_enter:
+            app.music.currentSong = 'shugou_song_main'
         BoxLayout:
             orientation: "vertical"
             ShugouTitle:
