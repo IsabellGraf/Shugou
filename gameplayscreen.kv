@@ -14,7 +14,7 @@
     canvas.after:
         PopMatrix
 
-<SelectPlayersPopup@Popup>:
+<SelectPlayersPopup>:
     size_hint: 1, 1
     separator_height: 0
     title: 'Who found the Shugou?'
@@ -24,7 +24,7 @@
     font_size: '25sp'
     halign: 'center'
 
-<GamePlayScreen@Screen>:
+<GamePlayScreen>:
     id: mainpage
     name: 'game'
     canvas.before:
@@ -76,11 +76,12 @@
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"
-                Label:
-                    text: ""
-                SettingButton:
-                    on_press:
-                        root.goToSettings()
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'bottom'
+                    SettingButton:
+                        on_press:
+                            root.goToSettings()
 
             ScoreLabel:
                 value: 3
