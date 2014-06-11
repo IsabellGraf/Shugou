@@ -5,7 +5,7 @@
 
 # All classes related to the intro screen
 
-<PlayerSection@Button>:
+<PlayerSection>:
     background_normal: 'images/players.png'
     border: 2,2,2,2
     value: 0
@@ -20,9 +20,11 @@
 <SettingButton@Button>:
     #background_color: 102/255., 102/255., 0/255., 0
     background_color: 1, 1, 1, 1
+    size_hint: None, None
     Image:
         source: "images/gear.png"
-        x: self.parent.x + self.parent.width/2 - self.width/2
+        x: self.parent.x
+        
 
 <GameLayout>:
     id: screenManager
@@ -59,10 +61,12 @@
                 Widget:
                 BoxLayout:
                     orientation: "vertical"
-                    #Widget:
-                    SettingButton:
-                        on_press:
-                            app.open_settings()
+                    AnchorLayout:
+                        anchor_x: 'center'
+                        anchor_y: 'bottom'
+                        SettingButton:
+                            on_press:
+                                root.goToSettings()
                 Widget:
                 
     GamePlayScreen:
