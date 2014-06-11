@@ -2,6 +2,12 @@
 commands:
 	@grep -E '^##' makefile | sed -e 's/##//g'
 
+## debug: use crtl+e to open the inspector
+debug:
+	python combineFiles.py combine
+	sudo python main.py -m inspector
+	python combineFiles.py clean
+
 ## normal: for PCs
 normal:
 	python combineFiles.py combine
