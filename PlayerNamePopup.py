@@ -14,12 +14,17 @@ class PlayerNamePopup(Popup):
 
     def __init__(self, namesOfPlayers, numPlayers):
         super(PlayerNamePopup, self).__init__()
+        #self.auto_dismiss = False
         self.namesOfPlayers = namesOfPlayers
         # Create the screen which allows to select which users' name to change
         for i, name in enumerate(self.namesOfPlayers[0:numPlayers]):
             button = Button(text=name, on_press=self.click, font_size='25dp')
             button.value = i
             self.ids.content.add_widget(button)
+
+    def start_game(self):
+        self.goto_game()
+        self.dismiss()
 
     def click(self, button):
         # In here, we create the popup where we request the new user's names.
