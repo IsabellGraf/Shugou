@@ -258,6 +258,10 @@ class ShugouApp(App):
         self.gamelayout.playscreen.setUpHint()
         self.gamelayout.playscreen.setUpAI()
 
+    def on_pause(self, *arg):
+        # We should save some data of the game here
+        return True
+
     def on_config_change(self, config, section, key, value):
         if key == 'sound':
             self.music.soundActivated = boolFromJS(value)
