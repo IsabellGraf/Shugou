@@ -218,7 +218,7 @@ class ShugouApp(App):
         Clock.unschedule(self.gamelayout.playscreen.aiMoves)
 
         self.settings = settings
-        self.settings.interface.menu.width = dp(100)
+        self.settings.interface.menu.width = dp(160)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
         self.settingsCloseButton = settingsCloseButton
