@@ -21,9 +21,12 @@ class PlayerNamePopup(Popup):
             button.value = i
             self.ids.content.add_widget(button)
 
+    def start_game(self):
+        self.goto_game()
+        self.dismiss()
+
     def click(self, button):
         # In here, we create the popup where we request the new user's names.
-
         playerEdit = PlayerNameEdit(nameText=button.text,
                                     on_dismiss=lambda popup:
                                     self.set_caption(popup.textBox.text,
