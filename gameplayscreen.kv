@@ -47,7 +47,7 @@
                 ScoreLabel:
                     text: "AI: " + str(root.aiScore) if root.aiActivated else ""
             ScoreLabel:
-                value: 1 
+                value: 1 if root.number_of_players != 2 else 2
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
         GridLayout:
             id: cards_layout
@@ -72,7 +72,7 @@
         BoxLayout:
             orientation: "horizontal"
             ScoreLabel:  
-                value: 2
+                value: 2 if root.number_of_players != 2 else 1
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"
