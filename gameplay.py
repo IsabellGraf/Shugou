@@ -6,6 +6,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
+from kivy.core.audio import SoundLoader
 
 from Deck import Deck
 from AI import AI
@@ -119,6 +120,11 @@ class GamePlayScreen(Screen):
         if Deck.checkSet(self.cards[down[0]],
                          self.cards[down[1]],
                          self.cards[down[2]]):
+            # Taken from: http://www.freesound.org/people/schademans/sounds/13286/
+            sound = SoundLoader.load("music/" + "13286__schademans__pipe5" + ".wav")
+            sound.loop = False
+            sound.play()
+
             self.aiUpdates()
             if self.aiPlayed:
                 self.aiScore += 1
