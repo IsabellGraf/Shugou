@@ -139,7 +139,7 @@ class GameLayout(ScreenManager):
     def player_name_popup(self, numPlayers):
         '''called after selecting number of players'''
         self.number_of_players = numPlayers
-        tempNames = ['John', 'Sally', 'Sam', 'Joey']
+        tempNames = ['Artagnan', 'Athos', 'Porthos', 'Aramis']
 
         if self.number_of_players == 1 or platform == 'android':
             self.name_of_players = tempNames
@@ -218,7 +218,7 @@ class ShugouApp(App):
         Clock.unschedule(self.gamelayout.playscreen.aiMoves)
 
         self.settings = settings
-        self.settings.interface.menu.width = dp(100)
+        self.settings.interface.menu.width = dp(160)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
         
@@ -269,6 +269,10 @@ class ShugouApp(App):
         ''' activated when you exit the setting panels'''
         self.gamelayout.playscreen.setUpHint()
         self.gamelayout.playscreen.setUpAI()
+
+    def on_pause(self, *arg):
+        # We should save some data of the game here
+        return True
 
     def on_config_change(self, config, section, key, value):
         if key == 'sound':

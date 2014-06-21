@@ -22,7 +22,7 @@ class SelectPlayersPopup(Popup):
         super(SelectPlayersPopup, self).__init__()
         # More UI that I can't quite put in the kv file
         self.playscreen = playscreen
-        self.content = GridLayout(cols=2, spacing='10dp')
+        self.content = GridLayout(rows=2, spacing='10dp')
         for i in range(self.playscreen.number_of_players):
             button = Button()
             button.text = self.playscreen.name_of_players[i]
