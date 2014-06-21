@@ -221,27 +221,39 @@ class ShugouApp(App):
         self.settings.interface.menu.width = dp(100)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
-        self.settingsCloseButton = settingsCloseButton
-        self.settingsCloseButton.text = "Return"
-        settingsCloseButton.on_press = self.leaveSettingsPanel
-        settings.interface.ids.menu.add_widget(
-            Button(text="Tutorial",
+        
+        settingsCloseButton.height += 10
+
+        def close(*args):
+            self.leaveSettingsPanel()
+            self.close_settings()
+        newCloseButton = Button(text="Return",
+                                 size_hint=(None, None),
+                                 x=settingsCloseButton.x,
+                                 y=settingsCloseButton.y,
+                                 size=settingsCloseButton.size,
+                                 on_press=close)
+
+        tutorialButton = Button(text="Tutorial",
                    size_hint=(None, None),
                    x=settingsCloseButton.x,
-                   y=settingsCloseButton.top + 10,
+                   y=newCloseButton.top + 10,
                    size=settingsCloseButton.size,
-                   on_press=self.moveToTutorial))
+                   on_press=self.moveToTutorial)
 
         self.quitButton = Button(text="Quit",
                                  background_color=[1, 0, 0, 1],
                                  size_hint=(None, None),
                                  x=settingsCloseButton.x,
-                                 y=settingsCloseButton.top
-                                 + settingsCloseButton.height + 20,
+                                 y=tutorialButton.top + 10,
                                  size=settingsCloseButton.size,
-                                 disabled=False,
                                  on_press=self.quit)
 
+        settings.interface.ids.menu.remove_widget(settingsCloseButton)
+
+        settings.interface.ids.menu.add_widget(newCloseButton)
+
+        settings.interface.ids.menu.add_widget(tutorialButton)
         settings.interface.ids.menu.add_widget(self.quitButton)
         settings.on_close = self.quit
 
