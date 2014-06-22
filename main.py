@@ -11,6 +11,9 @@ from kivy.uix.screenmanager import (Screen,
                                     FadeTransition,
                                     SlideTransition,
                                     NoTransition)
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 from kivy.uix.settings import SettingsWithSidebar
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
@@ -169,6 +172,8 @@ def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
     return True if value == '1' else False
 
+class AboutUs(BoxLayout):
+    pass
 
 class ShugouApp(App):
     active = BooleanProperty(False)
@@ -193,6 +198,39 @@ class ShugouApp(App):
         # crashes if the build_settings wasn't launched first
         # self.quitButton.disabled = not self.gamelayout.active
         pass
+
+    def AboutUs(self,*arg):
+        content = AboutUs()
+        popup = Popup(title='Common questions', content=content,auto_dismiss=False)
+        popup.content = self.buildAboutUs(popup.dismiss)
+        popup.open()
+
+    def buildAboutUs(self, dismiss):
+        box = BoxLayout(orientation="vertical")
+        scrollViewLayout = ScrollView(do_scroll_x=False)
+        childLayout = GridLayout(cols = 1, size_hint_x = 1, size_hint_y = None)
+        childLayout.bind(minimum_height=childLayout.setter('height'))
+
+        def longTextLabel():
+            _long_text = """[b]Programmers: [/b]\n Carmen Bruni, Jia Guu, Bernhard Konrad Jerome Lefebvre \n\n
+            [b]Art: [/b]\n Isabell Graf \n\n
+            [b]Music: [/b]\n Carmen Bruni\n\n
+            [b]Sound Effect: [/b]\n ...?\n\n
+            """
+            reallyLongText = _long_text
+            myLabel = Label(text = reallyLongText, text_size = (700,None), line_height=1.5, markup=True)
+
+            myLabel.size_hint_y = None
+            myLabel.height = 500
+
+            return myLabel
+
+        childLayout.add_widget(longTextLabel())
+        scrollViewLayout.add_widget(childLayout)
+        box.add_widget(scrollViewLayout)
+        close_button = Button(text="Close",size_hint_y=0.1, on_press=dismiss)
+        box.add_widget(close_button)
+        return box
 
     def loadSettings(self):
         # Load the values already stored into the file
@@ -221,28 +259,48 @@ class ShugouApp(App):
         self.settings.interface.menu.width = dp(160)
         settings.add_json_panel('Settings', self.config, data=settingsjson)
         settingsCloseButton = settings.interface.ids.menu.ids.button
-        self.settingsCloseButton = settingsCloseButton
-        self.settingsCloseButton.text = "Return"
-        settingsCloseButton.on_press = self.leaveSettingsPanel
-        settings.interface.ids.menu.add_widget(
-            Button(text="Tutorial",
+        
+        settingsCloseButton.height += 10
+
+        def close(*args):
+            self.leaveSettingsPanel()
+            self.close_settings()
+        newCloseButton = Button(text="Return",
+                                 size_hint=(None, None),
+                                 x=settingsCloseButton.x,
+                                 y=settingsCloseButton.y,
+                                 size=settingsCloseButton.size,
+                                 on_press=close)
+
+        tutorialButton = Button(text="Tutorial",
                    size_hint=(None, None),
                    x=settingsCloseButton.x,
-                   y=settingsCloseButton.top + 10,
+                   y=newCloseButton.top + 10,
                    size=settingsCloseButton.size,
-                   on_press=self.moveToTutorial))
+                   on_press=self.moveToTutorial)
 
         self.quitButton = Button(text="Quit",
                                  background_color=[1, 0, 0, 1],
                                  size_hint=(None, None),
                                  x=settingsCloseButton.x,
-                                 y=settingsCloseButton.top
-                                 + settingsCloseButton.height + 20,
+                                 y=tutorialButton.top + 10,
                                  size=settingsCloseButton.size,
-                                 disabled=False,
                                  on_press=self.quit)
 
+        aboutUSButton = Button(text="About US",
+                                 size_hint=(None, None),
+                                 x=settingsCloseButton.x,
+                                 y=self.quitButton.top + 10,
+                                 size=settingsCloseButton.size,
+                                 on_press=self.AboutUs)
+
+        settings.interface.ids.menu.remove_widget(settingsCloseButton)
+
+        settings.interface.ids.menu.add_widget(newCloseButton)
+
+        settings.interface.ids.menu.add_widget(tutorialButton)
         settings.interface.ids.menu.add_widget(self.quitButton)
+        settings.interface.ids.menu.add_widget(aboutUSButton)
         settings.on_close = self.quit
 
     def quit(self, *arg):
