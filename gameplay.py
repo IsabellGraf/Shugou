@@ -120,10 +120,11 @@ class GamePlayScreen(Screen):
         if Deck.checkSet(self.cards[down[0]],
                          self.cards[down[1]],
                          self.cards[down[2]]):
-            # Taken from: http://www.freesound.org/people/lukechalaudio/sounds/151568/
-            sound = SoundLoader.load("music/" + "151568__lukechalaudio__user-interface-generic" + ".wav")
-            sound.loop = False
-            sound.play()
+            if App.get_running_app().music.soundActivated:
+                # Taken from: http://www.freesound.org/people/lukechalaudio/sounds/151568/
+                sound = SoundLoader.load("music/" + "151568__lukechalaudio__user-interface-generic" + ".wav")
+                sound.loop = False
+                sound.play()
 
             self.aiUpdates()
             if self.aiPlayed:
