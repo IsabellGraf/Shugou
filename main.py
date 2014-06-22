@@ -202,33 +202,34 @@ class ShugouApp(App):
 
     def AboutUs(self,*arg):
         content = AboutUs()
-        popup = Popup(title='Common questions', content=content,auto_dismiss=False)
+        popup = Popup(title='Common questions', content=content, auto_dismiss=False)
         popup.content = self.buildAboutUs(popup.dismiss)
         popup.open()
 
     def buildAboutUs(self, dismiss):
         box = BoxLayout(orientation="vertical")
-        scrollViewLayout = ScrollView(do_scroll_x=False)
-        childLayout = GridLayout(cols = 1, size_hint_x = 1, size_hint_y = None)
+        scrollViewLayout = ScrollView(do_scroll_x=False, scroll_y=1)
+        childLayout = GridLayout(cols=1, size_hint_x=1, size_hint_y=None)
         childLayout.bind(minimum_height=childLayout.setter('height'))
 
         def longTextLabel():
-            _long_text = """[b]Programmers: [/b]\n Carmen Bruni (cbruni@math.ubc.ca), Jia Gou (jiaaguu@gmail.com)\n\n Bernhard Konrad (bernhard.konrad@gmail.com) and Jerome Lefebvre (jerome.p.lefebvre@gmail.com)\n\n
-            [b]Art: [/b]\n Isabell Graf (grafisab@gmail.com) \n\n
-            [b]Music: [/b]\n Carmen Bruni\n\n
-            """
+            _long_text = """\n\n[b]Programmers[/b]\nCarmen Bruni (carmen.bruni@gmail.com), Jia Gou (jiaaguu@gmail.com), Christina Koch (koch.christinal@gmail.com), Bernhard Konrad (bernhard.konrad@gmail.com) and Jerome Lefebvre (jerome.p.lefebvre@gmail.com)\n
+[b]Art[/b]\nIsabell Graf (grafisab@gmail.com) \n
+[b]Music[/b]\nCarmen Bruni\n
+[b]Contact & Feedback[/b]\nshugou.app@gmail.com"""
+
             reallyLongText = _long_text
-            myLabel = Label(text = reallyLongText, text_size = (700,None), line_height=1.5, markup=True)
+            myLabel = Label(text=reallyLongText, text_size=(700,None), line_height=1.5, markup=True)
 
             myLabel.size_hint_y = None
-            myLabel.height = 500
+            myLabel.height = 650
 
             return myLabel
 
         childLayout.add_widget(longTextLabel())
         scrollViewLayout.add_widget(childLayout)
         box.add_widget(scrollViewLayout)
-        close_button = Button(text="Close",size_hint_y=0.1, on_press=dismiss)
+        close_button = Button(text="Close", size_hint_y=0.1, on_press=dismiss)
         box.add_widget(close_button)
         return box
 
