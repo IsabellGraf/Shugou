@@ -25,7 +25,7 @@ class SelectPlayersPopup(Popup):
         self.playscreen = playscreen
         self.content = GridLayout(rows=2, spacing='10dp')
         for i in range(self.playscreen.number_of_players):
-            button = Button()
+            button = Button(font_size='20dp')
             button.text = self.playscreen.name_of_players[i]
             button.value = i
             button.bind(on_press=self.click)
@@ -120,10 +120,11 @@ class GamePlayScreen(Screen):
         if Deck.checkSet(self.cards[down[0]],
                          self.cards[down[1]],
                          self.cards[down[2]]):
-            # Taken from: http://www.freesound.org/people/lukechalaudio/sounds/151568/
-            sound = SoundLoader.load("music/" + "151568__lukechalaudio__user-interface-generic" + ".wav")
-            sound.loop = False
-            sound.play()
+            if App.get_running_app().music.soundActivated:
+                # Taken from: http://www.freesound.org/people/lukechalaudio/sounds/151568/
+                sound = SoundLoader.load("music/" + "151568__lukechalaudio__user-interface-generic" + ".wav")
+                sound.loop = False
+                sound.play()
 
             self.aiUpdates()
             if self.aiPlayed:
