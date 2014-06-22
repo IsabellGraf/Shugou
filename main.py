@@ -212,10 +212,9 @@ class ShugouApp(App):
         childLayout.bind(minimum_height=childLayout.setter('height'))
 
         def longTextLabel():
-            _long_text = """[b]Programmers: [/b]\n Carmen Bruni, Jia Guu, Bernhard Konrad Jerome Lefebvre \n\n
-            [b]Art: [/b]\n Isabell Graf \n\n
+            _long_text = """[b]Programmers: [/b]\n Carmen Bruni (cbruni@math.ubc.ca), Jia Gou (jiaaguu@gmail.com)\n\n Bernhard Konrad (bernhard.konrad@gmail.com) and Jerome Lefebvre (jerome.p.lefebvre@gmail.com)\n\n
+            [b]Art: [/b]\n Isabell Graf (grafisab@gmail.com) \n\n
             [b]Music: [/b]\n Carmen Bruni\n\n
-            [b]Sound Effect: [/b]\n ...?\n\n
             """
             reallyLongText = _long_text
             myLabel = Label(text = reallyLongText, text_size = (700,None), line_height=1.5, markup=True)
@@ -287,7 +286,7 @@ class ShugouApp(App):
                                  size=settingsCloseButton.size,
                                  on_press=self.quit)
 
-        aboutUSButton = Button(text="About US",
+        aboutUSButton = Button(text="About Us",
                                  size_hint=(None, None),
                                  x=settingsCloseButton.x,
                                  y=self.quitButton.top + 10,
