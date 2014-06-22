@@ -305,7 +305,8 @@ class ShugouApp(App):
 
     def quit(self, *arg):
         self.gamelayout.quit()
-        self.settingsCloseButton.trigger_action()
+        self.leaveSettingsPanel()
+        self.close_settings()
 
     def moveToTutorial(self, buttonInstance):
         tutorial = TutorialScreen(title="Tutorial")
