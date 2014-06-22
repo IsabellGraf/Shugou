@@ -66,16 +66,16 @@ def draw_rounded(cr, area, radius, fillin, *argv):
 
 def draw_contour(w,h,state):
     offset = 10
-    wid = 30
+    wid = 20
     w+=offset
     h+=offset
     fig_size = (w,h)
     # an area with coordinates of
     # (top, bottom, left, right) edges in absolute coordinates:
-    if state == 'Down':
-        inside_area = (offset, w-offset, offset, h-offset-wid)
-    else:
-        inside_area = (offset, w-offset, offset, h-offset)
+    # if state == 'Down':
+    #     inside_area = (offset, w-offset, offset, h-offset-wid)
+    # else:
+    inside_area = (offset, w-offset, offset, h-offset)
 
 
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, *fig_size)
@@ -86,7 +86,7 @@ def draw_contour(w,h,state):
     if state == 'Normal':
         colorcode = (101/255.,173/255.,178/255.,1)
         background_color = (1.,1.,1.,1.)
-        inside_area_down = (offset, w-offset, offset, h-wid)
+        inside_area_down = (offset, w-offset, offset, h-wid-offset)
 
         draw_rounded(cr, inside_area, 40, 'Fill', *colorcode)
         draw_rounded(cr, inside_area, 40,'Border', *colorcode)
@@ -95,11 +95,16 @@ def draw_contour(w,h,state):
         draw_rounded(cr, inside_area_down, 40,'Border', *colorcode)
 
     elif state == 'Down':
-        background_color = (255/255.,200/255.,200/255.,1.)
+
         colorcode = (101/255.,173/255.,178/255.,1)
+        background_color = (255/255.,200/255.,200/255.,1.)
+        inside_area_down = (offset, w-offset, offset+wid, h-offset)
 
         draw_rounded(cr, inside_area, 40, 'Fill', *background_color)
         draw_rounded(cr, inside_area, 40,'Border', *colorcode)
+
+        # draw_rounded(cr, inside_area_down, 40,'Fill', *background_color)
+        # draw_rounded(cr, inside_area_down, 40,'Border', *colorcode)
 
     im = Image.frombuffer("RGBA", fig_size, surface.get_data(), "raw", "BGRA", 0,1)
     return im
