@@ -100,11 +100,11 @@ def draw_contour(w,h,state):
         background_color = (255/255.,200/255.,200/255.,1.)
         inside_area_down = (offset, w-offset, offset+wid, h-offset)
 
-        draw_rounded(cr, inside_area, 40, 'Fill', *colorcode)
+        draw_rounded(cr, inside_area, 40, 'Fill', *background_color)
         draw_rounded(cr, inside_area, 40,'Border', *colorcode)
 
-        draw_rounded(cr, inside_area_down, 40,'Fill', *background_color)
-        draw_rounded(cr, inside_area_down, 40,'Border', *colorcode)
+        # draw_rounded(cr, inside_area_down, 40,'Fill', *background_color)
+        # draw_rounded(cr, inside_area_down, 40,'Border', *colorcode)
 
     im = Image.frombuffer("RGBA", fig_size, surface.get_data(), "raw", "BGRA", 0,1)
     return im
