@@ -21,10 +21,11 @@
     orientation: 'vertical'
     size_hint_x: 1
     size_hint_y: None
-    height: 160
+    height: 210
     TextLabel:
         text: root.text
         size_hint_y: None
+        markup: True
     BoxLayout:
         orientation: 'horizontal'
         width: root.width
@@ -33,17 +34,17 @@
             size_hint_x: 1
             source: root.image1
             size_hint_y: None
-            height: 80
+            height: 120
         Image:
             size_hint_x: 1
             source: root.image2
             size_hint_y: None
-            height: 80
+            height: 120
         Image:
             size_hint_x: 1
-            source: root.image1
+            source: root.image3
             size_hint_y: None
-            height: 80
+            height: 120
 
 <NavButton@Button>:
     size_hint: .9, 1
@@ -90,36 +91,36 @@
                     cols: 1
                     size_hint_x: 1
                     size_hint_y: None
-                    height: 1200
+                    height: 1100
                     TutorialExample:
-                        text: "The colors and fillings are equal, the quantities and shapes are different. The colors and fillings are equal, the quantities and shapes are different. The colors and fillings are equal, the quantities and shapes are different. The colors and fillings are equal, the quantities and shapes are different."
-                        image1: 'images/1221.png'
-                        image2: 'images/3223.png'
-                        image3: 'images/2222.png'
+                        text: "Colors, quantities, shapes equal; fillings different."
+                        image1: 'images/2321.png'
+                        image2: 'images/2331.png'
+                        image3: 'images/2311.png'
 
                     TutorialExample:
-                        text: "The colors and fillings are equal, the quantities and shapes are different."
+                        text: "Colors, fillings equal; quantities, shapes different."
                         image1: 'images/1221.png'
-                        image2: 'images/3223.png'
-                        image3: 'images/2222.png'
+                        image2: 'images/2222.png'
+                        image3: 'images/3223.png'
 
                     TutorialExample:
-                        text: "The colors and fillings are equal, the quantities and shapes are different."
-                        image1: 'images/1221.png'
-                        image2: 'images/3223.png'
-                        image3: 'images/2222.png'
+                        text: "Colors equal; fillings, quantities, shapes different."
+                        image1: 'images/1321.png'
+                        image2: 'images/2333.png'
+                        image3: 'images/3312.png'
 
                     TutorialExample:
-                        text: "The colors and fillings are equal, the quantities and shapes are different."
-                        image1: 'images/1221.png'
-                        image2: 'images/3223.png'
-                        image3: 'images/2222.png'
+                        text: "All properties are different."
+                        image1: 'images/1313.png'
+                        image2: 'images/2231.png'
+                        image3: 'images/3122.png'
 
                     TutorialExample:
-                        text: "The colors and fillings are equal, the quantities and shapes are different."
-                        image1: 'images/1221.png'
-                        image2: 'images/3223.png'
-                        image3: 'images/2222.png'
+                        text: "[b]NOT A SHUGOU:[/b] Fillings equal; colors, quantities different; [b]shapes neither equal nor different.[/b]"
+                        image1: 'images/1112.png'
+                        image2: 'images/2311.png'
+                        image3: 'images/3211.png'
 
 
             BoxLayout:
