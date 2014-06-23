@@ -171,7 +171,7 @@ class GameLayout(ScreenManager):
 
 def boolFromJS(value):
     ''' JSON config returns '1' and '0' for True and False'''
-    return True if value == '1' else False
+    return value == '1'
 
 class AboutUs(BoxLayout):
     pass
