@@ -72,49 +72,104 @@
             BoxLayout:
                 orientation: 'vertical'
                 padding: 10
+                TextLabel:
+                    text: "The colors and fillings are equal, the quantities and shapes are different."
                 BoxLayout:
                     orientation: 'horizontal'
-                    padding: '5dp'
-                    spacing: '5dp'
-                    BoxLayoutcol:
-                        TextLabel:
-                            text: "The colors and fillings are equal, the quantities and shapes are different."
-                        TextLabel:
-                            text: "The colors are equal, the fillings, quantities and shapes are different."
-                        TextLabel:
-                            text: "The colors, shapes and quantities are equal, the fillings are different."
-                        TextLabel:
-                            text: "All properties are different."
-                    BoxLayoutcol:                            
-                        BoxLayoutim:
-                            image1: 'images/1221.png'
-                            image2: 'images/3223.png'
-                            image3: 'images/2222.png'
-                        BoxLayoutim:
-                            image1: 'images/2333.png'
-                            image2: 'images/1321.png'
-                            image3: 'images/3312.png'
-                        BoxLayoutim:
-                            image1: 'images/2311.png'
-                            image2: 'images/2321.png'
-                            image3: 'images/2331.png'
-                        BoxLayoutim:
-                            image1: 'images/3122.png'
-                            image2: 'images/1313.png'
-                            image3: 'images/2231.png'
+                    padding: '2dp'
+                    spacing: '5dp' 
+                    size_hint: (1, 1)
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/1221.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/3223.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/2222.png'
+
+                TextLabel:
+                    text: "The colors and fillings are equal, the quantities and shapes are different."
                 BoxLayout:
                     orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Back to instruction page'
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Done'
-                            on_press: root.dismiss()
+                    padding: '2dp'
+                    spacing: '5dp' 
+                    size_hint: (1, 1)
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/1221.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/3223.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/2222.png'
+
+                TextLabel:
+                    text: "The colors and fillings are equal, the quantities and shapes are different."
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: '2dp'
+                    spacing: '5dp' 
+                    size_hint: (1, 1)
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/1221.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/3223.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/2222.png'
+
+                TextLabel:
+                    text: "The colors and fillings are equal, the quantities and shapes are different."
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: '2dp'
+                    spacing: '5dp' 
+                    size_hint: (1, 1)
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/1221.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/3223.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/2222.png'
+
+                TextLabel:
+                    text: "The colors and fillings are equal, the quantities and shapes are different."
+                BoxLayout:
+                    orientation: 'horizontal'
+                    padding: '2dp'
+                    spacing: '5dp' 
+                    size_hint: (1, 1)
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/1221.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/3223.png'
+                    Image:
+                        size_hint_x: 0.5
+                        source: 'images/2222.png'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (1,.1)
+                spacing: 5
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Back to instruction page'
+                        on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Done'
+                        on_press: root.dismiss()
 
  
