@@ -31,12 +31,11 @@ from PlayerNamePopup import PlayerNamePopup
 class TutorialScreen(Popup):
     pass
 
-
-class BoxLayoutim(BoxLayout):
+class TutorialExample(BoxLayout):
+    text = StringProperty('')
     image1 = StringProperty('')
     image2 = StringProperty('')
-    image3 = StringProperty('')
-
+    image3 = StringProperty('')    
 
 class EndGameScreen(Screen):
     name_of_players = ListProperty(['', '', '', ''])

@@ -17,21 +17,35 @@
     spacing: '5dp' 
     size_hint: (1, 1)
 
-<BoxLayoutim>
-    size_hint: (0.8, 0.8)
-    pos_hint: {'center_x': 0.5}
-    orientation: 'horizontal'
-    padding: '5dp'
-    spacing: '5dp'
-    Image:
-        size_hint_x: 0.5
-        source: root.image1
-    Image:
-        size_hint_x: 0.5
-        source: root.image2
-    Image:
-        size_hint_x: 0.5
-        source: root.image3
+<TutorialExample>
+    orientation: 'vertical'
+    size_hint_x: 1
+    size_hint_y: None
+    height: 210
+    TextLabel:
+        text: root.text
+        size_hint_y: None
+        markup: True
+        color: 0, 0, 0, 1
+    BoxLayout:
+        orientation: 'horizontal'
+        width: root.width
+        padding: '2pt'
+        Image:
+            size_hint_x: 1
+            source: root.image1
+            size_hint_y: None
+            height: 120
+        Image:
+            size_hint_x: 1
+            source: root.image2
+            size_hint_y: None
+            height: 120
+        Image:
+            size_hint_x: 1
+            source: root.image3
+            size_hint_y: None
+            height: 120
 
 <NavButton@Button>:
     size_hint: .9, 1
@@ -47,74 +61,105 @@
         Screen:
             id: tutorial
             name: 'tutorial1'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                TextLabel:
-                    text: u"Welcome to Shugou! Shugou is the Japanese word for sets or collection of elements. Your goal is to find special collections of 3 cards among the 12 that will be dealt. Those collections is what we call a shugou. And to do so as quickly as possible. Play continues until there are no more shogou to be found on the board. A shogou is a collection of 3 cards, in which all four properties, quantity, shape, filling and color are all the same or all different."
+            canvas:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 0.8
+                Rectangle:
+                    pos: root.pos
+                    size: root.size
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
                 BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Back'
-                            on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Next: Examples'
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
+                    orientation: 'vertical'
+                    padding: 10
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: 525
+
+                    TextLabel:
+                        text: u"Welcome to [b]Shugou[/b]!\n\nShugou is the Japanese word for sets or collections of elements. Your goal is to find special collections of 3 cards among the 12 cards on the board, and to do so as quickly as possible. Those collections is what we call a [b]shugou[/b].\nPlay continues until there are no more [b]shugous[/b] to be found on the board.\n\nA [b]shogou[/b] is a collection of 3 cards, in which all four properties, [i]color, filling, quantity and shape[/i] are all the same or all different."
+                        color: 0, 0, 0, 1
+                        markup: True
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (1,.1)
+                spacing: 5
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Done'
+                        on_press: root.dismiss()
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Next: Examples'
+                        on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
+
+
         Screen:
             name: 'tutorial2'
-            on_enter: root.title = "Examples"
+            on_enter: root.title = "Examples of Shugous"
+            canvas:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 0.8
+                Rectangle:
+                    pos: root.pos
+                    size: root.size
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                GridLayout:
+                    cols: 1
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: 1100
+                    TutorialExample:
+                        text: "Colors, quantities, shapes equal; fillings different."
+                        image1: 'images/2321.png'
+                        image2: 'images/2331.png'
+                        image3: 'images/2311.png'
+
+                    TutorialExample:
+                        text: "Colors, fillings equal; quantities, shapes different."
+                        image1: 'images/1221.png'
+                        image2: 'images/2222.png'
+                        image3: 'images/3223.png'
+
+                    TutorialExample:
+                        text: "Colors equal; fillings, quantities, shapes different."
+                        image1: 'images/1321.png'
+                        image2: 'images/2333.png'
+                        image3: 'images/3312.png'
+
+                    TutorialExample:
+                        text: "All properties are different."
+                        image1: 'images/1313.png'
+                        image2: 'images/2231.png'
+                        image3: 'images/3122.png'
+
+                    TutorialExample:
+                        text: "[b]NOT A SHUGOU:[/b] Fillings equal; colors, quantities different; [b]shapes neither equal nor different.[/b]"
+                        image1: 'images/1112.png'
+                        image2: 'images/2311.png'
+                        image3: 'images/3211.png'
+
+
             BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: '5dp'
-                    spacing: '5dp'
-                    BoxLayoutcol:
-                        TextLabel:
-                            text: "The colors and fillings are equal, the quantities and shapes are different."
-                        TextLabel:
-                            text: "The colors are equal, the fillings, quantities and shapes are different."
-                        TextLabel:
-                            text: "The colors, shapes and quantities are equal, the fillings are different."
-                        TextLabel:
-                            text: "All properties are different."
-                    BoxLayoutcol:                            
-                        BoxLayoutim:
-                            image1: 'images/1221.png'
-                            image2: 'images/3223.png'
-                            image3: 'images/2222.png'
-                        BoxLayoutim:
-                            image1: 'images/2333.png'
-                            image2: 'images/1321.png'
-                            image3: 'images/3312.png'
-                        BoxLayoutim:
-                            image1: 'images/2311.png'
-                            image2: 'images/2321.png'
-                            image3: 'images/2331.png'
-                        BoxLayoutim:
-                            image1: 'images/3122.png'
-                            image2: 'images/1313.png'
-                            image3: 'images/2231.png'
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Back to instruction page'
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Done'
-                            on_press: root.dismiss()
+                orientation: 'horizontal'
+                size_hint: (1,.1)
+                spacing: 5
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Back'
+                        on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Done'
+                        on_press: root.dismiss()
 
  
