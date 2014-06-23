@@ -13,13 +13,13 @@ package.domain = org.cantor
 source.dir = /home/berny/Desktop/Shugou
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,kv,wav
+source.include_exts = py, png, kv, wav
 
 # (list) Source files to exclude (let empty to not exclude anything)
 source.exclude_exts = generateLogo.py, generateImages.py, apk, keystore
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = 
+source.exclude_dirs = bin, build
 
 # (list) List of exclusions using pattern matching
 #source.exclude_patterns = license,images/*/*.jpg
@@ -29,7 +29,7 @@ source.exclude_dirs =
 #version.filename = %(source.dir)s/main.py
 
 # (str) Application versioning (method 2)
-version = 0.5.1
+version = 0.6
 
 # (list) Application requirements
 requirements = kivy
