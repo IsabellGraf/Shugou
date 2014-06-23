@@ -69,94 +69,127 @@
         Screen:
             name: 'tutorial2'
             on_enter: root.title = "Examples"
-            BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                TextLabel:
-                    text: "The colors and fillings are equal, the quantities and shapes are different."
-                BoxLayout:
-                    orientation: 'horizontal'
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                GridLayout:
+                    cols: 1
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: 3000
                     padding: '2dp'
-                    spacing: '5dp' 
-                    size_hint: (1, 1)
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/1221.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/3223.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/2222.png'
+                    GridLayout:
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+                        TextLabel:
+                            text: "The colors and fillings are equal, the quantities and shapes are different."
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '2dp'
+                            spacing: '5dp' 
+                            size_hint: (1, 1)
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/1221.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/3223.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/2222.png'
+                    GridLayout:
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+                        TextLabel:
+                            text: "The colors and fillings are equal, the quantities and shapes are different."
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '2dp'
+                            spacing: '5dp' 
+                            size_hint: (1, 1)
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/1221.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/3223.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/2222.png'
+                    GridLayout:
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
 
-                TextLabel:
-                    text: "The colors and fillings are equal, the quantities and shapes are different."
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: '2dp'
-                    spacing: '5dp' 
-                    size_hint: (1, 1)
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/1221.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/3223.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/2222.png'
-
-                TextLabel:
-                    text: "The colors and fillings are equal, the quantities and shapes are different."
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: '2dp'
-                    spacing: '5dp' 
-                    size_hint: (1, 1)
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/1221.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/3223.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/2222.png'
-
-                TextLabel:
-                    text: "The colors and fillings are equal, the quantities and shapes are different."
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: '2dp'
-                    spacing: '5dp' 
-                    size_hint: (1, 1)
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/1221.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/3223.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/2222.png'
-
-                TextLabel:
-                    text: "The colors and fillings are equal, the quantities and shapes are different."
-                BoxLayout:
-                    orientation: 'horizontal'
-                    padding: '2dp'
-                    spacing: '5dp' 
-                    size_hint: (1, 1)
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/1221.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/3223.png'
-                    Image:
-                        size_hint_x: 0.5
-                        source: 'images/2222.png'
             
+                        TextLabel:
+                            text: "The colors and fillings are equal, the quantities and shapes are different."
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '2dp'
+                            spacing: '5dp' 
+                            size_hint: (1, 1)
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/1221.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/3223.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/2222.png'
+
+                    GridLayout:
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+
+        
+                        TextLabel:
+                            text: "The colors and fillings are equal, the quantities and shapes are different."
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '2dp'
+                            spacing: '5dp' 
+                            size_hint: (1, 1)
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/1221.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/3223.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/2222.png'
+
+                    GridLayout:
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+        
+                        TextLabel:
+                            text: "The colors and fillings are equal, the quantities and shapes are different."
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            padding: '2dp'
+                            spacing: '5dp' 
+                            size_hint: (1, 1)
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/1221.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/3223.png'
+                            Image:
+                                size_hint_x: 0.5
+                                source: 'images/2222.png'
+                    
+
+
+
+
             BoxLayout:
                 orientation: 'horizontal'
                 size_hint: (1,.1)
