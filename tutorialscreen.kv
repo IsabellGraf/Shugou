@@ -17,21 +17,27 @@
     spacing: '5dp' 
     size_hint: (1, 1)
 
-<BoxLayoutim>
-    size_hint: (0.8, 0.8)
-    pos_hint: {'center_x': 0.5}
-    orientation: 'horizontal'
-    padding: '5dp'
-    spacing: '5dp'
-    Image:
-        size_hint_x: 0.5
-        source: root.image1
-    Image:
-        size_hint_x: 0.5
-        source: root.image2
-    Image:
-        size_hint_x: 0.5
-        source: root.image3
+
+<TutorialExample>
+    cols: 1
+    size_hint_x: 1
+    size_hint_y: None
+    TextLabel:
+        text: root.text
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: '2dp'
+        spacing: '5dp' 
+        size_hint: (1, 1)
+        Image:
+            size_hint_x: 0.5
+            source: root.image1
+        Image:
+            size_hint_x: 0.5
+            source: root.image2
+        Image:
+            size_hint_x: 0.5
+            source: root.image1
 
 <NavButton@Button>:
     size_hint: .9, 1
@@ -78,26 +84,12 @@
                     size_hint_y: None
                     height: 3000
                     padding: '2dp'
-                    GridLayout:
-                        cols: 1
-                        size_hint_x: 1
-                        size_hint_y: None
-                        TextLabel:
-                            text: "The colors and fillings are equal, the quantities and shapes are different."
-                        BoxLayout:
-                            orientation: 'horizontal'
-                            padding: '2dp'
-                            spacing: '5dp' 
-                            size_hint: (1, 1)
-                            Image:
-                                size_hint_x: 0.5
-                                source: 'images/1221.png'
-                            Image:
-                                size_hint_x: 0.5
-                                source: 'images/3223.png'
-                            Image:
-                                size_hint_x: 0.5
-                                source: 'images/2222.png'
+                    TutorialExample:
+                        text: "The colors and fillings are equal, the quantities and shapes are different."
+                        image1: 'images/1221.png'
+                        image2: 'images/3223.png'
+                        image3: 'images/2222.png'
+
                     GridLayout:
                         cols: 1
                         size_hint_x: 1
