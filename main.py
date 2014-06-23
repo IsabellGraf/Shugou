@@ -31,7 +31,7 @@ from PlayerNamePopup import PlayerNamePopup
 class TutorialScreen(Popup):
     pass
 
-class TutorialExample(GridLayout):
+class TutorialExample(BoxLayout):
     text = StringProperty('')
     image1 = StringProperty('')
     image2 = StringProperty('')
