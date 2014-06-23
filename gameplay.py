@@ -63,6 +63,12 @@ class GamePlayScreen(Screen):
     def __init__(self, *args, **kwargs):
         super(GamePlayScreen, self).__init__(*args, **kwargs)
         self.rotator = Rotator()
+        Clock.schedule_once(self.post_init,0)
+
+    def post_init(self,*args):
+        self.buttons = self.ids.cards_layout.children
+        for i in range(12):
+            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
 
     # Dealing with multiplayer ###
     def select_player_popup(self, *args):
@@ -84,9 +90,6 @@ class GamePlayScreen(Screen):
         ''' Sets the game '''
         # You can only enter the game from the intro
         self.deck = Deck()
-        self.buttons = self.ids.cards_layout.children
-        for i in range(12):
-            self.buttons[i].bind(on_press=self.checkIfSetOnBoard)
         self.cards = self.deck.drawGuarantee(numberofcards=12)
         for i in range(len(self.scores_of_players)):
             self.scores_of_players[i] = 0
