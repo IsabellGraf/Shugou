@@ -62,8 +62,14 @@ class EndGameScreen(Screen):
             return ''
 
     def on_enter(self, *args, **kwargs):
+        self.aiActivated = App.get_running_app().aiActivated()
         if self.aiActivated:
             self.number_of_players += 1
+        self.ids.score1.text = self.nthname(0) + ':      ' + str(self.nthscore(0)) if self.number_of_players>=1 else ''
+        self.ids.score2.text = self.nthname(1) + ':      ' + str(self.nthscore(1)) if self.number_of_players>=2 else ''
+        self.ids.score3.text = self.nthname(2) + ':      ' + str(self.nthscore(2)) if self.number_of_players>=3 else ''
+        self.ids.score4.text = self.nthname(3) + ':      ' + str(self.nthscore(3)) if self.number_of_players>=4 else ''
+        self.ids.score5.text = self.nthname(4) + ':      ' + str(self.nthscore(4)) if self.number_of_players>=5 else ''
 
     def on_leave(self, *args, **kwargs):
         if self.aiActivated:
@@ -245,6 +251,9 @@ class ShugouApp(App):
             self.gamelayout.playscreen.hintActivated = False
         self.gamelayout.playscreen.aiActivated = boolFromJS(
             self.config.get('settings', 'ai'))
+
+    def aiActivated(self):
+        return boolFromJS(self.config.get('settings', 'ai'))
 
     def build_config(self, config):
         config.setdefaults('settings', {'sound': False,
