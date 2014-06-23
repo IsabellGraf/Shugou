@@ -68,27 +68,34 @@
                     pos: root.pos
                     size: root.size
 
-            BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                TextLabel:
-                    text: u"Welcome to [b]Shugou[/b]!\n\nShugou is the Japanese word for sets or collections of elements. Your goal is to find special collections of 3 cards among the 12 cards on the board, and to do so as quickly as possible. Those collections is what we call a [b]shugou[/b].\nPlay continues until there are no more [b]shugous[/b] to be found on the board.\n\nA [b]shogou[/b] is a collection of 3 cards, in which all four properties, [i]color, filling, quantity and shape[/i] are all the same or all different."
-                    color: 0, 0, 0, 1
-                    markup: True
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
                 BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: (1,.1)
-                    spacing: 5
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Done'
-                            on_press: root.dismiss()
-                    AnchorLayout:
-                        size_hint:(.3,1)
-                        NavButton:
-                            text: 'Next: Examples'
-                            on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
+                    orientation: 'vertical'
+                    padding: 10
+                    size_hint_x: 1
+                    size_hint_y: None
+                    height: 525
+
+                    TextLabel:
+                        text: u"Welcome to [b]Shugou[/b]!\n\nShugou is the Japanese word for sets or collections of elements. Your goal is to find special collections of 3 cards among the 12 cards on the board, and to do so as quickly as possible. Those collections is what we call a [b]shugou[/b].\nPlay continues until there are no more [b]shugous[/b] to be found on the board.\n\nA [b]shogou[/b] is a collection of 3 cards, in which all four properties, [i]color, filling, quantity and shape[/i] are all the same or all different."
+                        color: 0, 0, 0, 1
+                        markup: True
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (1,.1)
+                spacing: 5
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Done'
+                        on_press: root.dismiss()
+                AnchorLayout:
+                    size_hint:(.3,1)
+                    NavButton:
+                        text: 'Next: Examples'
+                        on_press: tutorialScreens.transition = SlideTransition(direction = 'left'); tutorialScreens.current = 'tutorial2'
 
 
         Screen:
@@ -147,7 +154,7 @@
                 AnchorLayout:
                     size_hint:(.3,1)
                     NavButton:
-                        text: 'Back to instruction page'
+                        text: 'Back'
                         on_press: tutorialScreens.transition = SlideTransition(direction = 'right'); tutorialScreens.current = 'tutorial1'; root.title = 'How To Play Shugou'
                 AnchorLayout:
                     size_hint:(.3,1)
