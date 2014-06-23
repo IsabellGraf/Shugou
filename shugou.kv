@@ -7,13 +7,15 @@
 
 <PlayerSection>:
     background_normal: 'images/players.png'
-    border: 2,2,2,2
+    background_color: 1, 1, 1, 1
+    border: 2, 2, 2, 2
     value: 0
-    font_size: '30dp'
-    text: str(self.value) + ' Players' if self.value > 1 else '1 Player'
+    font_size: '34dp'
+    text: '[color=ff3333]' + str(self.value) + '[/color] [color=3333ff]Players[/color]' if self.value > 1 else '[color=ff3333]1[/color] [color=3333ff]Player[/color]'
+    markup: True
 
 <ShugouTitle@Label>:
-    text: '[color=ff3333]Sh[/color][color=3333ff]ug[/color][color=33ff33]ou[/color]'
+    text: '[b][color=ff3333]Sh[/color][color=3333ff]ug[/color][color=33ff33]ou[/color][/b]'
     markup: True
     font_size: '40dp'
 
