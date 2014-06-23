@@ -110,6 +110,30 @@ class GamePlayScreen(Screen):
         self.unselectAll()
         self.setUpAI()
 
+    def foundCorrect(self, down, *args):
+        ''' Called once a shugou is found '''
+        self.aiUpdates()
+        if self.aiPlayed:
+            self.aiScore += 1
+            self.aiPlayed = False
+        else:
+            if self.number_of_players > 1:
+                self.select_player_popup()
+            else:
+                self.scores_of_players[0] += 1
+
+        selectedcards = {self.cards[i] for i in down}
+        try:
+            newcards = self.deck.drawGuarantee(
+                othercards=set(self.cards) ^ selectedcards,
+                numberofcards=3)
+        except ValueError:  # no more shugous available
+            self.game.current = 'end'
+            return
+        for index, i in enumerate(down):
+            self.cards[i] = newcards[index]
+        self.newRound()
+
     def checkIfSetOnBoard(self, obj):
         '''Called when a button is pressed, checks if there is a set.
         If there is one, then refill the display cards'''
@@ -125,28 +149,9 @@ class GamePlayScreen(Screen):
                 sound = SoundLoader.load("music/" + "151568__lukechalaudio__user-interface-generic" + ".wav")
                 sound.loop = False
                 sound.play()
-
-            self.aiUpdates()
-            if self.aiPlayed:
-                self.aiScore += 1
-                self.aiPlayed = False
-            else:
-                if self.number_of_players > 1:
-                    self.select_player_popup()
-                else:
-                    self.scores_of_players[0] += 1
-
-            selectedcards = {self.cards[i] for i in down}
-            try:
-                newcards = self.deck.drawGuarantee(
-                    othercards=set(self.cards) ^ selectedcards,
-                    numberofcards=3)
-            except ValueError:  # no more shugous available
-                self.game.current = 'end'
-                return
-            for index, i in enumerate(down):
-                self.cards[i] = newcards[index]
-            self.newRound()
+            # We send the selection in case the player unselects a card before 
+            # self.foundCorrect is found
+            Clock.schedule_once(lambda arg: self.foundCorrect(down=down),2)
         else:  # The cards were not a set
             self.unselectAll()
 
@@ -170,11 +175,12 @@ class GamePlayScreen(Screen):
             if self.ai.time < 5:
                 self.ai.time = 5
             down = self.selected()
-            selected = self.cards[down[0]], \
-                self.cards[down[1]],\
-                self.cards[down[2]]
-            self.ai.updateRatingsHuman(
-                self.cards, selected, timeDifference)
+            # Crashes now, no idea why
+            # selected = self.cards[down[0]], \
+            #     self.cards[down[1]],\
+            #     self.cards[down[2]]
+            # self.ai.updateRatingsHuman(
+            #     self.cards, selected, timeDifference)
 
     def stopRotation(self):
         self.rotator.endRotate()
