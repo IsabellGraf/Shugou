@@ -151,7 +151,8 @@ class GamePlayScreen(Screen):
                 sound.play()
             # We send the selection in case the player unselects a card before 
             # self.foundCorrect is found
-            Clock.schedule_once(lambda arg: self.foundCorrect(down=down),2)
+            self.stopRotation()
+            Clock.schedule_once(lambda arg: self.foundCorrect(down=down), 2)
         else:  # The cards were not a set
             self.unselectAll()
 
