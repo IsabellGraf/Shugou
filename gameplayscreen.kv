@@ -76,6 +76,10 @@
                 text: root.name_of_players[self.value] + ':\n'+ str(root.scores_of_players[self.value]) if root.number_of_players >= self.value + 1 else ''
             BoxLayout:
                 orientation: "vertical"
+                # We need this button everytime we have to test the end game, might as well leave it there.
+                #Button:
+                #    text: "Go to end screen"
+                #    on_press: root.game.current = 'end'
                 AnchorLayout:
                     anchor_x: 'center'
                     anchor_y: 'bottom'
