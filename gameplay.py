@@ -187,7 +187,7 @@ class GamePlayScreen(Screen):
             #     self.cards, selected, timeDifference)
 
     def stopRotation(self):
-        self.rotator.endRotate()
+        self.rotator.end_rotate()
 
     def selected(self):
         '''Returns the indices of all the selected ToggleButton'''
@@ -256,7 +256,7 @@ class GamePlayScreen(Screen):
         if self.selected() == []:  # no cards have been selected
             # displays on the first card in a hint
             buttonToRotate = self.buttonFromCard(self.hint[0])
-            self.rotator.rotateThisButton(buttonToRotate)
+            self.rotator.rotate_this(buttonToRotate)
             Clock.schedule_once(self.displayHintSecond, self.displayHintTimer)
         else:  # if the player has a card selected, try calling it again later
             self.setUpHint()
@@ -265,7 +265,7 @@ class GamePlayScreen(Screen):
         ''' Displays the second of two cards in a hint'''
         selectedcards = self.selected()
         buttonToRotate = self.buttonFromCard(self.hint[1])
-        self.rotator.rotateThisButton(buttonToRotate)
+        self.rotator.rotate_this(buttonToRotate)
 
     # Functions to handling the game play screen
     def selected(self):
