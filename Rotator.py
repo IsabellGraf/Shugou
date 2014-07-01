@@ -1,49 +1,31 @@
-
 from kivy.clock import Clock
 
 
 class Rotator(object):
-    ''' A class that handles the rotation of buttons '''
+    ''' A class that handles the rotation of widgets '''
     def __init__(self):
         self.angle = 0
-        self.buttons = []
+        self.widgets = []
+        self.velocity = 1
 
-    def rotateThisButton(self, button):
-        ''' Starts rotating the given button '''
+    def rotate_this(self, widget):
+        ''' Starts rotating the given widget '''
+        self.widgets.append(widget)
+        if len(self.widgets) == 1:
+            Clock.schedule_interval(self.rotate, 0.05)
 
-        self.buttons.append(button)
-        # It is already rotating
-        if len(self.buttons) > 1:
-            self.buttons[-1].angle = self.angle
-        else:
-            Clock.schedule_interval(self.rotateLeft, 0.05)
+    def rotate(self, dt):
+        self.angle += self.velocity*0.5
+        self.update()
+        if abs(self.angle) >= 8:
+            self.velocity *= -1
 
-    def rotateLeft(self, dt):
-        if self.angle < 8:
-            self.angle += 0.5
-        for button in self.buttons:
-            button.angle = self.angle
-        if self.angle == 8:
-            Clock.unschedule(self.rotateLeft)
-            Clock.schedule_interval(self.rotateRight, 0.05)
+    def update(self):
+        for widget in self.widgets:
+            widget.angle = self.angle
 
-    def rotateRight(self, dt):
-        if self.angle > -8:
-            self.angle -= 0.5
-        for button in self.buttons:
-            button.angle = self.angle
-        if self.angle == -8:
-            Clock.unschedule(self.rotateRight)
-            Clock.schedule_interval(self.rotateLeft, 0.05)
-
-    def endRotate(self):
-        Clock.unschedule(self.rotateRight)
-        Clock.unschedule(self.rotateLeft)
-        for button in self.buttons:
-            # The bizarre way to get the angles back to 0
-            while button.angle != 0:
-                if button.angle > 0:
-                    button.angle -= 0.5
-                else:
-                    button.angle += 0.5
-        self.buttons = []
+    def end_rotate(self):
+        Clock.unschedule(self.rotate)
+        self.angle = 0
+        self.update()
+        self.widgets = []
