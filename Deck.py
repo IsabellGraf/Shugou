@@ -3,16 +3,8 @@ from random import sample
 from collections import namedtuple
 from itertools import product
 
-# Enums for cards.
-ONE, TWO, THREE = NUMBERS = [1, 2, 3]
-RED, GREEN, BLUE = COLOURS = [1, 2, 3]
-BLANK, STRIPED, FILLED = FILLINGS = [1, 2, 3]
-STAR, SQUARE, CIRCLE = SHAPES = [1, 2, 3]
-PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
-
 # A simple immutable card class
 # Each has three states which takes on values 1,2,3
-# Thus, ONE, RED, FILLED, STAR is 1132
 # This allows each card to be represented by a unique integer
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
@@ -38,7 +30,7 @@ Card.downimage = downimage
 
 
 def cardPrint(self):
-    ''' Returns a basic formating for a card '''
+    ''' Returns a text version of the card '''
     shapes = ['!', '@', '#']
     colours = ['ff3333', '3333ff', '33ff33']
     fillings = ['_', '*', '']  # easier to read than bold and italics
@@ -47,7 +39,6 @@ def cardPrint(self):
         self.filling - 1] if self.filling != 3 else string
     string = '[color=' + colours[self.colour - 1] + ']' + string + '[/color]'
     return string
-
 Card.__str__ = cardPrint
 
 
