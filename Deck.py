@@ -16,28 +16,24 @@ PROPERTIES = [NUMBERS, COLOURS, FILLINGS, SHAPES]
 # This allows each card to be represented by a unique integer
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
-# We extend the class to help with its representation
-
-
+# We extend the class to help with its representation.
+@property
 def index(self):
-    ''' card -> int - returns an index base on a card for
+    ''' card -> string - returns an index base on a card for
     the purpose of looking up filenames of the associated card'''
-    return (str(self.number) + str(self.colour)
-            + str(self.filling) + str(self.shape))
+    return ''.join(str(field) for field in self)
 Card.index = index
 
 
 def normalimage(self):
     ''' Where the file should be stored for the card's image'''
-    # This will need to be changed once we have the file structure workedout.
-    return "images/" + self.index() + ".png"
+    return "images/" + self.index + ".png"
 Card.normalimage = normalimage
 
 
 def downimage(self):
     ''' Where the file should be stored for the card's image'''
-    # This will need to be changed once we have the file structure workedout.
-    return "images/" + self.index() + "_down.png"
+    return "images/" + self.index + "_down.png"
 Card.downimage = downimage
 
 
@@ -50,7 +46,6 @@ def cardPrint(self):
     string = fillings[self.filling - 1] + string + fillings[
         self.filling - 1] if self.filling != 3 else string
     string = '[color=' + colours[self.colour - 1] + ']' + string + '[/color]'
-
     return string
 
 Card.__str__ = cardPrint
@@ -127,7 +122,7 @@ class Deck(object):
     @staticmethod
     def idOfSet(cards):
         sortedCards = sorted(cards)
-        return ''.join([sortedCards[i].index() for i in range(len(cards))])
+        return ''.join([sortedCards[i].index for i in range(len(cards))])
 
     @staticmethod
     def hasSet(cards):
