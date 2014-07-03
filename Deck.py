@@ -28,7 +28,6 @@ def downimage(self):
     return "images/" + self.index + "_down.png"
 Card.downimage = downimage
 
-
 def cardPrint(self):
     ''' Returns a text version of the card '''
     shapes = ['!', '@', '#']
@@ -64,15 +63,6 @@ class Deck(object):
         '''objects -> bool -- Returns True if
         all the args are different or all the same'''
         return len(set(args)) == 1 or len(set(args)) == len(args)
-
-    @staticmethod
-    def similarities(*cards):
-        ''' cards -> int -- returns the number
-        of similarities in the sets of cards'''
-        similarities = 0
-        for i in range(0, 4):
-            similarities += Deck.allSame(*[card[i] for card in cards])
-        return similarities
 
     @staticmethod
     def allSame(*args):
