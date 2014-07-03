@@ -24,13 +24,13 @@ def index(self):
     return ''.join(str(field) for field in self)
 Card.index = index
 
-
+@property
 def normalimage(self):
     ''' Where the file should be stored for the card's image'''
     return "images/" + self.index + ".png"
 Card.normalimage = normalimage
 
-
+@property
 def downimage(self):
     ''' Where the file should be stored for the card's image'''
     return "images/" + self.index + "_down.png"

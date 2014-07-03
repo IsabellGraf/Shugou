@@ -189,5 +189,5 @@ for card in deck:
 
     # saves the images where normalimage and downimage is pointing to
     # dpi sets the resolution of images(dots per inch)
-    im1.save(card.normalimage(), dpi=(264,264))
-    im2.save(card.downimage(), dpi=(264,264))
+    im1.save(card.normalimage, dpi=(264,264))
+    im2.save(card.downimage, dpi=(264,264))

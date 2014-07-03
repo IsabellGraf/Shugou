@@ -3,8 +3,8 @@
 #: import Deck Deck.Deck
 
 <CardToggle>:
-    background_normal: root.card.normalimage() if root.card else ''   
-    background_down: root.card.downimage() if root.card else ''
+    background_normal: root.card.normalimage if root.card else ''   
+    background_down: root.card.downimage if root.card else ''
     border: 2, 3, 3, 3   
     canvas.before:
         PushMatrix
