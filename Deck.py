@@ -6,9 +6,9 @@ from itertools import product
 # A simple immutable card class
 # Each has three states which takes on values 1,2,3
 # This allows each card to be represented by a unique integer
+# We need to also extend the class
 Card = namedtuple('Card', ['number', 'colour', 'filling', 'shape'])
 
-# We extend the class to help with its representation.
 @property
 def index(self):
     ''' card -> string - returns an index base on a card for
@@ -16,29 +16,19 @@ def index(self):
     return ''.join(str(field) for field in self)
 Card.index = index
 
+
 @property
 def normalimage(self):
     ''' Where the file should be stored for the card's image'''
     return "images/" + self.index + ".png"
 Card.normalimage = normalimage
 
+
 @property
 def downimage(self):
     ''' Where the file should be stored for the card's image'''
     return "images/" + self.index + "_down.png"
 Card.downimage = downimage
-
-def cardPrint(self):
-    ''' Returns a text version of the card '''
-    shapes = ['!', '@', '#']
-    colours = ['ff3333', '3333ff', '33ff33']
-    fillings = ['_', '*', '']  # easier to read than bold and italics
-    string = shapes[self.shape - 1] * self.number
-    string = fillings[self.filling - 1] + string + fillings[
-        self.filling - 1] if self.filling != 3 else string
-    string = '[color=' + colours[self.colour - 1] + ']' + string + '[/color]'
-    return string
-Card.__str__ = cardPrint
 
 
 class Deck(object):
@@ -47,12 +37,10 @@ class Deck(object):
     with ways of checking properties of subsets of the deck '''
 
     def __init__(self):
-        # a complete set of cards stored in a set
-        # thus, can never be taken out "in order"
         self.fill()
 
     def fill(self):
-        '''Fill the deck with a new sets of cards'''
+        '''Fill the deck with a set of card to force random access'''
         self.cards = set()
         for property in product([1, 2, 3], repeat=4):
             card = Card(*property)
@@ -71,8 +59,8 @@ class Deck(object):
 
     @staticmethod
     def allSets(cards):
-        ''' Returns all sets in a shugous of cards '''
-        return [c for c in combinations(cards, 3) if Deck.checkSet(*c)]
+        ''' Returns all shugous in a set of cards '''
+        return (c for c in combinations(cards, 3) if Deck.checkSet(*c))
 
     @staticmethod
     def hint(cards):
@@ -122,8 +110,7 @@ class Deck(object):
         which will once combined with othercards form a set it or
         raise an error if impossible'''
         # verify that we have atleast one possible set
-        if ((len(othercards) + numberofcards < 3) or
-                not Deck.hasSet(othercards | self.cards)):
+        if len(othercards) + numberofcards < 3 or not Deck.hasSet(othercards | self.cards):
             raise ValueError("No set can be found")
         newCards = set(sample(self.cards, numberofcards))
         while not Deck.hasSet(newCards | othercards):
