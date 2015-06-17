@@ -1,22 +1,22 @@
-Collections
+Shugou
 =======
 
-[Link to Game Webpage](http://bernhardkonrad.github.io/Collection/)
+[Link to Game Webpage](http://isabellgraf.github.io/Shugou/)
 
 Organization:
 
-1. Front Page/ Tutorial/ Documentation: @ChristinaLK
+1. Tutorial and Documentation: Christina Koch
 
-2. Pictures: IsabellGraf
+2. Deck Graphics (Python-pillow): Isabell Graf
 
-3. Game play / design:  Jerome, Carmen
+3. Game play and design:  Jerome Lefebvre, Carmen Bruni
 
-4. Multiplayer: Jia, Carmen
+4. Multiplayer: Jia Gou, Carmen Brunie
 
-5. AI: Bernhard
+5. AI: Isabell Graf, Bernhard Konrad
 
-6. Code Supervisor: Bernhard
+6. Code Supervisor: Bernhard Konrad
 
-6. Porting Android: Jia
+7. Porting Android: Bernhard Konrad
 
-7. Porting iOS: Jerome
+8. Porting iOS: Jerome Lefebvre
