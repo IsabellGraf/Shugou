@@ -1,4 +1,4 @@
 Shugou
 ======
 
-Link to url: http://bernhardkonrad.github.io/Shugou/
+Link to website: http://isabellgraf.github.io/Shugou/
